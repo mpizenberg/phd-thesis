@@ -1,4 +1,44 @@
-Hello World!
+% Front matter #######################################################
+\frontmatter
+
+% Page de garde
+\makeflyleaf%
+
+% Dédicaces
+\chapter*{Dedications}%
+\label{cha:dedications}
+\input{src/frontmatter/dedicaces.tex}
+
+% Abstract
+\chapter*{Abstract}%
+\label{cha:abstract}
+\input{src/frontmatter/abstract.tex}
+
+% Table des matières
+\tableofcontents
+
+% Main matter ########################################################
+\mainmatter%
+
+\part{Introduction}%
+\label{prt:introduction}
+\input{src/mainmatter/intro.tex}
+
+\part{Image Annotation}%
+\label{prt:image_annotation}
+\input{src/mainmatter/annotation.tex}
+
+\part{SLAM RGB-D}%
+\label{prt:slam_rgb_d}
+\input{src/mainmatter/slam-rgbd.tex}
+
+\part{Conclusion}%
+\label{prt:conclusion}
+\input{src/mainmatter/conclusion.tex}
+
+% Back matter #######################################################
+\backmatter%
+
 
 \bibliographystyle{plain}
 \bibliography{src/main.bib}
