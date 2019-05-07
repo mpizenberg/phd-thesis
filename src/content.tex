@@ -20,25 +20,25 @@
 % Main matter ########################################################
 \mainmatter%
 
-\part{Introduction}%
-\label{prt:introduction}
-\input{src/mainmatter/intro.tex}
+\part{Context for Interactive Computer Vision on the Web}%
+\label{prt:context}
+\input{src/mainmatter/context.tex}
 
 \part{Image Annotation}%
 \label{prt:image_annotation}
 \input{src/mainmatter/annotation.tex}
 
-\part{SLAM RGB-D}%
-\label{prt:slam_rgb_d}
-\input{src/mainmatter/slam-rgbd.tex}
+\part{RGB-D SLAM}%
+\label{prt:rgb_d_slam}
+\input{src/mainmatter/rgbd-slam.tex}
 
-\part{Conclusion}%
-\label{prt:conclusion}
+\chapter*{Conclusion}%
+\label{cha:conclusion}
+\addcontentsline{toc}{chapter}{Conclusion}
 \input{src/mainmatter/conclusion.tex}
 
 % Back matter #######################################################
 \backmatter%
-
 
 \bibliographystyle{plain}
 \bibliography{src/main.bib}
