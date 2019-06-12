@@ -1,9 +1,9 @@
-# LaTeX Template for my PhD Thesis
+# My PhD Thesis
 
 Clone with submodules for the package generating the cover.
 
 ```sh
-git clone --recursive git@github.com:mpizenberg/thesis-template-latex.git
+git clone --recursive git@github.com:mpizenberg/phd-thesis.git
 ```
 
 Compile with `make`.
