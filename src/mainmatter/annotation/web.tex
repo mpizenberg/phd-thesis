@@ -38,7 +38,8 @@
 \section{What is the Web?}%
 \label{sec:web}
 
-The Internet and the Web are ubiquitous technologies of our everyday lives.
+The Internet and the Web are ubiquitous technologies of our everyday lives,
+created around the 80's.
 Social media, communication, search, news, entertainment, mapping,
 shopping, learning, allmost every activity is now digital and online.
 Simply put, the Web, also called World Wide Web (WWW), consists of the sum of all resources,
@@ -53,19 +54,39 @@ and explain the choices we made to build reliable annotation Web applications.
 \label{sub:web_application}
 
 An application, in the context of programming (/computers),
-is of a piece of software presenting information to a user,
+is a piece of software presenting information to a user,
 usually in an actionable manner.
 This includes things like email clients, image manipulation, video games,
 word processors, automatic translation, and virtually any functionality
 available with a regular computing device.
 
 Web resources are commonly accessible through a Web browser.
-As of May 2019, the three most used Web browsers are Google Chrome (62.7\%),
+As of May 2019, the three most used Web browsers are Google Chrome (62.7\% of global market share),
 Apple Safari (15.9\%) and Mozilla Firefox (5.1\%).
 Cf http://gs.statcounter.com/browser-market-share/all/worldwide/2019.
 Thus, we can define a Web application as a user-facing software,
 accessed through a Web browser.
 
+The three pillars of Web applications are HTML, CSS and JavaScript.
+HTML, for ``Hypertext Markup Language'' is a description language
+orginizing a page information as a hierarchy of tagged content.
+In Listing~\ref{lst:html}, a ``body'' tag contains three other tags,
+a title ``h1'' (h for header), a paragraph ``p'', an image ``img''
+and a button not yet linked to any action.
+CSS, for ``Cascading Style Sheet'', complements HTML by styling
+the content of associated HTML documents.
+Listing~\ref{lst:css} shows how we would add a left margin of 20 pixels
+on all the document body, and make the h1 title red and bold.
+JavaScript is a scripting language, not affiliated in any form
+to the Java programming language.
+It is run inside the browser to add dynamic behavior to a Web page.
+In Listing~\ref{lst:js} we show how one could count and display
+the number of times a user clicked on the button in the page.
+
+\lstset{style=CodeStyle}
+\lstinputlisting[language=html,caption={Example HTML code.},label={lst:html}]{assets/code/html.html}
+\lstinputlisting[language=css,caption={Example CSS code.},label={lst:css}]{assets/code/css.css}
+\lstinputlisting[language=js,caption={Example JavaScript code.},label={lst:js}]{assets/code/js.js}
 
 \subsection{Rich Web Application}%
 \label{sub:rich_web_application}
@@ -75,3 +96,18 @@ of static documents, known as Web pages, linked together with hyperlinks.
 The nature of web pages would mostly be informative, visual or textual,
 with very few other interactions than navigation through the site by
 clicking on the links.
+
+Today, thanks to evolutions of Web technologies that we will detail later,
+Web applications have become full-fledged applications with almost
+the same capabilities as desktop ones.
+They feature functionalities like 3D graphics, sound processing or interactive elements,
+and are sometimes called rich web applications.
+Similar concepts like ``progressive web applications'' (PWA),
+or ``single page applications'' (SPA) are also explained in the following sections.
+Now let's dive into the cornerstone of Web pages dynamism, JavaScript.
+
+
+\section{JavaScript, formally known as ECMAScript}%
+\label{sec:javascript_formally_known_as_ecmascript}
+
+
