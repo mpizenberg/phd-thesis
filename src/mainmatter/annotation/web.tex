@@ -133,5 +133,66 @@ ES2016, ES2017 and ES2018.
 \label{sub:browser_performance_war}
 
 Though many browser wars for dominance of market share occurred since the 90's,
-we will focus on the JavaScript engine performance war, starting around 2008
-when Google released Chrome.
+we are interested in the JavaScript engine performance war, starting around 2008
+when Google released its Chrome browser.
+On September 2, 2008, Google announced a new Web browser called Chrome.
+Cf https://blog.chromium.org/2008/09/google-chromes-need-for-speed\_02.html
+The main selling point was its new JavaScript engine called V8,
+greatly improving the browser performances on web applications making
+heavy use of JavaScript like their email client Gmail.
+Beware that ``performance'' in a browser is the result of many factors
+such that network latency, DOM computation, page rendering or JavaScript processing.
+In this section, we will specifically focus JavaScript execution performances.
+
+\subsubsection{Dynamic interpretation}%
+\label{ssub:dynamic-interpretation}
+
+Previously, JavaScript was an interpreted language.
+For each line of code, the engine would translate it into machine code,
+and immediately execute it.
+This means that for a loop, the transformation from JavaScript to machine code
+is repeated over and over again.
+In addition, JavaScript is a dynamic language, which is one of its
+strongest points, but also a nightmare for execution.
+Let's take the function adding two numbers as an example
+as in Listing~\ref{lst:add-js}.
+
+\lstinputlisting[language=js,caption={Add two values.},label={lst:add.js}]{assets/code/add.js}
+
+According to the ECMAScript specification,
+(cf http://www.ecma-international.org/ecma-262/5.1/#sec-11.6.1)
+the addition operator either performs string concatenation or numeric addition.
+The production ``AdditiveExpression : AdditiveExpression + MultiplicativeExpression''
+is evaluated as follows:
+
+\begin{enumerate}
+    \item Let lref be the result of evaluating AdditiveExpression.
+    \item Let lval be GetValue(lref).
+    \item Let rref be the result of evaluating MultiplicativeExpression.
+    \item Let rval be GetValue(rref).
+    \item Let lprim be ToPrimitive(lval).
+    \item Let rprim be ToPrimitive(rval).
+    \item If Type(lprim) is String or Type(rprim) is String, then
+    \begin{enumerate}
+        \item     Return the String that is the result of concatenating ToString(lprim) followed by ToString(rprim)
+    \end{enumerate}
+    \item Return the result of applying the addition operation to ToNumber(lprim) and ToNumber(rprim). See the Note below 11.6.3.
+\end{enumerate}
+
+NOTE 1 No hint is provided in the calls to ToPrimitive in steps 5 and 6. All native ECMAScript objects except Date objects handle the absence of a hint as if the hint Number were given; Date objects handle the absence of a hint as if the hint String were given. Host objects may handle the absence of a hint in some other manner.
+
+NOTE 2 Step 7 differs from step 3 of the comparison algorithm for the relational operators (11.8.5), by using the logical-or operation instead of the logical-and operation.
+
+In theory, if we know that we will only use this function
+to sum two numbers, it should compile to a single instruction.
+However, due to the dynamic nature of JavaScript,
+as specified in the standard, the code has to check if the arguments
+are strings, objects, and proceed first with conversions before
+eventually reaching the instruction doing the addition.
+This process results in one or two orders of magnitude slower code,
+compared to statically typed languages like C or Java.
+
+\subsubsection{Just In Time (JIT) compilation}%
+\label{ssub:just_in_time_jit_compilation}
+
+Statically typed languages usually compile code ahead-of-time (AOT).
