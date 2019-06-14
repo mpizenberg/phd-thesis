@@ -192,7 +192,32 @@ eventually reaching the instruction doing the addition.
 This process results in one or two orders of magnitude slower code,
 compared to statically typed languages like C or Java.
 
-\subsubsection{Just In Time (JIT) compilation}%
+\subsubsection{Just-in-time (JIT) compilation}%
 \label{ssub:just_in_time_jit_compilation}
 
-Statically typed languages usually compile code ahead-of-time (AOT).
+Statically typed languages usually compile code ahead-of-time (AOT),
+while dynamically typed languages interpret code at runtime.
+Starting with Chrome in 2008, all browser vendors began implementing
+just-in-time (JIT) compilers.
+
+The key ingredient is a ``monitor'' sometimes called ``profiler''.
+The monitor watches the code while it is run by the interpreter,
+and keeps track of how often a piece of code is executed.
+Once a path of code is repeatedly executed, it becomes ``hot'',
+which triggers an optimizing compiler.
+According to the types previously used in the hot path,
+the optimizing compiler will make assumptions enabling
+extremely efficient machine code.
+If the same code is used once with different types however,
+it gets de-optimized back to the baseline compiler.
+Multiple optimization and de-optimization round trips
+hinders the performances, and consequently will permanently mark
+the section as not to be optimized anymore.
+A lot more could be said here,
+CF https://hacks.mozilla.org/2017/02/a-crash-course-in-just-in-time-jit-compilers/.
+
+Figure (TODO faire un schéma timeline) outlines the differences between
+interpreting and JITing regarding the ratio of time spent on each phase.
+Fun fact, in V8 the baseline compiler and interpreter is known as ``Ignition''
+and the optimizing compiler goes by the name of ``TurboFan''.
+
