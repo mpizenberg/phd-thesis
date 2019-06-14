@@ -63,7 +63,7 @@ available with a regular computing device.
 Web resources are commonly accessible through a Web browser.
 As of May 2019, the three most used Web browsers are Google Chrome (62.7\% of global market share),
 Apple Safari (15.9\%) and Mozilla Firefox (5.1\%).
-Cf http://gs.statcounter.com/browser-market-share/all/worldwide/2019.
+\alert{Cf http://gs.statcounter.com/browser-market-share/all/worldwide/2019}
 Thus, we can define a Web application as a user-facing software,
 accessed through a Web browser.
 
@@ -136,7 +136,7 @@ Though many browser wars for dominance of market share occurred since the 90's,
 we are interested in the JavaScript engine performance war, starting around 2008
 when Google released its Chrome browser.
 On September 2, 2008, Google announced a new Web browser called Chrome.
-Cf https://blog.chromium.org/2008/09/google-chromes-need-for-speed\_02.html
+\alert{Cf https://blog.chromium.org/2008/09/google-chromes-need-for-speed\_02.html}
 The main selling point was its new JavaScript engine called V8,
 greatly improving the browser performances on web applications making
 heavy use of JavaScript like their email client Gmail.
@@ -159,8 +159,9 @@ as in Listing~\ref{lst:add-js}.
 
 \lstinputlisting[language=js,caption={Add two values.},label={lst:add.js}]{assets/code/add.js}
 
+\begin{displayquote}
 According to the ECMAScript specification,
-(cf http://www.ecma-international.org/ecma-262/5.1/#sec-11.6.1)
+\alert{(cf http://www.ecma-international.org/ecma-262/5.1/#sec-11.6.1)}
 the addition operator either performs string concatenation or numeric addition.
 The production ``AdditiveExpression : AdditiveExpression + MultiplicativeExpression''
 is evaluated as follows:
@@ -182,6 +183,7 @@ is evaluated as follows:
 NOTE 1 No hint is provided in the calls to ToPrimitive in steps 5 and 6. All native ECMAScript objects except Date objects handle the absence of a hint as if the hint Number were given; Date objects handle the absence of a hint as if the hint String were given. Host objects may handle the absence of a hint in some other manner.
 
 NOTE 2 Step 7 differs from step 3 of the comparison algorithm for the relational operators (11.8.5), by using the logical-or operation instead of the logical-and operation.
+\end{displayquote}
 
 In theory, if we know that we will only use this function
 to sum two numbers, it should compile to a single instruction.
@@ -214,10 +216,38 @@ Multiple optimization and de-optimization round trips
 hinders the performances, and consequently will permanently mark
 the section as not to be optimized anymore.
 A lot more could be said here,
-CF https://hacks.mozilla.org/2017/02/a-crash-course-in-just-in-time-jit-compilers/.
+\alert{CF https://hacks.mozilla.org/2017/02/a-crash-course-in-just-in-time-jit-compilers/.}
 
-Figure (TODO faire un schéma timeline) outlines the differences between
+Figure (\alert{TODO faire un schéma timeline}) outlines the differences between
 interpreting and JITing regarding the ratio of time spent on each phase.
 Fun fact, in V8 the baseline compiler and interpreter is known as ``Ignition''
 and the optimizing compiler goes by the name of ``TurboFan''.
+
+\comment{}{
+
+December 18, 2007 - https://webkit.org/blog/152/announcing-sunspider-09/
+December 19, 2007 - https://blog.codinghorror.com/the-great-browser-javascript-showdown/
+September 2, 2008 - https://blog.chromium.org/2008/09/google-chromes-need-for-speed_02.html
+ -> realease date of Chrome
+September 3, 2008 - https://johnresig.com/blog/javascript-performance-rundown/
+September 3, 2008 - https://arstechnica.com/information-technology/2008/09/new-firefox-javascript-engine-is-faster-than-chromes-v8/
+September 5, 2008 - https://www.zdnet.com/article/is-firefox-faster-than-chrome/
+September 19, 2008 - http://www.satine.org/archives/2008/09/19/squirrelfish-extreme-fastest-javascript-engine-yet/
+November 14, 2008 - https://allanfeid.com/content/javascript-engine-benchmark-test-results
+
+
+SunSpider: JS perf test suite by WebKit team
+https://www2.webkit.org/perf/sunspider/sunspider.html
+no longer maintained -> cf JetStream
+
+JetStream: Test JS and wasm
+https://browserbench.org/JetStream/
+
+V8 Benchmark: heavy emphasis on recursion
+}
+
+
+
+\subsection{Explosion of JavaScript and Node}%
+\label{sub:explosion_of_javascript_and_node}
 
