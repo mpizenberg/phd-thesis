@@ -84,9 +84,9 @@ In Listing~\ref{lst:js} we show how one could count and display
 the number of times a user clicked on the button in the page.
 
 \lstset{style=CodeStyle}
-\lstinputlisting[language=html,caption={Example HTML code.},label={lst:html}]{assets/code/html.html}
-\lstinputlisting[language=css,caption={Example CSS code.},label={lst:css}]{assets/code/css.css}
-\lstinputlisting[language=js,caption={Example JavaScript code.},label={lst:js}]{assets/code/js.js}
+\lstinputlisting[language=HTML,caption={Example HTML code.},label={lst:html}]{assets/code/html.html}
+\lstinputlisting[language=CSS,caption={Example CSS code.},label={lst:css}]{assets/code/css.css}
+\lstinputlisting[language=ES6,caption={Example JavaScript code.},label={lst:js}]{assets/code/js.js}
 
 \subsection{Rich Web Application}%
 \label{sub:rich_web_application}
@@ -157,11 +157,11 @@ strongest points, but also a nightmare for execution.
 Let's take the function adding two numbers as an example
 as in Listing~\ref{lst:add-js}.
 
-\lstinputlisting[language=js,caption={Add two values.},label={lst:add-js}]{assets/code/add.js}
+\lstinputlisting[language=JavaScript,caption={Add two values.},label={lst:add-js}]{assets/code/add.js}
 
 \begin{displayquote}
 According to the ECMAScript specification,
-\alert{(cf http://www.ecma-international.org/ecma-262/5.1/#sec-11.6.1)}
+\alert{(cf http://www.ecma-international.org/ecma-262/5.1/\#sec-11.6.1)}
 the addition operator either performs string concatenation or numeric addition.
 The production ``AdditiveExpression : AdditiveExpression + MultiplicativeExpression''
 is evaluated as follows:
@@ -223,29 +223,25 @@ interpreting and JITing regarding the ratio of time spent on each phase.
 Fun fact, in V8 the baseline compiler and interpreter is known as ``Ignition''
 and the optimizing compiler goes by the name of ``TurboFan''.
 
-\comment{}{
-
-December 18, 2007 - https://webkit.org/blog/152/announcing-sunspider-09/
-December 19, 2007 - https://blog.codinghorror.com/the-great-browser-javascript-showdown/
-September 2, 2008 - https://blog.chromium.org/2008/09/google-chromes-need-for-speed_02.html
- -> realease date of Chrome
-September 3, 2008 - https://johnresig.com/blog/javascript-performance-rundown/
-September 3, 2008 - https://arstechnica.com/information-technology/2008/09/new-firefox-javascript-engine-is-faster-than-chromes-v8/
-September 5, 2008 - https://www.zdnet.com/article/is-firefox-faster-than-chrome/
-September 19, 2008 - http://www.satine.org/archives/2008/09/19/squirrelfish-extreme-fastest-javascript-engine-yet/
-November 14, 2008 - https://allanfeid.com/content/javascript-engine-benchmark-test-results
-
-
-SunSpider: JS perf test suite by WebKit team
-https://www2.webkit.org/perf/sunspider/sunspider.html
-no longer maintained -> cf JetStream
-
-JetStream: Test JS and wasm
-https://browserbench.org/JetStream/
-
-V8 Benchmark: heavy emphasis on recursion
-}
-
+\comment{}{List of links commented in code}
+% December 18, 2007 - https://webkit.org/blog/152/announcing-sunspider-09/
+% December 19, 2007 - https://blog.codinghorror.com/the-great-browser-javascript-showdown/
+% September 2, 2008 - https://blog.chromium.org/2008/09/google-chromes-need-for-speed_02.html
+%  -> realease date of Chrome
+% September 3, 2008 - https://johnresig.com/blog/javascript-performance-rundown/
+% September 3, 2008 - https://arstechnica.com/information-technology/2008/09/new-firefox-javascript-engine-is-faster-than-chromes-v8/
+% September 5, 2008 - https://www.zdnet.com/article/is-firefox-faster-than-chrome/
+% September 19, 2008 - http://www.satine.org/archives/2008/09/19/squirrelfish-extreme-fastest-javascript-engine-yet/
+% November 14, 2008 - https://allanfeid.com/content/javascript-engine-benchmark-test-results
+%
+% SunSpider: JS perf test suite by WebKit team
+% https://www2.webkit.org/perf/sunspider/sunspider.html
+% no longer maintained -> cf JetStream
+%
+% JetStream: Test JS and wasm
+% https://browserbench.org/JetStream/
+%
+% V8 Benchmark: heavy emphasis on recursion
 
 
 \subsection{Explosion of JavaScript and Node}%
