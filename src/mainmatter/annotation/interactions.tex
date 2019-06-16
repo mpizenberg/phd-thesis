@@ -294,7 +294,7 @@ It contains the images and configuration loaded as well as the annotations perfo
 Its type is defined as in Listing~\ref{lst:state}
 and can be modeled as a finite state machine, visualized in Figure~\ref{fig:states}.
 
-\lstinputlisting[language=haskell,caption={State type definition.},label={lst:state},float]{assets/code/State.txt}
+\lstinputlisting[language=elm,caption={State type definition.},label={lst:state},float]{assets/code/State.elm}
 
 \begin{figure}[ht]
 \centering
@@ -316,7 +316,7 @@ All modifications of the model are understood
 by looking at the \verb|Msg| type definition (Listing~\ref{lst:msg}).
 The \verb|update| function then performs the modifications described by those messages.
 
-\lstinputlisting[language=haskell,caption={Msg type definition.},label={lst:msg},float]{assets/code/Msg.txt}
+\lstinputlisting[language=elm,caption={Msg type definition.},label={lst:msg},float]{assets/code/Msg.elm}
 
 \begin{itemize}
 \item The \verb|WindowResizes| message is triggered when the application is resized.
