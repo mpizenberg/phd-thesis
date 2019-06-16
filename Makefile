@@ -11,6 +11,7 @@ compress = gs -sDEVICE=pdfwrite -dPDFSETTINGS=/$(1) -dCompatibilityLevel=1.4 -dN
 
 # Latex command to build pdf file.
 latexmk = export TEXINPUTS=.:./tlsflyleaf/: && latexmk -pdf -quiet -f -pdflatex="pdflatex -interaction=nonstopmode" -outdir=$(outdir) $(1) $(rootfile)
+# latexmk = export TEXINPUTS=.:./tlsflyleaf/: && latexmk -pdf -outdir=$(outdir) $(1) $(rootfile)
 
 # Build PDF version adapted to printers.
 printer: pdf
