@@ -61,11 +61,11 @@ word processors, automatic translation, and virtually any functionality
 available with a regular computing device.
 
 Web resources are commonly accessible through a Web browser.
-As of May 2019, the three most used Web browsers are Google Chrome (62.7\% of global market share),
-Apple Safari (15.9\%) and Mozilla Firefox (5.1\%).
-\alert{Cf http://gs.statcounter.com/browser-market-share/all/worldwide/2019}
 Thus, we can define a Web application as a user-facing software,
 accessed through a Web browser.
+As of May 2019 according to statcounter~\cite{browser-market-share},
+the most used Web browsers are Google Chrome (62.7\% of global market share),
+Apple Safari (15.9\%) and Mozilla Firefox (5.1\%).
 
 The three pillars of Web applications are HTML, CSS and JavaScript.
 HTML, for ``Hypertext Markup Language'' is a description language
@@ -135,8 +135,7 @@ ES2016, ES2017 and ES2018.
 Many browser wars for dominance of market share occurred since the 90's.
 We are interested in the JavaScript engine performance war,
 starting around 2008 when Google released its Chrome browser.
-On September 2, 2008, Google announced a new Web browser called Chrome.
-\alert{Cf https://blog.chromium.org/2008/09/google-chromes-need-for-speed\_02.html}
+On September 2, 2008, Google announced a new Web browser called Chrome~\cite{google-chrome}.
 The main selling point was its new JavaScript engine called V8,
 greatly improving the browser performances on web applications making
 heavy use of JavaScript like their email client Gmail.
@@ -160,8 +159,7 @@ as in Listing~\ref{lst:add-js}.
 \lstinputlisting[language=JavaScript,caption={Add two values.},label={lst:add-js}]{assets/code/add.js}
 
 \begin{displayquote}
-According to the ECMAScript specification,
-\alert{(cf http://www.ecma-international.org/ecma-262/5.1/\#sec-11.6.1)}
+According to the ECMAScript specification~\cite{ecmascript},
 the addition operator either performs string concatenation or numeric addition.
 The production ``AdditiveExpression : AdditiveExpression + MultiplicativeExpression''
 is evaluated as follows:
@@ -215,8 +213,8 @@ it gets de-optimized back to the baseline compiler.
 Multiple optimization and de-optimization round trips
 hinders the performances, and consequently will permanently mark
 the section as not to be optimized anymore.
-A lot more could be said here,
-\alert{CF https://hacks.mozilla.org/2017/02/a-crash-course-in-just-in-time-jit-compilers/.}
+For more information on JIT compilation, Lin Clark~\cite{clark-jit}
+wrote an introductory blog post.
 
 Figure (\alert{TODO faire un schéma timeline}) outlines the differences between
 interpreting and JITing regarding the ratio of time spent on each phase.
