@@ -7,7 +7,7 @@
 \definecolor{royalblue}{rgb}{0.25, 0.41, 0.88}
 \definecolor{crimson}{rgb}{0.86, 0.8, 0.24}
 
-\lstdefinestyle{CodeStyle}{
+\lstdefinestyle{CodeStyle}{%
     % Frame
     captionpos=b,
     basicstyle=\footnotesize\ttfamily,
@@ -29,6 +29,8 @@
     keywordstyle={[2]\color{darkviolet}},
     keywordstyle={[3]\color{royalblue}},
     stringstyle=\color{forestgreen},
+    % Straight quotes
+    upquote=true,
 }
 
 % ##############################################################################
@@ -36,7 +38,7 @@
 % ##############################################################################
 
 % Define JavaScript language
-\lstdefinelanguage{JavaScript}{
+\lstdefinelanguage{JavaScript}{%
   morekeywords=[1]{break, continue, delete, else, for, function, if, in,
     new, return, this, typeof, var, void, while, with},
   % Literals, primitive types, and reference types.
@@ -53,7 +55,7 @@
 }[keywords, comments, strings]
 
 % Define ES6 standard
-\lstdefinelanguage[ECMAScript2015]{JavaScript}[]{JavaScript}{
+\lstdefinelanguage[ECMAScript2015]{JavaScript}[]{JavaScript}{%
   morekeywords=[1]{await, async, case, catch, class, const, default, do,
     enum, export, extends, finally, from, implements, import, instanceof,
     let, static, super, switch, throw, try},
@@ -66,8 +68,8 @@
 % CSS ##########################################################################
 % ##############################################################################
 
-\lstdefinelanguage{CSS}{
-    keywords={
+\lstdefinelanguage{CSS}{%
+    keywords={%
         bottom, right, left, top,
         margin, color, font, weight
     }
@@ -77,7 +79,7 @@
 % JSON #########################################################################
 % ##############################################################################
 
-\lstdefinelanguage{json}{
+\lstdefinelanguage{json}{%
     literate=
      *{0}{{{\color{crimson}0}}}{1}
       {1}{{{\color{crimson}1}}}{1}
@@ -101,8 +103,8 @@
 % ELM ##########################################################################
 % ##############################################################################
 
-\lstdefinelanguage{elm}{
-  morekeywords={
+\lstdefinelanguage{elm}{%
+  morekeywords={%
     port, module, import, as, exposing,
     type, alias,
     case, of, if, then, else,
