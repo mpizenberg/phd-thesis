@@ -257,13 +257,28 @@ It features an event-driven architecture, with non-blocking input/output (I/O) A
 The project matured from the observation that blocking I/O is extremely non-efficient,
 since it requires many threads and much memory to scale with connections.
 JavaScript being event-driven by nature in the browser,
-was a perfect fit for the node project.
+it was a perfect fit for the node project.
 
 In order to provide non-blocking asynchronous I/O,
 node is composed of an event loop managing callbacks in queued fashion,
-and of a thread pool, executing all blocking I/O calls like file read.
+and of a thread pool, executing all blocking I/O calls like file reading.
 Both are abstracted away by the system, and so a user simply has
 to provide callbacks that will automatically be run upon completion of I/O.
 An example of reading a file is presented in Listing~\ref{lst:read-file-js}.
 
-\lstinputlisting[language=JavaScript,caption={Read a file.},label={lst:read-file-js}]{assets/code/readFile.js}
+\lstinputlisting[%
+	language=JavaScript,
+	caption={Read a file with node.js.
+		Notice the event-driven architecture with an anonymous callback function passed as argument.},
+	label={lst:read-file-js}
+]{assets/code/readFile.js}
+
+
+\subsubsection{Node package manager (npm)}%
+\label{ssub:node_package_manager_npm_}
+
+With the rise of node for server side JavaScript,
+another highly influencial project was born in January 2010, npm.
+% Actually it was born in September 2009
+% but first version published in January 2010.
+% Interview with Isaac Z. Schlueter: https://increment.com/development/interview-with-isaac-z-schlueter-ceo-of-npm/
