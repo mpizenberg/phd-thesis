@@ -277,8 +277,45 @@ An example of reading a file is presented in Listing~\ref{lst:read-file-js}.
 \subsubsection{Node package manager (npm)}%
 \label{ssub:node_package_manager_npm_}
 
+\begin{displayquote}
+	\textit{``To increase speed, you can either push harder or reduce friction.''}
+	--- Isaac Z. Schlueter, node.conf, Portland, OR, May 5th, 2011
+\end{displayquote}
+
 With the rise of node for server side JavaScript,
-another highly influencial project was born in January 2010, npm.
-% Actually it was born in September 2009
-% but first version published in January 2010.
-% Interview with Isaac Z. Schlueter: https://increment.com/development/interview-with-isaac-z-schlueter-ceo-of-npm/
+another highly influencial project was born late 2009, npm.
+Isaac Z. Schlueter, while working at Yahoo, wanted to increase usage
+of JavaScript for full stack web development.
+According to him, many people were already pushing hard on node.js,
+so he took a stab at lowering friction by creating the Node Package Manager (npm).
+The core design choices of npm are rooted in the principle of reducing
+most sources of friction, including the following.
+
+\begin{itemize}
+	\item \textbf{Conflicting dependencies.}
+		When transitive dependencies require different versions of the same package.
+		As a consequence, npm retrieves every version needed by dependencies.
+	\item \textbf{Inconsistent package installation.}
+		Typically, one would need to clone, make, copy, rename files, etc.
+		With \verb|npm install|, dependencies are all installed locally,
+		under the \verb|node_modules/| directory and usable by invoking
+		\verb|require('the-module')|.
+	\item \textbf{Publishing difficulties.}
+		Usually, package registries require a lot of metadata.
+		Npm only requires two fields, name and version.
+\end{itemize}
+
+% Mention inspiration from Yahoo's yinst package manager?
+% https://www.reddit.com/r/npm/comments/aounfi/best_package_manager/
+
+As a result, npm grew exponentially, to become the world's largest package
+registry ever, by a large amount, with over a million packages since June 2019.
+At node.conf 2011~\cite{npm-video}, when Isaac Schlueter announced npm 1.0,
+the registry contained 1900 packages and almost 800 active package authors.
+This roughly corresponds to doubling the registry size every year!
+
+Unfortunately, reduced friction and a policy favoring package creators over users
+brought few security issues.
+The most notable one is probably the event-stream incident late 2018~\cite{npm-event-stream}
+where a new maintainer of the event-stream package added a dependency
+to a malicious package, harvesting bitcoin from visitors of a targeted application.
