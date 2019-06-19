@@ -320,3 +320,70 @@ The most notable one is probably the event-stream incident late 2018~\cite{npm-e
 where a new maintainer of the event-stream package added a dependency
 to a malicious package, harvesting bitcoin from visitors of a targeted application.
 We will discuss later how this risk is reduced with elm packages.
+
+
+\subsection{JavaScript issues}%
+\label{sub:javascript_issues}
+
+\subsubsection{Organic growth and backward compatibility}%
+\label{ssub:organic_growth_and_backward_compatibility}
+
+Old programming languages tend to grow organically, cf spec of C, Java, JS.
+Recent programming languages tend to have simpler foundations, cf Go.
+
+\begin{itemize}
+	\item ECMAScript spec: 805 pages: https://www.ecma-international.org/publications/files/ECMA-ST/Ecma-262.pdf
+	\item C spec: 701 pages: http://www.open-std.org/jtc1/sc22/wg14/www/docs/n1570.pdf
+	\item Java SE 12: 772 pages: https://docs.oracle.com/javase/specs/jls/se12/jls12.pdf
+	\item Go spec Version of November 16, 2018: ~100 pages: https://golang.org/ref/spec
+\end{itemize}
+
+\subsubsection{Callback hell}%
+\label{ssub:callback_hell}
+
+About non-linearity of program flow.
+Async await syntax, fuel backward compatibility issue.
+
+\subsubsection{Context of this}%
+\label{ssub:context_of_this}
+
+What is this?
+
+\subsubsection{Dynamic typing and implicit conversions}%
+\label{ssub:dynamic_typing_and_implicit_conversions}
+
+Loooots of examples.
+
+\subsubsection{Undefined is not a function}%
+\label{ssub:undefined_is_not_a_function}
+
+Famous issue when a problem is detected too late in the call stack.
+
+
+\subsection{JavaScript as a compilation target}%
+\label{sub:javascript_as_a_compilation_target}
+
+
+\subsubsection{JavaScript transpilation}%
+\label{ssub:javascript_transpilation}
+
+It all started with Babel (September 2014,
+cf https://medium.com/@sebmck/2015-in-review-51ac7035e272)
+
+\subsubsection{Statically typed JavaScript}%
+\label{ssub:statically_typed_javascript}
+
+What about TypeScript (October 2012), Flow?
+
+\subsubsection{JavaScript from other domains}%
+\label{ssub:javascript_other_domains}
+
+ruby, python, Erlang, Elixir, Haskell, Ocaml, Perl, Java, ClojureScript,
+C with emscripten to asm.js
+
+\subsubsection{JavaScript as the main target}%
+\label{ssub:javascript_as_the_main_target}
+
+CoffeeScript (December 2009), Dart (October 2011),
+elm (April 2012), reasonml (March 2016), PureScript (2013),
+BuckleScript (just an OCaml to JS compiler)
