@@ -328,26 +328,93 @@ We will discuss later how this risk is reduced with elm packages.
 \subsubsection{Organic growth and backward compatibility}%
 \label{ssub:organic_growth_and_backward_compatibility}
 
-Old programming languages tend to grow organically, cf spec of C, Java, JS.
-Recent programming languages tend to have simpler foundations, cf Go.
+Most programming languages tend to grow in complexity with time.
+Regularly, new features are added, and for backward compatibility,
+old ways of doing things are kept in the language.
+JavaScript is no stranger to this kind of organic growth.
+As an example, the language specification of JavaScript is 805 pages~\cite{ecmascript-pdf}.
+This is roughly the same size as the Java specification with 772 pages~\cite{java-spec-pdf}
+or the C specification with 571 pages~\cite{c-spec-pdf}
+To compare, the specification for the Go progamming language
+by Google~\cite{go-spec}, contains approximately a 100 pages.
 
-\begin{itemize}
-	\item ECMAScript spec: 805 pages: https://www.ecma-international.org/publications/files/ECMA-ST/Ecma-262.pdf
-	\item C spec: 701 pages: http://www.open-std.org/jtc1/sc22/wg14/www/docs/n1570.pdf
-	\item Java SE 12: 772 pages: https://docs.oracle.com/javase/specs/jls/se12/jls12.pdf
-	\item Go spec Version of November 16, 2018: ~100 pages: https://golang.org/ref/spec
-\end{itemize}
+\comment{}{Plus tard mettre citation, it will be finished when there is nothing left to remove.}
+
+The wildest evolutions occurred with ES2015 (previously known as ES6).
+Among the confusing ones for beginners are the ``const'' and ``let'' keywords.
+They introduce two new ways of declaring variables, bringing it to a total of four,
+with the ``var'' keyword and no keyword.
+Differences between those are presented in Listing~\ref{lst:var-scope-js}.
+
+\lstinputlisting[language=ES6,caption={Variable scope in JavaScript.},label={lst:var-scope-js}]{assets/code/var-scope.js}
+
+The syntax list continues with ``arrow functions'', ``promises'' and so on.
+Most new features are illustrated online at es6-features.org,
+I suggest browsing this site for more information.
+
+\comment{}{%
+	Il pourrait être aussi intéressant de montionner les choses suivantes :
+	- Module systems (CommonJS, AMD, ES2015): https://auth0.com/blog/javascript-module-systems-showdown/
+	- ESNext (generators, observers, ...)
+}
 
 \subsubsection{Callback hell}%
 \label{ssub:callback_hell}
 
-About non-linearity of program flow.
-Async await syntax, fuel backward compatibility issue.
+As mentioned when introducing node.js,
+JavaScript event-driven APIs rely on callback functions.
+Let's consider a simple case where we want to retrieve some data
+from a database.
+Listing~\ref{lst:callback-hell-sync} outlines how a blocking synchronous API
+would look like.
+The control flow of the program is easy to follow,
+but blocking at ``getDatabase'' and ``db.get'' calls
+means the server (or the graphical interface) is non responding
+during this time.
+
+\lstinputlisting[%
+	language=ES6,
+	caption={Hypothetical blocking and synchronous API.},
+	label={lst:callback-hell-sync}
+]{assets/code/callback-hell-sync.js}
+
+In contrast, the asynchronous callback version
+in Listing~\ref{lst:callback-hell-callback},
+is efficiently giving back control while waiting for the
+database to connect and respond.
+The main drawback resides in the complexity of the control flow,
+and the verbosity of the code.
+By a convention that emerged with time,
+callback functions are supposed to handle a potential error
+as first argument, and successful result as second argument.
+This model continues to bring suffering to JavaScript developers,
+and thus has been coined in the community the ``callback hell''~\cite{callback-hell}.
+
+\lstinputlisting[%
+	language=ES6,
+	caption={Typical asynchronous API based on callbacks.},
+	label={lst:callback-hell-callback}
+]{assets/code/callback-hell-callback.js}
+
+We should mention that recent JavaScript standards provide new syntax
+making use of ``async'' and ``await'' keywords to simplify
+the control flow, while preserving the performances of
+the callback model.
+Listing~\ref{lst:callback-hell-async} shows how the same code can take advantage of the new syntax.
+Unfortunately, this is to the detriment of language simplicity,
+as explained in the previous point.
+
+\lstinputlisting[%
+	language=ES6,
+	caption={Asynchronous version with the new async/await syntax.},
+	label={lst:callback-hell-async}
+]{assets/code/callback-hell-async.js}
 
 \subsubsection{Context of this}%
 \label{ssub:context_of_this}
 
 What is this?
+https://github.com/dotnet/try/issues/290
 
 \subsubsection{Dynamic typing and implicit conversions}%
 \label{ssub:dynamic_typing_and_implicit_conversions}
@@ -387,3 +454,14 @@ C with emscripten to asm.js
 CoffeeScript (December 2009), Dart (October 2011),
 elm (April 2012), reasonml (March 2016), PureScript (2013),
 BuckleScript (just an OCaml to JS compiler)
+
+
+\section{Frontend Web programming}%
+\label{sec:frontend_web_programming}
+
+
+
+\section{Elm}%
+\label{sec:elm}
+
+
