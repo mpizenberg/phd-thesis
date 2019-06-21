@@ -413,8 +413,45 @@ as explained in the previous point.
 \subsubsection{Context of this}%
 \label{ssub:context_of_this}
 
-What is this?
-https://github.com/dotnet/try/issues/290
+In other object oriented languages,
+``this'' (or ``self'') usually refers to the currently used instance of a class.
+As defined in the specification,
+\textit{The this keyword evaluates to the value of the ThisBinding of the current execution context.}
+JavaScript not being a typical object oriented language,
+``this'' can take many shapes, depending on the execution context.
+The execution contexts are in a stack where new contexts are created and pushed
+whenever code not associated with the current context starts running.
+This typically happens in function calls.
+Let's take Listing~\ref{lst:this-js} to exhibit some odities of the ``this'' value.
+
+\lstinputlisting[%
+	language=ES6,
+	caption={Value of ``this'' in JavaScript.},
+	label={lst:this-js}
+]{assets/code/this.js}
+
+By default, if ``this'' is undefined, as in lines 17 and 18,
+it is binded to the global object.
+At line 11, we define ``x = 1'' with no keyword,
+so ``x'' is a global variable.
+As a result, line 17 and 18 print 1.
+The definitions of the ``log'' and ``logF'' methods on the ``Who'' class
+lines 7 and 8 are equivalent. The behavior of ``this'' in that context,
+is what we expect to see for methods call on objects and thus,
+lines 20 and 21 both print 2.
+The ``call'' function (and some others), used for the definition of the ``logCall'' method,
+enables binding of the ``this'' value to a specific object given as first argument.
+That is why line 23 prints 3.
+
+Now the most surprising results are lines 19 and 22, both printing 1 instead of 2.
+At line 13, ``logMe'' is defined as the same function than ``me.log'' which
+actually is the original ``log'' function.
+As a consequence, line 19 is strictly equivalent to line 18, and they both print 1.
+Finally, the ``logF2'' method also prints 1 because it's definition isn't the log function
+(as defined for the ``log'' method) but rather calls the ``log'' function which
+generates another context in which ``this'' is not defined anymore.
+The behavior is thus the same than for lines 17 and 18, which binds ``this'' to the global object,
+and prints the global variable ``x = 1''.
 
 \subsubsection{Dynamic typing and implicit conversions}%
 \label{ssub:dynamic_typing_and_implicit_conversions}
