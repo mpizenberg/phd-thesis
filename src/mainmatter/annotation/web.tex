@@ -456,7 +456,41 @@ and prints the global variable ``x = 1''.
 \subsubsection{Dynamic typing and implicit conversions}%
 \label{ssub:dynamic_typing_and_implicit_conversions}
 
-Loooots of examples.
+JavaScript is dynamically typed language.
+This means that types of values are only known at runtime,
+and that they can change during the execution of the program
+as shown in Listing~\ref{lst:dynamic-js}.
+
+\lstinputlisting[%
+	language=ES6,
+	caption={Dynamic typing in JavaScript.},
+	label={lst:dynamic-js}
+]{assets/code/dynamic.js}
+
+In addition, JavaScript performs implicit conversions between type,
+depending on the operators and functions being used.
+In Listing~\ref{lst:weak-js}, the number 42 gets converted into the string ``42''
+before concatenation, and the string ``6'' is converted to the number 6
+before multiplication with the number 7.
+
+\lstinputlisting[%
+	language=ES6,
+	caption={Weak typing in JavaScript (implicit conversion).},
+	label={lst:weak-js}
+]{assets/code/weak.js}
+
+By combining dynamic types, and implicit conversions,
+JavaScript often generates extremely surprising situations,
+resulting in unexpected behaviors.
+It can also lead to very original use cases.
+In 2010, an informal code obfuscation competition resulted in the creation
+of subset of JavaScript containing only six characters~\cite{jsfuck}, ``['',
+``]'', ``('', ``)'', ``!'' and ``+'',
+able to represent any valid JavaScript code.
+The value ``false'' would be obtained with ``![]'',
+since negation of an empty array returns ``false'' according to JavaScript specification.
+Numbers, characters, and other language constructs are obtained through similar
+implicit conversion tricks.
 
 \subsubsection{Undefined is not a function}%
 \label{ssub:undefined_is_not_a_function}
