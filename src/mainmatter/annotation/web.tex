@@ -484,8 +484,8 @@ JavaScript often generates extremely surprising situations,
 resulting in unexpected behaviors.
 It can also lead to very original use cases.
 In 2010, an informal code obfuscation competition resulted in the creation
-of subset of JavaScript containing only six characters~\cite{jsfuck}, ``['',
-``]'', ``('', ``)'', ``!'' and ``+'',
+of a subset of JavaScript containing only six characters~\cite{jsfuck},
+``['', ``]'', ``('', ``)'', ``!'' and ``+'',
 able to represent any valid JavaScript code.
 The value ``false'' would be obtained with ``![]'',
 since negation of an empty array returns ``false'' according to JavaScript specification.
@@ -495,7 +495,23 @@ implicit conversion tricks.
 \subsubsection{Undefined is not a function}%
 \label{ssub:undefined_is_not_a_function}
 
-Famous issue when a problem is detected too late in the call stack.
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=1.0\linewidth]{assets/img/undefined-improved.png}
+	\caption{Tweet by Addy Osmani (21-Feb-2015) announcing error report improvements in Chrome.}%
+	\label{fig:undefined-improved}
+\end{figure}
+
+For JavaScript developers previous to 2015,
+the error ``undefined is not a function'' was famous for not being helpful.
+This error would very often rise from a typo somewhere in the code.
+Due to the dynamic nature of JavaScript, the error can be reported late in the call stack.
+Indeed, even if an error in the code might create an ``undefined'' value,
+it is only later when called, that an uncaught error would trigger.
+As shown in Figure~\ref{fig:undefined-improved}, browsers are more helpful now,
+at the cost of loosing an iconic error for all JavaScript developers.
+Yet not having a compile step prevents advanced static analysis of the code,
+and at the same time lengthen the feedback loop to fix errors.
 
 
 \subsection{JavaScript as a compilation target}%
