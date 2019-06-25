@@ -118,7 +118,7 @@ own Web technologies, Netscape Communications recruited Brendan Eich,
 with the aim of integrating a scripting language into their browser.
 And so, in May 1995, he wrote a prototype in 10 days.
 Assumably for marketing reasons, it was officially named JavaScript
-when realeased in Netscape Navigator 2.0 beta 3.
+when released in Netscape Navigator 2.0 beta 3.
 
 Two years later, in June 1997, the European Computer Manufacturers Association
 (ECMA) standardized the first version of ``ECMAScript'' as ECMA-262,
@@ -224,7 +224,7 @@ and the optimizing compiler goes by the name of ``TurboFan''.
 % December 18, 2007 - https://webkit.org/blog/152/announcing-sunspider-09/
 % December 19, 2007 - https://blog.codinghorror.com/the-great-browser-javascript-showdown/
 % September 2, 2008 - https://blog.chromium.org/2008/09/google-chromes-need-for-speed_02.html
-%  -> realease date of Chrome
+%  -> release date of Chrome
 % September 3, 2008 - https://johnresig.com/blog/javascript-performance-rundown/
 % September 3, 2008 - https://arstechnica.com/information-technology/2008/09/new-firefox-javascript-engine-is-faster-than-chromes-v8/
 % September 5, 2008 - https://www.zdnet.com/article/is-firefox-faster-than-chrome/
@@ -562,9 +562,25 @@ control on the generated code for designing complex applications.
 \subsubsection{JavaScript as the main target}%
 \label{ssub:javascript_as_the_main_target}
 
-CoffeeScript (December 2009), Dart (October 2011),
-elm (April 2012), reasonml (March 2016), PureScript (2013),
-BuckleScript (just an OCaml to JS compiler)
+Instead of trying to tackle both server and client programming,
+a new category of languages emerged focused on the client side,
+with JavaScript being the only, or main compilation target.
+The most notable ones are CoffeeScript~\cite{coffeescript} released in 2009
+by Jeremy Ashkenas, Dart~\cite{dart-blog} designed by Lars Bak
+(creator of the V8 engine) and Kasper Lund for Google in 2010,
+Elm~\cite{czaplicki2013asynchronous} the product of Evan Czaplicki senior thesis
+on functional reactive programming in 2012,
+and Reason~\cite{reason} (also known as ReasonML) in 2016 by Jordan Walke,
+also the original designer of the React framework we will discuss later.
+
+One can notice that appart from Dart, which is heavily object oriented,
+most attempts at new programming languages for the client follow the functional paradigm.
+It is not estranged from guaranties brought by
+functional programming that we will develop when exploring the Elm programming language.
+
+A note about the Dart language, it has been abandonned for Web programming,
+but found a new home in the Flutter framework~\cite{flutter}, released in 2017,
+targeting mainly native development of mobile applications on iOS and Android.
 
 \subsubsection{JavaScript transpilation}%
 \label{ssub:javascript_transpilation}
