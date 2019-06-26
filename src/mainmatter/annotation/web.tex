@@ -582,10 +582,39 @@ A note about the Dart language, it has been abandonned for Web programming,
 but found a new home in the Flutter framework~\cite{flutter}, released in 2017,
 targeting mainly native development of mobile applications on iOS and Android.
 
-\subsubsection{Statically typed JavaScript}%
-\label{ssub:statically_typed_javascript}
+\subsubsection{Gradually typed JavaScript}%
+\label{ssub:gradually_typed_javascript}
 
-What about TypeScript (October 2012), Flow?
+Coding with a completely different language is a rather extreme approach
+which can feel overwhelming.
+From this observation, both Microsoft and Facebook decided to bring
+new contributions to the JavaScript ecosystem in the form of gradual typing.
+Gradual typing is a type system where values are partially typed.
+Some may be typed, and consequently static typing rules are verified,
+and some may be untyped, left for compile-time verifications.
+
+In October 2012, Microsoft released TypeScript~\cite{bierman2014understanding},
+a superset of JavaScript, enabling type annotations.
+As a consequence, any valid JavaScript program is also a valid TypeScript program.
+This property was most certainly the major success factor of TypeScript.
+Programs can be ported progressively to benefit from static analysis.
+Listing~\ref{lst:add-ts} exhibits the core type annotation feature of TypeScript.
+
+\lstinputlisting[%
+	language=JavaScript,
+	caption={JavaScript and TypeScript version of an add function.},
+	label={lst:add-ts}
+]{assets/code/add.ts}
+
+Another benefit of static typing that JavaScript developers are discovering when
+switching to TypeScript is the improved IDE support,
+with better autocompletion tools, jumping to definitions and other support from your editor.
+
+In 2014, another tool named Flow and led by Facebook~\cite{chaudhuri2017fast}
+enabled gradual typing of JavaScript.
+Ultimately, TypeScript seems to have taken the biggest part of the cake,
+but choosing between the two will most likely depend on how well they integrate
+with your working framework.
 
 \subsubsection{JavaScript transpilation}%
 \label{ssub:javascript_transpilation}
