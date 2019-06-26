@@ -621,8 +621,23 @@ with your working framework.
 \subsubsection{JavaScript transpilation}%
 \label{ssub:javascript_transpilation}
 
-It all started with Babel (September 2014,
-cf https://medium.com/@sebmck/2015-in-review-51ac7035e272)
+Despite increasing language complexity
+as explained in Section~\ref{ssub:organic_growth_and_backward_compatibility},
+ES2015 and later specifications brought very appreciated features to the table,
+many influenced by other languages like CoffeeScript.
+The ``async / await'' pair of keywords is such example of syntax
+improving on complexity of the code control flow.
+New specifications however, are not always immediately available in all browsers,
+especially mobile versions.
+But there is one version of JavaScript fully supported on all browsers, ES5.
+Inspired by the traceur tool by Google engineers,
+Sebastian McKenzie jumped head first into writing 6to5~\cite{babel}
+on September 2014, at the age of 17.
+His 6to5 project, now renamed Babel, is known as a JavaScript ``transpiler'',
+i.e.\ a program converting recent JavaScript source code into another (older) version
+of JavaScript source code.
+Today, Babel has become one of the most used tools
+with 7 million weekly downloads on npm.
 
 
 \section{Frontend Web programming}%
