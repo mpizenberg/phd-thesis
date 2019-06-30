@@ -252,14 +252,14 @@ and the optimizing compiler goes by the name of ``TurboFan''.}{This can probably
 
 Not long after the release of the V8 engine from Google,
 Ryan Dahl announced at the European JSConf of 2009
-a new project named node.js~\cite{node-js-speaker}.
+a new project named \comment{node.js}{not Node.js ?}~\cite{node-js-speaker}.
 As he explains in his talk~\cite{node-js-video},
 node is a cross-platform JavaScript runtime environment based on V8.
 It features an event-driven architecture, with non-blocking input/output (I/O) APIs.
 The project matured from the observation that blocking I/O is extremely non-efficient,
-since it requires many threads and much memory to scale with connections.
-JavaScript being event-driven by nature in the browser,
-it was a perfect fit for the node project.
+since it requires many threads and \replace{much}{a large} memory to scale with connections.
+\remove{JavaScript} Being event-driven by nature in the browser,
+\replace{it}{JavaScript} was a perfect fit for the node project.
 
 In order to provide non-blocking asynchronous I/O,
 node is composed of an event loop managing callbacks in queued fashion,
