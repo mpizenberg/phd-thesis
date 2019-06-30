@@ -113,17 +113,17 @@ In the next section, we will dive into the cornerstone of Web pages dynamism, Ja
 \label{sub:genesis_of_javascript}
 
 In 1995, the dominating Web browser was the Netscape Navigator.
-Realizing that pages dynamism was key in the war against Microsoft
+Realizing that pages dynamism was key in the \replace{war}{competition} against Microsoft\add{'s}
 own Web technologies, Netscape Communications recruited Brendan Eich,
 with the aim of integrating a scripting language into their browser.
-And so, in May 1995, he wrote a prototype in 10 days.
+\replace{And so, in May 1995, he wrote a prototype in 10 days.}{A first prototype was thus developed in 10 days (May 1995).}
 Assumably for marketing reasons, it was officially named JavaScript
 when released in Netscape Navigator 2.0 beta 3.
 
 Two years later, in June 1997, the European Computer Manufacturers Association
 (ECMA) standardized the first version of ``ECMAScript'' as ECMA-262,
-JavaScript being its most well known implementation.
-The ECMAScript (ES) standard has been evolving since.
+JavaScript being its most well\add{-}known implementation.
+The ECMAScript (ES) standard has been evolving \add{ever} since.
 Today, all browsers fully implement ES5, released in 2009,
 and partially implement the most recent versions, ES2015,
 ES2016, ES2017 and ES2018.
@@ -132,31 +132,32 @@ ES2016, ES2017 and ES2018.
 \label{sub:browser_performance_war}
 
 Many browser wars for dominance of market share occurred since the 90's.
-We are interested in the JavaScript engine performance war,
+\add{In this section, }we are \add{particularly} interested in the JavaScript engine performance war,
 starting around 2008 when Google released its Chrome browser.
 On September 2, 2008, Google announced a new Web browser called Chrome~\cite{google-chrome}.
-The main selling point was its new JavaScript engine called V8,
+Its main selling \replace{point}{feature} was a new JavaScript engine called V8,
 greatly improving the browser performances on web applications making
-heavy use of JavaScript like their email client Gmail.
-Beware that ``performance'' in a browser is the result of many factors
+heavy use of JavaScript like their email client \comment{Gmail}{should we notify trademarks with a proper style?}.
+\replace{Beware}{Note} that ``performance'' in a browser \replace{is the result of}{depends on} many factors
 such that network latency, DOM computation, page rendering or JavaScript processing.
-In this section, we will specifically focus JavaScript execution performances.
+In this section, we will specifically focus \add{on} JavaScript execution performances.
 
 \subsubsection{Dynamic interpretation}%
 \label{ssub:dynamic-interpretation}
 
-Previously, JavaScript was an interpreted language.
+\replace{Previously, JavaScript was}{JavaScript was originally} an interpreted language.
 For each line of code, the engine would translate it into machine code,
 and immediately execute it.
-This means that for a loop, the transformation from JavaScript to machine code
+This means that for a loop, the \add{same} transformation from JavaScript to machine code
 is repeated over and over again.
-In addition, JavaScript is a dynamic language, which is one of its
-strongest points, but also a nightmare for execution.
-Let's take the function adding two numbers as an example
-as in Listing~\ref{lst:add-js}.
+In addition, JavaScript is a dynamic language, which is \add{both} one of its
+strongest points but also a \replace{nightmare for}{huge drag on} execution.
+Let's take the function adding two numbers \add{depicted in Listing~\ref{lst:add-js}} as an example
+\remove{as in Listing~\ref{lst:add-js}}.
 
-\lstinputlisting[language=JavaScript,caption={Add two values.},label={lst:add-js}]{assets/code/add.js}
+\lstinputlisting[language=JavaScript,caption={Adding two values.},label={lst:add-js}]{assets/code/add.js}
 
+\comment{}{If what follows is a quote, it should be made clearer in the presentation.}
 \begin{displayquote}
 According to the ECMAScript specification~\cite{ecmascript},
 the addition operator either performs string concatenation or numeric addition.
@@ -177,17 +178,18 @@ is evaluated as follows:
     \item Return the result of applying the addition operation to ToNumber(lprim) and ToNumber(rprim). See the Note below 11.6.3.
 \end{enumerate}
 
-NOTE 1 No hint is provided in the calls to ToPrimitive in steps 5 and 6. All native ECMAScript objects except Date objects handle the absence of a hint as if the hint Number were given; Date objects handle the absence of a hint as if the hint String were given. Host objects may handle the absence of a hint in some other manner.
+\textbf{NOTE 1}. No hint is provided in the calls to ToPrimitive in steps 5 and 6. All native ECMAScript objects except Date objects handle the absence of a hint as if the hint Number were given; Date objects handle the absence of a hint as if the hint String were given. Host objects may handle the absence of a hint in some other manner.
 
-NOTE 2 Step 7 differs from step 3 of the comparison algorithm for the relational operators (11.8.5), by using the logical-or operation instead of the logical-and operation.
+\textbf{NOTE 2}. Step 7 differs from step 3 of the comparison algorithm for the relational operators (11.8.5), by using the logical-or operation instead of the logical-and operation.
 \end{displayquote}
+
 
 In theory, if we know that we will only use this function
 to sum two numbers, it should compile to a single instruction.
 However, due to the dynamic nature of JavaScript,
 as specified in the standard, the code has to check if the arguments
 are strings, objects, and proceed first with conversions before
-eventually reaching the instruction doing the addition.
+eventually reaching the instruction \replace{doing}{that actually computes} the addition.
 This process results in one or two orders of magnitude slower code,
 compared to statically typed languages like C or Java.
 
@@ -202,7 +204,7 @@ just-in-time (JIT) compilers.
 The key ingredient is a ``monitor'' sometimes called ``profiler''.
 The monitor watches the code while it is run by the interpreter,
 and keeps track of how often a piece of code is executed.
-Once a path of code is repeatedly executed, it becomes ``hot'',
+Once a path of code is \add{found to be }repeatedly executed, it becomes ``hot'',
 which triggers an optimizing compiler.
 According to the types previously used in the hot path,
 the optimizing compiler will make assumptions enabling
@@ -213,12 +215,12 @@ Multiple optimization and de-optimization round trips
 hinders the performances, and consequently will permanently mark
 the section as not to be optimized anymore.
 For more information on JIT compilation, Lin Clark~\cite{clark-jit}
-wrote an introductory blog post.
+wrote an \add{enlightning} introductory blog post.
 
-Figure (\alert{TODO faire un schéma timeline}) outlines the differences between
+Figure (\alert{TODO faire un schema timeline}) outlines the differences between
 interpreting and JITing regarding the ratio of time spent on each phase.
-Fun fact, in V8 the baseline compiler and interpreter is known as ``Ignition''
-and the optimizing compiler goes by the name of ``TurboFan''.
+\comment{Fun fact, in V8 the baseline compiler and interpreter is known as ``Ignition''
+and the optimizing compiler goes by the name of ``TurboFan''.}{This can probably be ignored :-)}
 
 \comment{}{List of links commented in code}
 % December 18, 2007 - https://webkit.org/blog/152/announcing-sunspider-09/
