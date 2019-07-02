@@ -265,7 +265,7 @@ In order to provide non-blocking asynchronous I/O,
 node is composed of an event loop managing callbacks in queued fashion,
 and of a thread pool, executing all blocking I/O calls like file reading.
 Both are abstracted away by the system, and so a user simply has
-to provide callbacks that will automatically be run upon completion of I/O.
+to provide callbacks that will automatically be run upon completion of I/O \add{calls?}.
 An example of reading a file is presented in Listing~\ref{lst:read-file-js}.
 
 \lstinputlisting[%
@@ -284,14 +284,14 @@ An example of reading a file is presented in Listing~\ref{lst:read-file-js}.
 	--- Isaac Z. Schlueter, node.conf, Portland, OR, May 5th, 2011
 \end{displayquote}
 
-With the rise of node for server side JavaScript,
-another highly influencial project was born late 2009, npm.
+With the rise of node for server-side JavaScript,
+another highly influencial project was born late 2009, \add{the Node package manager} (npm).
 Isaac Z. Schlueter, while working at Yahoo, wanted to increase usage
 of JavaScript for full stack web development.
 According to him, many people were already pushing hard on node.js,
-so he took a stab at lowering friction by creating the Node Package Manager (npm).
+so he \comment{took a stab}{trop familier} at lowering friction by creating the Node Package Manager (npm).
 The core design choices of npm are rooted in the principle of reducing
-most sources of friction, including the following.
+most sources of friction, including the following:
 
 \begin{itemize}
 	\item \textbf{Conflicting dependencies.}
@@ -317,7 +317,7 @@ the registry contained 1900 packages and almost 800 active package authors.
 This roughly corresponds to doubling the registry size every year!
 
 Unfortunately, reduced friction and a policy favoring package creators over users
-brought few security issues.
+brought a few security issues.
 The most notable one is probably the event-stream incident late 2018~\cite{npm-event-stream}
 where a new maintainer of the event-stream package added a dependency
 to a malicious package, harvesting bitcoin from visitors of a targeted application.
@@ -331,28 +331,28 @@ We will discuss later how this risk is reduced with elm packages.
 \label{ssub:organic_growth_and_backward_compatibility}
 
 Most programming languages tend to grow in complexity with time.
-Regularly, new features are added, and for backward compatibility,
-old ways of doing things are kept in the language.
-JavaScript is no stranger to this kind of organic growth.
+New features are regularly added, and backward compatibility requires that
+\replace{old ways of doing things}{outdated practices} are kept in the language.
+JavaScript is a good illustration of this kind of organic growth.
 As an example, the language specification of JavaScript is 805 pages~\cite{ecmascript-pdf}.
 This is roughly the same size as the Java specification with 772 pages~\cite{java-spec-pdf}
 or the C specification with 571 pages~\cite{c-spec-pdf}
 To compare, the specification for the Go progamming language
-by Google~\cite{go-spec}, contains approximately a 100 pages.
+by Google~\cite{go-spec}, contains approximately 100 pages.
 
 \comment{}{Plus tard mettre citation, it will be finished when there is nothing left to remove.}
 
-The wildest evolutions occurred with ES2015 (previously known as ES6).
-Among the confusing ones for beginners are the ``const'' and ``let'' keywords.
+The \replace{wildest}{most salient} evolutions occurred with ES2015 (previously known as ES6).
+\comment{Among the confusing ones for beginners are the ``const'' and ``let'' keywords.}{tournure bizarre}
 They introduce two new ways of declaring variables, bringing it to a total of four,
-with the ``var'' keyword and no keyword.
+along with the ``var'' keyword and no keyword.
 Differences between those are presented in Listing~\ref{lst:var-scope-js}.
 
 \lstinputlisting[language=ES6,caption={Variable scope in JavaScript.},label={lst:var-scope-js}]{assets/code/var-scope.js}
 
-The syntax list continues with ``arrow functions'', ``promises'' and so on.
+\comment{The syntax list continues with ``arrow functions'', ``promises'' and so on.
 Most new features are illustrated online at es6-features.org,
-I suggest browsing this site for more information.
+I suggest browsing this site for more information.}{Je ne suis pas sur de l'utilit\'e de ces phrases. A remplacer peut-etre par un commentaire sur la complexit\'e de ces keywords, ou une comparaison avec d'autres langages ?}
 
 \comment{}{%
 	Il pourrait être aussi intéressant de montionner les choses suivantes :
@@ -365,13 +365,13 @@ I suggest browsing this site for more information.
 
 As mentioned when introducing node.js,
 JavaScript event-driven APIs rely on callback functions.
-Let's consider a simple case where we want to retrieve some data
+Let's consider a simple case where we want to retrieve information
 from a database.
 Listing~\ref{lst:callback-hell-sync} outlines how a blocking synchronous API
 would look like.
 The control flow of the program is easy to follow,
 but blocking at ``getDatabase'' and ``db.get'' calls
-means the server (or the graphical interface) is non responding
+means the server (or the graphical interface) is \replace{non}{not} responding
 during this time.
 
 \lstinputlisting[%
@@ -389,7 +389,7 @@ and the verbosity of the code.
 By a convention that emerged with time,
 callback functions are supposed to handle a potential error
 as first argument, and successful result as second argument.
-This model continues to bring suffering to JavaScript developers,
+This model \comment{continues to bring suffering to JavaScript developers}{cela semble une assertion forte, et je n'en vois pas trop l'origine dans les lignes pr\'ec\'edentes},
 and thus has been coined in the community the ``callback hell''~\cite{callback-hell}.
 
 \lstinputlisting[%
@@ -415,7 +415,7 @@ as explained in the previous point.
 \subsubsection{Context of this}%
 \label{ssub:context_of_this}
 
-In other object oriented languages,
+In other object-oriented languages,
 ``this'' (or ``self'') usually refers to the currently used instance of a class.
 As defined in the specification,
 \textit{The this keyword evaluates to the value of the ThisBinding of the current execution context.}
