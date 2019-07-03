@@ -418,20 +418,20 @@ as explained in the previous point.
 In other object-oriented languages,
 ``this'' (or ``self'') usually refers to the currently used instance of a class.
 As defined in the specification,
-\textit{The this keyword evaluates to the value of the ThisBinding of the current execution context.}
+\textit{The this keyword evaluates to the value of the ThisBinding of the current execution context.} \comment{}{j'avoue que je ne comprends pas trop la phrase en italique}
 JavaScript not being a typical object oriented language,
 ``this'' can take many shapes, depending on the execution context.
-The execution contexts are in a stack where new contexts are created and pushed
+The execution contexts are in a stack in which new contexts are created and pushed
 whenever code not associated with the current context starts running.
 This typically happens in function calls.
-Let's take Listing~\ref{lst:this-js} to exhibit some odities of the ``this'' value.
+Let's take Listing~\ref{lst:this-js} to exhibit some oddities of the ``this'' value.
 
 \lstinputlisting[%
 	language=ES6,
 	caption={Value of ``this'' in JavaScript.},
 	label={lst:this-js}
 ]{assets/code/this.js}
-
+\comment{}{Honnetement, j'ai rien compris de cette partie :-(}
 By default, if ``this'' is undefined, as in lines 17 and 18,
 it is binded to the global object.
 At line 11, we define ``x = 1'' with no keyword,
@@ -458,7 +458,7 @@ and prints the global variable ``x = 1''.
 \subsubsection{Dynamic typing and implicit conversions}%
 \label{ssub:dynamic_typing_and_implicit_conversions}
 
-JavaScript is dynamically typed language.
+JavaScript is a dynamically typed language.
 This means that types of values are only known at runtime,
 and that they can change during the execution of the program
 as shown in Listing~\ref{lst:dynamic-js}.
@@ -480,7 +480,7 @@ before multiplication with the number 7.
 	caption={Weak typing in JavaScript (implicit conversion).},
 	label={lst:weak-js}
 ]{assets/code/weak.js}
-
+\comment{}{3e exemple ajout\'e grace \`a tforgione}
 By combining dynamic types, and implicit conversions,
 JavaScript often generates extremely surprising situations,
 resulting in unexpected behaviors.
@@ -505,7 +505,7 @@ implicit conversion tricks.
 \end{figure}
 
 For JavaScript developers previous to 2015,
-the error ``undefined is not a function'' was famous for not being helpful.
+the error ``undefined is not a function'' was \comment{famous for not being helpful}{n\'ecessite une r\'ef\'erence}.
 This error would very often rise from a typo somewhere in the code.
 Due to the dynamic nature of JavaScript, the error can be reported late in the call stack.
 Indeed, even if an error in the code might create an ``undefined'' value,
