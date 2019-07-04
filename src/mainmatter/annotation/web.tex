@@ -649,7 +649,74 @@ with 7 million weekly downloads on npm.
 \subsection{Single Page Application (SPA)}%
 \label{sub:single_page_application_spa_}
 
-Angular, React, Vue
+In a desire to improve user experience in Web applications,
+code location has been shifting from server to client.
+Since 2009, a Web framework named AngularJS~\cite{hevery2009declarative} strongly pushed
+the Web actors toward writing ``Single Page Applications'' (SPA).
+A Single Page Application gets its name from the fact that only one
+HTML page is sent to the client browser.
+This page however, contains JavaScript code taking control
+of the application and rendering it for the rest of the user navigation.
+When new data is required, the application can send requests
+with the XMLHttpRequest (XHR) object, or a WebSocket provided by the browser,
+then process the answer and re-render the HTML page accordingly.
+Since February 2005, this technique was popularized under the name Ajax~\cite{ajax}
+by Jesse James Garret and is represented in Figure~TODO.
+Ajax stands for asynchronous JavaScript and XML,
+though today exchanged data is mostly in the JSON format (JavaScript Object Notation) instead of XML,
+and occasionally just raw bytes depending on use cases and protocols.
+Let's describe briefly today's leading Web frameworks, namely Angular, React and Vue.
+
+\subsubsection{Angular}%
+\label{ssub:angular}
+
+AngularJS~\cite{hevery2009declarative} goes back to 2009, when Miško Hevery and Adam Abrons
+where trying to sell online storage services through software at getangular.com.
+The project wasn't successful enough, and so they made <angular/> open source.
+Miško Hevery was later recruited at Google, working on their feedback project.
+The story, as told by Miško Hevery and Brad Green at Google I/O 2013~\cite{angularjs-googleio},
+says that it took Miško three weeks (though he had bet two) to rewrite a six-month work
+with 17000 lines of code into 1500 lines of code with <angular/>.
+Impressed, Brad decided to embrace the <angular/> project under Google's wing
+and it got rebranded AngularJS with a new logo.
+In 2016, Google released its successor, renamed Angular (without the JS part).
+The key feature of Angular/AngularJS is declarative two-way data binding,
+showcased in Listing~\ref{lst:angularjs}.
+
+\lstinputlisting[%
+  language=HTML,
+  caption={Two-way data binding in AngularJS.},
+  label={lst:angularjs}
+]{assets/code/angularjs.html}
+
+https://web.archive.org/web/20091230110525/http://getangular.com/
+
+Angular
+angularjs: 59 569 stars, October 20, 2010.
+Two-way data binding with dirty checking
+angular: 49 356 stars, 
+
+angular vs angularjs:
+- angular is TypeScript.
+- angular uses components and ES modules instead of controllers.
+
+https://www.accelebrate.com/blog/two-way-data-binding-angular-2-and-react/
+
+https://medium.com/unicorn-supplies/angular-vs-react-vs-vue-a-2017-comparison-c5c52d620176
+
+https://blog.nrwl.io/managing-state-in-angular-applications-22b75ef5625f
+
+\subsubsection{React}%
+\label{ssub:react}
+
+React: 131 931 stars
+
+\subsubsection{Vue}%
+\label{ssub:vue}
+
+Vue: 142 680 stars
+
+https://vuejs.org/v2/guide/forms.html
 
 \subsection{Functional reactive programming}%
 \label{sub:functional_reactive_programming}
