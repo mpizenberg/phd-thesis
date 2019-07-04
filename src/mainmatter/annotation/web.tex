@@ -661,11 +661,18 @@ When new data is required, the application can send requests
 with the XMLHttpRequest (XHR) object, or a WebSocket provided by the browser,
 then process the answer and re-render the HTML page accordingly.
 Since February 2005, this technique was popularized under the name Ajax~\cite{ajax}
-by Jesse James Garret and is represented in Figure~TODO.
+by Jesse James Garret and is represented in Figure~\ref{fig:spa}.
 Ajax stands for asynchronous JavaScript and XML,
 though today exchanged data is mostly in the JSON format (JavaScript Object Notation) instead of XML,
 and occasionally just raw bytes depending on use cases and protocols.
 Let's describe briefly today's leading Web frameworks, namely Angular, React and Vue.
+
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=1.0\linewidth]{assets/img/spa-bis.pdf}
+	\caption{Difference between traditional Web applications and Single Page Application (SPA). A traditional application will ask the server to generate a new HTML page to access the required content. A SPA will just ask for the required data and render it in the client directly.}%
+	\label{fig:spa}
+\end{figure}
 
 \subsubsection{Angular}%
 \label{ssub:angular}
