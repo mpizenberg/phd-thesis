@@ -1,0 +1,15 @@
+<div id="myApp">
+  Firstname: <input v-model="firstname" />
+  Lastname: <input v-model="lastname" />
+  <h1>{{firstname}} {{lastname}}</h1>
+</div>
+
+<script>
+  new Vue({
+    el: "#myApp",
+    data: {
+      firstname: "John",
+      lastname: "Doe"
+    }
+  });
+</script>

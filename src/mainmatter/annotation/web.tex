@@ -73,6 +73,8 @@ organizing a page information as a hierarchy of tagged content.
 In Listing~\ref{lst:html}, a ``body'' tag contains three other tags,
 a title ``h1'' (h for header), a paragraph ``p'', an image ``img''
 and a button not yet linked to any action.
+This hierarchical organization of an HTML page is call the DOM,
+for Document Object Model.
 CSS, for ``Cascading Style Sheet'', complements HTML by styling
 the content of associated HTML documents.
 Listing~\ref{lst:css} shows how \replace{we}{one} would add a left margin of 20 pixels
@@ -687,8 +689,12 @@ with 17000 lines of code into 1500 lines of code with <angular/>.
 Impressed, Brad decided to embrace the <angular/> project under Google's wing
 and it got rebranded AngularJS with a new logo.
 In 2016, Google released its successor, renamed Angular (without the JS part).
+An important difference is that Angular is using TypeScript instead of JavaScript.
 The key feature of Angular/AngularJS is declarative two-way data binding,
 showcased in Listing~\ref{lst:angularjs}.
+Another important design decision is that Angular is trying
+to provide a fully featured and coherant framework
+capable of handling most use cases you will ever encounter.
 
 \lstinputlisting[%
   language=HTML,
@@ -696,34 +702,44 @@ showcased in Listing~\ref{lst:angularjs}.
   label={lst:angularjs}
 ]{assets/code/angularjs.html}
 
-https://web.archive.org/web/20091230110525/http://getangular.com/
-
-Angular
-angularjs: 59 569 stars, October 20, 2010.
-Two-way data binding with dirty checking
-angular: 49 356 stars, 
-
-angular vs angularjs:
-- angular is TypeScript.
-- angular uses components and ES modules instead of controllers.
-
-https://www.accelebrate.com/blog/two-way-data-binding-angular-2-and-react/
-
-https://medium.com/unicorn-supplies/angular-vs-react-vs-vue-a-2017-comparison-c5c52d620176
-
-https://blog.nrwl.io/managing-state-in-angular-applications-22b75ef5625f
-
 \subsubsection{React}%
 \label{ssub:react}
 
-React: 131 931 stars
+Contrary to Angular, React is designed to solve a very specific use case,
+which is how to build user interfaces.
+As such it doesn't care about how you store data,
+or manage routing of the SPA with the url.
+The core feature of React is its Virtual DOM that we will explain soon.
+It provides one-way data binding between the state of a React component
+and its rendering in the DOM.\@
+The syntax used for the binding is showcased in Listing~\ref{lst:reactjs}.
+
+\lstinputlisting[%
+  language=ES6,
+  caption={React example showing the state and render function of a component.},
+  label={lst:reactjs}
+]{assets/code/react.js}
+
 
 \subsubsection{Vue}%
 \label{ssub:vue}
 
-Vue: 142 680 stars
+Vue describes itself as a progressive framework,
+meaning it provides core features targetting a small scope,
+and other opt-in layers bringing more functionalities.
+In a sense, it shares advantages and inconvenients of both
+React and Angular, with a different balance point.
+It mostly uses one-way data bindings,
+but also provides inbuilt conveniences to simulate two-way data binding
+through attaching event listeners when using the ``v-model'' property.
+An example is given in Listing~\ref{lst:vuejs}.
 
-https://vuejs.org/v2/guide/forms.html
+\lstinputlisting[%
+  language=HTML,
+  caption={Simulated two-way data binding in Vue using the ``v-model'' property.},
+  label={lst:vuejs}
+]{assets/code/vue.html}
+
 
 \subsection{Functional reactive programming}%
 \label{sub:functional_reactive_programming}
@@ -741,6 +757,30 @@ Understanding the animation frame loop.
 
 How JavaScript switched from a human readable interpreted file,
 to a modularized, transpiled, minified, gzipped compilation target.
+
+
+\subsection{How to choose?}%
+\label{sub:how_to_choose_}
+
+All three frameworks provide data binding between the state of the application
+and its rendering, making the user interface declarative and reactive.
+Angular and React are the more mature projects with
+the biggest community.
+Angular provides a solution covering most aspects needed for a SPA,
+while React is focused on the user interface and will often be paired
+with libraries to manage state efficiently like Redux.
+Vue has a lower barrier to entry, like React,
+but also a coherent set of opt-in functionalities making it an all-in-one solution similar to Angular.
+In order to produce small and compatible applications,
+they all require multiple techniques such as modularization,
+transpilation or minification, effectively making Web development similar
+to static and compiled development environments.
+Knowing all this, I will argue that we can use Elm,
+a functional programming language compiling to JavaScript.
+In the next section I will detail how it can bring
+all the advantages of other Web frameworks,
+but with an improved developer experience,
+and a more reliable application at the end.
 
 \section{Elm}%
 \label{sec:elm}
