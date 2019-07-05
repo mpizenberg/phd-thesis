@@ -785,8 +785,31 @@ and a more reliable application at the end.
 \section{Elm}%
 \label{sec:elm}
 
+Elm is a statically typed functional programming language for building Web applications.
+Its syntax comes from the ML family of languages, similar to Haskell and OCaml.
+The home page of the language claims that Elm generates JavaScript
+with great performances and no runtime exceptions.
+In the following sections, we will see how its properties enable such a claim.
+
 \subsection{Pure functions}%
 \label{sub:pure_functions}
+
+All functions in Elm, except for debugging, are ``pure'',
+meaning they produce no side effect.
+A side effect is a behavior with implications outside of the scope of a function,
+such as modifying a global variable or an input parameter,
+generating random values or interacting with the outside world.
+Side effects are important to handle to build applications that are not predetermined
+at startup, but we will explain later how they are managed withing The Elm Architecture (TEA).
+
+Listing~\ref{lst:sideeffectjs} gives examples of functions that cannot be directly
+transcribed from JavaScript to Elm due to side effects.
+
+\lstinputlisting[%
+  language=ES6,
+  caption={Side effects in JavaScript.},
+  label={lst:sideeffectjs}
+]{assets/code/side-effect.js}
 
 And referential transparency.
 
