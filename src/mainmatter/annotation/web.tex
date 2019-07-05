@@ -804,6 +804,16 @@ at startup, but we will explain later how they are managed withing The Elm Archi
 
 Listing~\ref{lst:sideeffectjs} gives examples of functions that cannot be directly
 transcribed from JavaScript to Elm due to side effects.
+Pure functions are also sometimes called ``referentially transparent''
+though the meaning of this terminology is unclear depending on sources.
+The important property is that calling a pure function with the same arguments
+will always return the same result.
+As a consequence many optimizations can be performed such as memoization,
+or precomputation of functions with no arguments (which actually are constant expressions).
+The Elm compiler doesn't precompute constant expressions yet,
+but memoization in the form of lazy functions can be used for computation
+of view functions, reducing the amount of work for the diffing algorithm
+of the virtual DOM.\@
 
 \lstinputlisting[%
   language=ES6,
