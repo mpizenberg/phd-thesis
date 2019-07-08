@@ -838,6 +838,7 @@ all possible combinations, which is the product $2\times2\times2$.
 Sum types are referred to as ``custom types'' in Elm.
 They are defined with the ``type'' keyword.
 Few examples of custom types definitions are provided in Listing~\ref{lst:customtype-elm}.
+\comment{}{OneOfThreeBools as 6 distinct elements, 2 + 2 + 2}
 
 \lstinputlisting[%
   language=Elm,
@@ -882,9 +883,88 @@ By design, custom types prevents an entire family of bugs.
 \subsection{Total functions}%
 \label{sub:total_functions}
 
-0 runtime exception.
-Enjoyable refactoring.
-The compiler is your assistant.
+Functions are qualified as ``total'' when they are guarantied
+to return a result for every possible valid input.
+\comment{}{Actually find a precise definition here.}
+\comment{}{Advantages of total functions.}
+Elm has two properties helping in the quest of total functions,
+\begin{itemize}
+	\item exhaustive pattern matching on custom types,
+	\item and no statement, only expressions.
+\end{itemize}
+
+\subsubsection{No statement, only expressions}%
+\label{ssub:no_statement_only_expressions}
+
+In most programming languages like JavaScript,
+programs are composed of successions of statements and expressions.
+The former do not return values while the latter do.
+Appart from imports, Elm code contains only top level definitions and expressions.
+Listing~\ref{lst:expressionelm} provides example of Elm expressions
+for conditions or loops.
+All branches of conditions (``if'' expressions) must have a value of the same type.
+Without an ``else'' branch, the code will not compile.
+Not having ``for'' loops statements is among the thoughest functional
+concepts to learn for begginers.
+In a language with only expressions,
+loops need to be expressed either with recursive functions,
+or with higher order functions, like ``List.foldl'' in the length example.
+
+\lstinputlisting[%
+  language=Elm,
+  caption={Branching control and loops are expressions in Elm.},
+  label={lst:expressionelm}
+]{assets/code/expression.elm}
+
+
+\subsubsection{Pattern matching}%
+\label{ssub:pattern_matching}
+
+Pattern matching is a branching mechanism based on the structure of a type.
+Any custom type can be matched to one of its different variants
+with the ``case ... of'' syntax as shown in Listing~\ref{lst:pattern-matching-elm}.
+Any lowercase variable in the pattern will be bound to the corresponding data,
+like the ``name'' variable here.
+
+\lstinputlisting[%
+  language=Elm,
+  caption={Pattern matching in Elm},
+  label={lst:pattern-matching-elm}
+]{assets/code/pattern-match.elm}
+
+In javascript, one can fairly easily forget to handle a case,
+or willingly only process the ``happy path'' for prototyping speed.
+In Elm, if I remove the ``Anonymous'' branch,
+the compiler will refuse to compile the code
+with the message showed in Listing~\ref{lst:missing-pattern-elm}
+
+\lstinputlisting[%
+  language=Elm,
+  caption={Missing pattern compiler error in Elm},
+  label={lst:missing-pattern-elm}
+]{assets/code/pattern-match-missing.elm}
+
+As suggested in the hint of the compiler error,
+we can also use the ``Debug.todo "message"'',
+which is very useful for the rapid prototyping phase.
+Remark that the ``Debug.todo'' function will make the program crash
+if reached at runtime.
+For this reason, all functions from the ``Debug'' module
+are forbidden in code compiled in release mode.
+
+
+\subsubsection{No runtime exception}%
+\label{ssub:no_runtime_exception}
+
+Thanks to expressions and exhaustive pattern matching,
+Refactoring an Elm code base can be done with confidence.
+Any place where types do not match with functions
+will be signalled by the compiler, which becomes a true coding assistant.
+Noredink, a company based in San Francisco reported in 2018 that after
+two years of using Elm in production,
+they got their first runtime exception,
+compared to 60000 for the JavaScript code~\cite{zeroruntimeerror}.
+
 
 \subsection{The Elm Architecture (TEA)}%
 \label{sub:the_elm_architecture_tea_}
