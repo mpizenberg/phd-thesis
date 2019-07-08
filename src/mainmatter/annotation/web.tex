@@ -521,34 +521,33 @@ and at the same time lengthen the feedback loop to fix errors.
 
 As we now know, JavaScript exists since 1995, and from 1997 onward,
 has mostly been the only way to run code dynamically in the browser.
-For this reason, many alternative languages started to treat JavaScript
+For this reason, many alternative languages started treating JavaScript
 as a compilation target to run code in a browser.
 
 \subsubsection{Multi-tier programming}%
 \label{ssub:multitier}
 
 Haxe was probably the first production ready language to target JavaScript, in 2006.
-At this time, there was no JIT, and JavaScript performances weren't great either.
-Yet some people where trying to make the web a video and gaming platform.
-Flash, a multimedia platform running the ActionScript language was the rising star at this time.
-In 2005, YouTube made use of a Flash player to distribute videos.
-Haxe, created by Nicolas Cannasse~\cite{haxe-interview},
-had a clear purpose, remove the overhead of composing many languages like a Flash client,
-a Web server, and additional JavaScript glue when designing Web games.
+At this time, there was no JIT, and JavaScript performances were \replace{n't great either}{fairly limited}.
+\remove{Yet s} \add{S}ome people were \add{nonetheless} trying to make the Web a video and gaming platform.
+Flash, a multimedia platform running the ActionScript language was the \replace{rising star}{most popular solution} at the time.
+In 2005, YouTube \replace{made use of}{was for example relying on} a Flash player to distribute videos.
+Haxe was created by Nicolas Cannasse~\cite{haxe-interview} with the clear purpose to remove the overhead of composing heterogeneous components like a Flash client,
+a Web server, and additional JavaScript \remove{glue} \replace{when designing Web games}{for Web games design}.
 
-Many other languages followed that trend of using the same language
+Many other languages \add{later} followed that \replace{trend}{path} of using the same language
 for server and client code, sometimes called ``isomorphic'' frameworks.
 Google announced their Google Web Toolkit (GWT) in May 2006~\cite{gwt},
-enabling Java developers to build client application.
+enabling Java developers to build client applications.
 The Ocsigen framework by V. Balat et al.~\cite{balat2006ocsigen} in 2006
-enabled fully featured applications in the OCaml programming language.
-The Opal compiler~\cite{opalrb} transforms ruby code into JavaScript,
-enabling full stack Ruby with the rails framework for the backend.
+allowed building fully featured applications in the OCaml programming language.
+The Opal compiler~\cite{opalrb} \replace{transforms}{translates} ruby code into JavaScript,
+\comment{enabling full stack Ruby with the rails framework for the backend.}{too technical, to be made clearer; what is rails ?}
 Today, most programming languages can target JavaScript,
 including Python, C, Erlang, Haskell, etc.
 
-Around the same period, academic research is also trying to solve
-what we call multi-tier web programming with unique new languages like Links
+Around the same period, academic research \replace{is}{has} also \add{been} trying to solve
+what we call \comment{multi-tier web programming}{to be defined ??} with unique new languages like Links
 by E. Cooper et al.~\cite{cooper2006links},
 or Hop by Serrano et al.~\cite{serrano2006hop} in 2006.
 Those efforts are continuing with for example
@@ -556,50 +555,53 @@ A. Chlipala et al.~\cite{chlipala2015ur} who created the Ur/Web variant
 of the Ur modelling language,
 or Sinha et al.~\cite{sinha2015simplifying} with the WebNat programming language in 2015.
 Unfortunately, those research attempts at novel ways of programming the Web
-are not adopted by the programmers.
+are not \add{yet} adopted by \replace{the programmers}{developers}.
 According to~\cite{sinha2015simplifying},
-one of the key factors is that experienced Web programmers want fine grained
+one of the key \comment{factors}{factors of what? of not adopting multi tier programming? if so, to be made clearer}   is that experienced Web programmers want fine grained
 control on the generated code for designing complex applications.
 
 \subsubsection{JavaScript as the main target}%
 \label{ssub:javascript_as_the_main_target}
 
-Instead of trying to tackle both server and client programming,
-a new category of languages emerged focused on the client side,
-with JavaScript being the only, or main compilation target.
+Instead of trying to tackle both server and client-side programming,
+a new category of languages later emerged, focusing on the client side,
+and with JavaScript being the only or main compilation target.
 The most notable ones are CoffeeScript~\cite{coffeescript} released in 2009
 by Jeremy Ashkenas, Dart~\cite{dart-blog} designed by Lars Bak
 (creator of the V8 engine) and Kasper Lund for Google in 2010,
 Elm~\cite{czaplicki2013asynchronous} the product of Evan Czaplicki senior thesis
 on functional reactive programming in 2012,
-and Reason~\cite{reason} (also known as ReasonML) in 2016 by Jordan Walke,
-also the original designer of the React framework we will discuss later.
+and Reason~\cite{reason} (also known as ReasonML) in 2016 by Jordan Walke (who is
+also the original designer of the React framework we will discuss later).
 
-One can notice that appart from Dart, which is heavily object oriented,
-most attempts at new programming languages for the client follow the functional paradigm.
-It is not estranged from guaranties brought by
+One can notice that appart from Dart, which is heavily object-oriented,
+those new languages \remove{for the client} follow the functional paradigm.
+\comment{It is not estranged}{TODO : check this expression} from guaranties brought by
 functional programming that we will develop when exploring the Elm programming language.
 
-A note about the Dart language, it has been abandonned for Web programming,
-but found a new home in the Flutter framework~\cite{flutter}, released in 2017,
-targeting mainly native development of mobile applications on iOS and Android.
+\comment{A note about the Dart language, it has been abandonned for Web programming,
+but found a new home in the Flutter framework%~\cite{flutter}
+, released in 2017,
+targeting mainly native development of mobile applications on iOS and Android.}{pas certain que ce soit utile}
+
+\comment{}{sur cette section je reste un peu sur ma faim ; tu listes des frameworks, tu dis qu'ils sont fonctionnels pour des raisons qu'on d\'etaillera plus tard mais cela apporte finalement assez peu d'info}
 
 \subsubsection{Gradually typed JavaScript}%
 \label{ssub:gradually_typed_javascript}
 
 Coding with a completely different language is a rather extreme approach
-which can feel overwhelming.
+which can \replace{feel overwhelming}{be disturbing for developers}.
 From this observation, both Microsoft and Facebook decided to bring
-new contributions to the JavaScript ecosystem in the form of gradual typing.
+new contributions to the JavaScript ecosystem \replace{in}{under} the form of gradual typing.
 Gradual typing is a type system where values are partially typed.
 Some may be typed, and consequently static typing rules are verified,
 and some may be untyped, left for compile-time verifications.
 
 In October 2012, Microsoft released TypeScript~\cite{bierman2014understanding},
-a superset of JavaScript, enabling type annotations.
+a superset of JavaScript, \replace{enabling}{introducing} \comment{}{ajouter "facultatif", ce qui explique la prochaine phrase}  type annotations.
 As a consequence, any valid JavaScript program is also a valid TypeScript program.
 This property was most certainly the major success factor of TypeScript.
-Programs can be ported progressively to benefit from static analysis.
+Programs can be \comment{ported}{TO BE CHECKED} progressively to benefit from static analysis.
 Listing~\ref{lst:add-ts} exhibits the core type annotation feature of TypeScript.
 
 \lstinputlisting[%
@@ -610,13 +612,13 @@ Listing~\ref{lst:add-ts} exhibits the core type annotation feature of TypeScript
 
 Another benefit of static typing that JavaScript developers are discovering when
 switching to TypeScript is the improved IDE support,
-with better autocompletion tools, jumping to definitions and other support from your editor.
+with \add{includes for example} better autocompletion tools, jumping to definitions \replace{and other support from your editor}{etc}.
 
 In 2014, another tool named Flow and led by Facebook~\cite{chaudhuri2017fast}
 enabled gradual typing of JavaScript.
-Ultimately, TypeScript seems to have taken the biggest part of the cake,
+Ultimately, TypeScript seems to \replace{have taken the biggest part of the cake}{be the most popular one},
 but choosing between the two will most likely depend on how well they integrate
-with your working framework.
+with \comment{your working framework}{tournure non standard pour un manuscrit de these}.
 
 \subsubsection{JavaScript transpilation}%
 \label{ssub:javascript_transpilation}
