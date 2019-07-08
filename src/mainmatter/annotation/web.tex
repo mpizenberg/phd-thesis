@@ -974,4 +974,45 @@ An inspiration for Redux.
 \subsection{Elm-UI, an alternative layout strategy}%
 \label{sub:elm_ui_an_alternative_layout_strategy}
 
-When your layout compiles it is correct.
+\begin{figure}[ht]
+	\centering
+	\setlength{\fboxsep}{0pt}
+	\fbox{\includegraphics[width=1.0\linewidth]{assets/img/elm-ui.png}}
+	\caption{User interface specified by Listing~\ref{lst:elm-ui}.}%
+	\label{fig:elm-ui}
+\end{figure}
+
+We have seen that the Elm architecture enables building Web applications with HTML views.
+It treats the user interface as data, using a virtual DOM under the hood
+and managing the DOM side effects with a runtime system.
+Overall, with Elm guaranties, one is fairly confident that when
+the program compiles, it is functionally correct.
+Layout however, traditionally relies both on HTML and CSS rules,
+intrinsically hard to debug due to their cascading nature
+since a CSS rule may apply to all children of a DOM element.
+In~\cite{sinha2015simplifying}, Sinha et al. identified user interface design
+as the main difficulty in Web development.
+
+At Elm Europe 2017, Matthew Griffith made a presentation
+entitled ``Understanding style''~\cite{griffithstyle}.
+In this work, he identifies the most problematic aspect of layout being
+that there is no clear way to identify when it is incorrect.
+There is not even an unhelpful ``undefined is not a function'' in CSS resolution.
+Basically an error in layout and style is just the unexpected.
+With this in mind he created library, now named elm-ui~\cite{griffithelmui},
+aiming at providing the guaranty that if your code compiles,
+the layout if fully specified.
+They key property of the library is that its base building block,
+the ``el'' element only has one child,
+instead of a list like in the case of a ``div'' HTML element.
+Also, building blocks with multiple children must have explicit layout.
+Listing~\ref{lst:elm-ui} showcases how functional composition of UI elements
+and an attention on naming enable building of clear and robust user interfaces.
+The corresponding user interface is provided in Figure~\ref{fig:elm-ui}.
+
+\lstinputlisting[%
+  language=Elm,
+  caption={Fully specified layout with elm-ui.},
+  label={lst:elm-ui},
+  basicstyle=\scriptsize\ttfamily
+]{assets/code/elm-ui.elm}
