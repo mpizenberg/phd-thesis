@@ -554,7 +554,7 @@ by E. Cooper et al.~\cite{cooper2006links},
 or Hop by Serrano et al.~\cite{serrano2006hop} in 2006.
 Those efforts are continuing with for example
 A. Chlipala et al.~\cite{chlipala2015ur} who created the Ur/Web variant
-of the Ur modelling language,
+of the Ur modeling language,
 or Sinha et al.~\cite{sinha2015simplifying} with the WebNat programming language in 2015.
 Unfortunately, those research attempts at novel ways of programming the Web
 are not \add{yet} adopted by \replace{the programmers}{developers}.
@@ -821,13 +821,63 @@ of the virtual DOM.\@
   label={lst:sideeffectjs}
 ]{assets/code/side-effect.js}
 
-And referential transparency.
 
 \subsection{Algebraic Data Types (ADT)}%
 \label{sub:algebraic_data_types_adt_}
 
-Sum and product types, ``custom'' types as they are called in Elm.
-Analogy between types and cardinality of sets.
+Algebraic data types (ADT) initially appeared in 1980 with the Hope programming language,
+developed by Rod Burstall, Dave MacQueen and Don Sannella~\cite{burstall1980hope}.
+Since then, they have been popularized by functional programming languages
+such as Haskell or OCaml.
+Usually, algebraic data types include product types and sum types.
+Product types are types regrouping multiple data together under the same name.
+Tuples like (Int, Float), and records (or objects) are the most common product types.
+Their names come from the properties on cardinality if we consider types as sets.
+Indeed, a tuple of three booleans have a cardinality of 8 if you consider
+all possible combinations, which is the product $2\times2\times2$.
+Sum types are referred to as ``custom types'' in Elm.
+They are defined with the ``type'' keyword.
+Few examples of custom types definitions are provided in Listing~\ref{lst:customtype-elm}.
+
+\lstinputlisting[%
+  language=Elm,
+  caption={Custom types definitions in Elm.},
+  label={lst:customtype-elm}
+]{assets/code/customtype.elm}
+
+The most important property of custom types in Elm
+is that they enable modelization of a problem with exactly the correct
+cardinality for the types, preventing impossible states by design.
+Concretely, consider that we are modeling accessibility of a site
+depending on the logged status of users.
+Typically, in a language without sum types, like JavaScript,
+the user will be modeled with two fields as in Listing~\ref{lst:userjs}.
+Initially the ``loggedIn'' field will be false and the user name empty.
+And as soon as the user is logged in,
+the corresponding field will have the value ``true'',
+and the name will be filled with the user name.
+But what happens when the ``loggedIn'' field is ``false'' but
+the name is filled with something like ``John Doe''.
+In theory this state should never be reached if we are carefull in our implementation,
+but in practice, bugs tend to fill every possible crack,
+requiring more tests to verify that this state is never reached.
+With custom types in Elm, the user type will be defined as in Listing~\ref{lst:userelm}.
+In this definition, a user can either be anonymous or logged in with a name,
+but never anonymous and with a name.
+By design, custom types prevents an entire family of bugs.
+
+\lstinputlisting[%
+  language=ES6,
+  caption={User modeled with a product type in JavaScript.},
+  label={lst:userjs}
+]{assets/code/user.js}
+
+\lstinputlisting[%
+  language=Elm,
+  caption={User modeled with a custom (sum) type in Elm.},
+  label={lst:userelm}
+]{assets/code/user.elm}
+
 
 \subsection{Total functions}%
 \label{sub:total_functions}
