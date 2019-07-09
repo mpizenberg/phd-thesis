@@ -1,47 +1,21 @@
 \chapter{Reliable Web Applications}%
 \label{cha:reliable_web_applications}
 
-\begin{itemize}
-	\item What is the Web?
-	\begin{itemize}
-		\item What is a Web application?
-		\item Rich Internet Application (RIA)?
-	\end{itemize}
-	\item JavaScript or ECMAScript
-	\begin{itemize}
-		\item Creation of JavaScript
-		\item Browser performance war with Just In Time compilation (JIT)
-		\item Explosion of JavaScript and Node
-		\item JavaScript issues
-		\item The ``transpilation to JavaScript'' paradigm
-	\end{itemize}
-	\item Frontend Web programming
-	\begin{itemize}
-		\item Single Page Application (SPA)?
-		\item Reactive programming
-		\item Functional Reactive programming (FRP)
-		\item About the Virtual DOM
-		\item Async and the event loop
-	\end{itemize}
-	\item Elm
-	\begin{itemize}
-		\item Pure functions
-		\item Algebraic Data Types (making impossible states impossible)
-		\item Totality
-		\item Switch to The Elm Architecture (TEA)
-		\item 0 runtime exception
-		\item Elm-UI, an alternative layout approach
-	\end{itemize}
-\end{itemize}
-
-
 \section{What is the Web?}%
 \label{sec:web}
 
 The Internet and the Web are ubiquitous technologies of our everyday lives,
-created \comment{around the 80's.}{would be good to be more precise}
+that flourished around the 80's.
+Inter-connected networked appeared as early as in the 60's.
+ARPANET, founded by the Advanced Research Projects Agency (ARPA) in 1969,
+standardized the communication protocols named TCP/IP in 1982 for its network.
+These are the protocols still in use on the Internet today.
+In August 1991, Tim Berners-Lee who had been working at CERN for the previous seven years,
+shared a summary of his World Wide Web project,
+including the HyperText Transfer Protocol (HTTP),
+the HyperText Markup Language (HTML), and the first Web browser.
 Social media, communication, search, news, entertainment, mapping,
-shopping, learning, \replace{allmost every}{virtually any} activity is now digital and online.
+shopping, learning, virtually any activity is now digital and online.
 Simply put, the Web, also called World Wide Web (WWW), consists of the sum of all resources,
 available through unique identifiers (URI), that we share on the Internet,
 the global network carrying them.
@@ -56,8 +30,8 @@ and explain the choices we made to build reliable annotation Web applications.
 An application, in the context of programming (/computers),
 is a piece of software presenting information to a user,
 usually in an actionable manner.
-This includes \replace{things}{programs} like email clients, image \replace{manipulation}{editors}, video games,
-word processors, automatic \replace{translation}{translators}, and virtually any functionality
+This includes programs like email clients, image editors, video games,
+word processors, automatic translators, and virtually any functionality
 available on a regular computing device.
 
 Web resources are commonly accessible through a Web browser.
@@ -68,18 +42,18 @@ the most used Web browsers are Google Chrome (62.7\% of global market share),
 Apple Safari (15.9\%) and Mozilla Firefox (5.1\%).
 
 The three pillars of Web applications are HTML, CSS and JavaScript.
-HTML, for ``Hypertext Markup Language'' is a description language
+HTML, for ``HyperText Markup Language'' is a description language
 organizing a page information as a hierarchy of tagged content.
-In Listing~\ref{lst:html}, a ``body'' tag contains three other tags,
-a title ``h1'' (h for header), a paragraph ``p'', an image ``img''
+In Listing~\ref{lst:html}, a \verb|body| tag contains three other tags,
+a title \verb|h1| (h for header), a paragraph \verb|p|, an image \verb|img|
 and a button not yet linked to any action.
 This hierarchical organization of an HTML page is call the DOM,
 for Document Object Model.
 CSS, for ``Cascading Style Sheet'', complements HTML by styling
 the content of associated HTML documents.
-Listing~\ref{lst:css} shows how \replace{we}{one} would add a left margin of 20 pixels
+Listing~\ref{lst:css} shows how one would add a left margin of 20 pixels
 on all the document body, and make the h1 title red and bold.
-\add{Finally, }JavaScript is a scripting language, not affiliated in any form
+Finally, JavaScript is a scripting language, not affiliated in any form
 to the Java programming language.
 It is run inside the browser to add dynamic behavior to a Web page.
 In Listing~\ref{lst:js} we show how one could count and display
@@ -101,9 +75,9 @@ clicking on the links.
 Today, thanks to evolutions of Web technologies that we will detail later,
 Web applications have become full-fledged applications with almost
 the same capabilities as desktop ones.
-They feature functionalities like 3D graphics, \replace{sound}{audio} processing or interactive elements,
+They feature functionalities like 3D graphics, audio processing or interactive elements,
 and are sometimes called rich web applications.
-Similar concepts like ``progressive web applications'' (PWA),
+Similar concepts like \comment{``progressive web applications'' (PWA)}{Not explained actually ...},
 or ``single page applications'' (SPA) are also explained in the following sections.
 In the next section, we will dive into the cornerstone of Web pages dynamism, JavaScript.
 
@@ -115,49 +89,55 @@ In the next section, we will dive into the cornerstone of Web pages dynamism, Ja
 \label{sub:genesis_of_javascript}
 
 In 1995, the dominating Web browser was the Netscape Navigator.
-Realizing that pages dynamism was key in the \replace{war}{competition} against Microsoft\add{'s}
+Realizing that pages dynamism was key in the competition against Microsoft's
 own Web technologies, Netscape Communications recruited Brendan Eich,
 with the aim of integrating a scripting language into their browser.
-\replace{And so, in May 1995, he wrote a prototype in 10 days.}{A first prototype was thus developed in 10 days (May 1995).}
+A first prototype was thus developed in 10 days (May 1995).
 Assumably for marketing reasons, it was officially named JavaScript
 when released in Netscape Navigator 2.0 beta 3.
 
 Two years later, in June 1997, the European Computer Manufacturers Association
 (ECMA) standardized the first version of ``ECMAScript'' as ECMA-262,
-JavaScript being its most well\add{-}known implementation.
-The ECMAScript (ES) standard has been evolving \add{ever} since.
+JavaScript being its most well-known implementation.
+The ECMAScript (ES) standard has been evolving ever since.
 Today, all browsers fully implement ES5, released in 2009,
 and partially implement the most recent versions, ES2015,
 ES2016, ES2017 and ES2018.
 
-\subsection{Browser performance war}%
-\label{sub:browser_performance_war}
+\subsection{Browser performance}%
+\label{sub:browser_performance}
 
 Many browser wars for dominance of market share occurred since the 90's.
-\add{In this section, }we are \add{particularly} interested in the JavaScript engine performance war,
+In this section, we are particularly interested
+in the wide performance improvements of the JavaScript engines,
 starting around 2008 when Google released its Chrome browser.
 On September 2, 2008, Google announced a new Web browser called Chrome~\cite{google-chrome}.
-Its main selling \replace{point}{feature} was a new JavaScript engine called V8,
+Its main selling feature was a new JavaScript engine called V8,
 greatly improving the browser performances on web applications making
-heavy use of JavaScript like their email client \comment{Gmail}{should we notify trademarks with a proper style?}.
-\replace{Beware}{Note} that ``performance'' in a browser \replace{is the result of}{depends on} many factors
+heavy use of JavaScript like their email client \comment{Gmail}
+{should we use sans serif font for all names like \textsf{Gmail}.}
+Note that performance in a browser depends on many factors
 such that network latency, DOM computation, page rendering or JavaScript processing.
-In this section, we will specifically focus \add{on} JavaScript execution performances.
+In this section, we will specifically focus on JavaScript execution performances.
 
 \subsubsection{Dynamic interpretation}%
 \label{ssub:dynamic-interpretation}
 
-\replace{Previously, JavaScript was}{JavaScript was originally} an interpreted language.
+JavaScript was originally an interpreted language.
 For each line of code, the engine would translate it into machine code,
 and immediately execute it.
-This means that for a loop, the \add{same} transformation from JavaScript to machine code
+This means that for a loop, the same transformation from JavaScript to machine code
 is repeated over and over again.
-In addition, JavaScript is a dynamic language, which is \add{both} one of its
-strongest points but also a \replace{nightmare for}{huge drag on} execution.
-Let's take the function adding two numbers \add{depicted in Listing~\ref{lst:add-js}} as an example
-\remove{as in Listing}.
+In addition, JavaScript is a dynamic language, which is both one of its
+strongest points and a huge drag on execution.
+Let's take the function adding two numbers
+depicted in Listing~\ref{lst:add-js} as an example.
 
-\lstinputlisting[language=JavaScript,caption={Adding two values.},label={lst:add-js}]{assets/code/add.js}
+\lstinputlisting[%
+	language=JavaScript,
+	caption={Adding two values.},
+	label={lst:add-js}
+]{assets/code/add.js}
 
 \comment{}{If what follows is a quote, it should be made clearer in the presentation.}
 \begin{displayquote}
@@ -191,7 +171,7 @@ to sum two numbers, it should compile to a single instruction.
 However, due to the dynamic nature of JavaScript,
 as specified in the standard, the code has to check if the arguments
 are strings, objects, and proceed first with conversions before
-eventually reaching the instruction \replace{doing}{that actually computes} the addition.
+eventually reaching the instruction that actually computes the addition.
 This process results in one or two orders of magnitude slower code,
 compared to statically typed languages like C or Java.
 
@@ -206,7 +186,7 @@ just-in-time (JIT) compilers.
 The key ingredient is a ``monitor'' sometimes called ``profiler''.
 The monitor watches the code while it is run by the interpreter,
 and keeps track of how often a piece of code is executed.
-Once a path of code is \add{found to be }repeatedly executed, it becomes ``hot'',
+Once a path of code is found to be repeatedly executed, it becomes ``hot'',
 which triggers an optimizing compiler.
 According to the types previously used in the hot path,
 the optimizing compiler will make assumptions enabling
@@ -217,32 +197,10 @@ Multiple optimization and de-optimization round trips
 hinders the performances, and consequently will permanently mark
 the section as not to be optimized anymore.
 For more information on JIT compilation, Lin Clark~\cite{clark-jit}
-wrote an \add{enlightning} introductory blog post.
+wrote an enlightning introductory blog post.
 
 Figure (\alert{TODO faire un schema timeline}) outlines the differences between
 interpreting and JITing regarding the ratio of time spent on each phase.
-\comment{Fun fact, in V8 the baseline compiler and interpreter is known as ``Ignition''
-and the optimizing compiler goes by the name of ``TurboFan''.}{This can probably be ignored :-)}
-
-\comment{}{List of links commented in code}
-% December 18, 2007 - https://webkit.org/blog/152/announcing-sunspider-09/
-% December 19, 2007 - https://blog.codinghorror.com/the-great-browser-javascript-showdown/
-% September 2, 2008 - https://blog.chromium.org/2008/09/google-chromes-need-for-speed_02.html
-%  -> release date of Chrome
-% September 3, 2008 - https://johnresig.com/blog/javascript-performance-rundown/
-% September 3, 2008 - https://arstechnica.com/information-technology/2008/09/new-firefox-javascript-engine-is-faster-than-chromes-v8/
-% September 5, 2008 - https://www.zdnet.com/article/is-firefox-faster-than-chrome/
-% September 19, 2008 - http://www.satine.org/archives/2008/09/19/squirrelfish-extreme-fastest-javascript-engine-yet/
-% November 14, 2008 - https://allanfeid.com/content/javascript-engine-benchmark-test-results
-%
-% SunSpider: JS perf test suite by WebKit team
-% https://www2.webkit.org/perf/sunspider/sunspider.html
-% no longer maintained -> cf JetStream
-%
-% JetStream: Test JS and wasm
-% https://browserbench.org/JetStream/
-%
-% V8 Benchmark: heavy emphasis on recursion
 
 
 \subsection{Explosion of JavaScript}%
@@ -254,31 +212,31 @@ and the optimizing compiler goes by the name of ``TurboFan''.}{This can probably
 
 Not long after the release of the V8 engine from Google,
 Ryan Dahl announced at the European JSConf of 2009
-a new project named \comment{node.js}{not Node.js ?}~\cite{node-js-speaker}.
+a new project named Node.js~\cite{node-js-speaker}.
 As he explains in his talk~\cite{node-js-video},
-node is a cross-platform JavaScript runtime environment based on V8.
+Node is a cross-platform JavaScript runtime environment based on V8.
 It features an event-driven architecture, with non-blocking input/output (I/O) APIs.
 The project matured from the observation that blocking I/O is extremely non-efficient,
-since it requires many threads and \replace{much}{a large} memory to scale with connections.
-\remove{JavaScript} Being event-driven by nature in the browser,
-\replace{it}{JavaScript} was a perfect fit for the node project.
+since it requires many threads and a large memory to scale with connections.
+Being event-driven by nature in the browser,
+JavaScript was a perfect fit for the Node project.
 
 In order to provide non-blocking asynchronous I/O,
-node is composed of an event loop managing callbacks in queued fashion,
+Node is composed of an event loop managing callbacks in queued fashion,
 and of a thread pool, executing all blocking I/O calls like file reading.
 Both are abstracted away by the system, and so a user simply has
-to provide callbacks that will automatically be run upon completion of I/O \add{calls?}.
+to provide callbacks that will automatically be run upon completion of I/O tasks.
 An example of reading a file is presented in Listing~\ref{lst:read-file-js}.
 
 \lstinputlisting[%
 	language=JavaScript,
-	caption={Read a file with node.js.
+	caption={Read a file with Node.js.
 		Notice the event-driven architecture with an anonymous callback function passed as argument.},
 	label={lst:read-file-js}
 ]{assets/code/readFile.js}
 
 
-\subsubsection{Node package manager (npm)}%
+\subsubsection{Node package manager (\textsf{npm})}%
 \label{ssub:node_package_manager_npm_}
 
 \begin{displayquote}
@@ -286,19 +244,20 @@ An example of reading a file is presented in Listing~\ref{lst:read-file-js}.
 	--- Isaac Z. Schlueter, node.conf, Portland, OR, May 5th, 2011
 \end{displayquote}
 
-With the rise of node for server-side JavaScript,
-another highly influencial project was born late 2009, \add{the Node package manager} (npm).
+With the rise of Node for server-side JavaScript,
+another highly influencial project was born late 2009,
+the Node package manager (\textsf{npm}).
 Isaac Z. Schlueter, while working at Yahoo, wanted to increase usage
 of JavaScript for full stack web development.
-According to him, many people were already pushing hard on node.js,
-so he \comment{took a stab}{trop familier} at lowering friction by creating the Node Package Manager (npm).
-The core design choices of npm are rooted in the principle of reducing
+According to him, many people were already pushing hard on Node.js,
+so he attempted at lowering friction by creating the Node package manager (\textsf{npm}).
+The core design decisions of \textsf{npm} are rooted in the principle of reducing
 most sources of friction, including the following:
 
 \begin{itemize}
 	\item \textbf{Conflicting dependencies.}
 		When transitive dependencies require different versions of the same package.
-		As a consequence, npm retrieves every version needed by dependencies.
+		As a consequence, \textsf{npm} retrieves every version needed by dependencies.
 	\item \textbf{Inconsistent package installation.}
 		Typically, one would need to clone, make, copy, rename files, etc.
 		With \verb|npm install|, dependencies are all installed locally,
@@ -306,15 +265,15 @@ most sources of friction, including the following:
 		\verb|require('the-module')|.
 	\item \textbf{Publishing difficulties.}
 		Usually, package registries require a lot of metadata.
-		Npm only requires two fields, name and version.
+		\textsf{Npm} only requires two fields, name and version.
 \end{itemize}
 
 % Mention inspiration from Yahoo's yinst package manager?
 % https://www.reddit.com/r/npm/comments/aounfi/best_package_manager/
 
-As a result, npm grew exponentially, to become the world's largest package
+As a result, \textsf{npm} grew exponentially, to become the world's largest package
 registry ever, by a large amount, with over a million packages since June 2019.
-At node.conf 2011~\cite{npm-video}, when Isaac Schlueter announced npm 1.0,
+At NodeConf 2011~\cite{npm-video}, when Isaac Schlueter announced \textsf{npm} 1.0,
 the registry contained 1900 packages and almost 800 active package authors.
 This roughly corresponds to doubling the registry size every year!
 
@@ -334,7 +293,7 @@ We will discuss later how this risk is reduced with elm packages.
 
 Most programming languages tend to grow in complexity with time.
 New features are regularly added, and backward compatibility requires that
-\replace{old ways of doing things}{outdated practices} are kept in the language.
+outdated practices are kept in the language.
 JavaScript is a good illustration of this kind of organic growth.
 As an example, the language specification of JavaScript is 805 pages~\cite{ecmascript-pdf}.
 This is roughly the same size as the Java specification with 772 pages~\cite{java-spec-pdf}
@@ -342,38 +301,32 @@ or the C specification with 571 pages~\cite{c-spec-pdf}
 To compare, the specification for the Go progamming language
 by Google~\cite{go-spec}, contains approximately 100 pages.
 
-\comment{}{Plus tard mettre citation, it will be finished when there is nothing left to remove.}
 
-The \replace{wildest}{most salient} evolutions occurred with ES2015 (previously known as ES6).
-\comment{Among the confusing ones for beginners are the ``const'' and ``let'' keywords.}{tournure bizarre}
+The most salient evolutions occurred with ES2015 (previously known as ES6).
+The addition of the \verb|const| and \verb|let| keywords for example are confusing for beginners.
 They introduce two new ways of declaring variables, bringing it to a total of four,
-along with the ``var'' keyword and no keyword.
+along with the \verb|var| keyword and no keyword.
 Differences between those are presented in Listing~\ref{lst:var-scope-js}.
 
-\lstinputlisting[language=ES6,caption={Variable scope in JavaScript.},label={lst:var-scope-js}]{assets/code/var-scope.js}
+\lstinputlisting[%
+	language=ES6,
+	caption={Variable scope in JavaScript.},
+	label={lst:var-scope-js}
+]{assets/code/var-scope.js}
 
-\comment{The syntax list continues with ``arrow functions'', ``promises'' and so on.
-Most new features are illustrated online at es6-features.org,
-I suggest browsing this site for more information.}{Je ne suis pas sur de l'utilit\'e de ces phrases. A remplacer peut-etre par un commentaire sur la complexit\'e de ces keywords, ou une comparaison avec d'autres langages ?}
-
-\comment{}{%
-	Il pourrait être aussi intéressant de montionner les choses suivantes :
-	- Module systems (CommonJS, AMD, ES2015): https://auth0.com/blog/javascript-module-systems-showdown/
-	- ESNext (generators, observers, ...)
-}
 
 \subsubsection{Callback hell}%
 \label{ssub:callback_hell}
 
-As mentioned when introducing node.js,
+As mentioned when introducing Node.js,
 JavaScript event-driven APIs rely on callback functions.
 Let's consider a simple case where we want to retrieve information
 from a database.
 Listing~\ref{lst:callback-hell-sync} outlines how a blocking synchronous API
 would look like.
 The control flow of the program is easy to follow,
-but blocking at ``getDatabase'' and ``db.get'' calls
-means the server (or the graphical interface) is \replace{non}{not} responding
+but blocking at \verb|getDatabase| and \verb|db.get| calls
+means the server (or the graphical interface) is not responding
 during this time.
 
 \lstinputlisting[%
@@ -391,7 +344,8 @@ and the verbosity of the code.
 By a convention that emerged with time,
 callback functions are supposed to handle a potential error
 as first argument, and successful result as second argument.
-This model \comment{continues to bring suffering to JavaScript developers}{cela semble une assertion forte, et je n'en vois pas trop l'origine dans les lignes pr\'ec\'edentes},
+This model tends to produce extremely nested code because of
+function callbacks and if statements for error handling,
 and thus has been coined in the community the ``callback hell''~\cite{callback-hell}.
 
 \lstinputlisting[%
@@ -401,12 +355,12 @@ and thus has been coined in the community the ``callback hell''~\cite{callback-h
 ]{assets/code/callback-hell-callback.js}
 
 We should mention that recent JavaScript standards provide new syntax
-making use of ``async'' and ``await'' keywords to simplify
+making use of \verb|async| and \verb|await| keywords to simplify
 the control flow, while preserving the performances of
 the callback model.
 Listing~\ref{lst:callback-hell-async} shows how the same code can take advantage of the new syntax.
 Unfortunately, this is to the detriment of language simplicity,
-as explained in the previous point.
+as explained previously.
 
 \lstinputlisting[%
 	language=ES6,
@@ -418,44 +372,46 @@ as explained in the previous point.
 \label{ssub:context_of_this}
 
 In other object-oriented languages,
-``this'' (or ``self'') usually refers to the currently used instance of a class.
-As defined in the specification,
+\verb|this| (or \verb|self|) usually refers to the currently used instance of a class.
+According to the specification,
 \textit{The this keyword evaluates to the value of the ThisBinding of the current execution context.} \comment{}{j'avoue que je ne comprends pas trop la phrase en italique}
 JavaScript not being a typical object oriented language,
-``this'' can take many shapes, depending on the execution context.
+\verb|this| can take many shapes, depending on the execution context.
 The execution contexts are in a stack in which new contexts are created and pushed
 whenever code not associated with the current context starts running.
 This typically happens in function calls.
-Let's take Listing~\ref{lst:this-js} to exhibit some oddities of the ``this'' value.
+Let's take Listing~\ref{lst:this-js} as an example
+to exhibit some oddities of the \verb|this| value.
 
 \lstinputlisting[%
 	language=ES6,
-	caption={Value of ``this'' in JavaScript.},
+	caption={Value of \texttt{this} in JavaScript.},
 	label={lst:this-js}
 ]{assets/code/this.js}
 \comment{}{Honnetement, j'ai rien compris de cette partie :-(}
-By default, if ``this'' is undefined, as in lines 17 and 18,
+By default, if \verb|this| is undefined, as in lines 17 and 18,
 it is binded to the global object.
-At line 11, we define ``x = 1'' with no keyword,
-so ``x'' is a global variable.
+At line 11, we define \verb|x = 1| with no keyword,
+so \verb|x| is a global variable.
 As a result, line 17 and 18 print 1.
-The definitions of the ``log'' and ``logF'' methods on the ``Who'' class
-lines 7 and 8 are equivalent. The behavior of ``this'' in that context,
+The definitions of the \verb|log| and \verb|logF| methods on the \verb|Who| class
+lines 7 and 8 are equivalent. The behavior of \verb|this| in that context,
 is what we expect to see for methods call on objects and thus,
 lines 20 and 21 both print 2.
-The ``call'' function (and some others), used for the definition of the ``logCall'' method,
-enables binding of the ``this'' value to a specific object given as first argument.
+The \verb|call| JavaScript function (and some others),
+used for the definition of the \verb|logCall| method,
+enables binding of the \verb|this| value to a specific object given as first argument.
 That is why line 23 prints 3.
 
 Now the most surprising results are lines 19 and 22, both printing 1 instead of 2.
-At line 13, ``logMe'' is defined as the same function than ``me.log'' which
-actually is the original ``log'' function.
+At line 13, \verb|logMe| is defined as the same function than \verb|me.log| which
+actually is the original \verb|log| function.
 As a consequence, line 19 is strictly equivalent to line 18, and they both print 1.
-Finally, the ``logF2'' method also prints 1 because it's definition isn't the log function
-(as defined for the ``log'' method) but rather calls the ``log'' function which
-generates another context in which ``this'' is not defined anymore.
-The behavior is thus the same than for lines 17 and 18, which binds ``this'' to the global object,
-and prints the global variable ``x = 1''.
+Finally, the \verb|logF2| method also prints 1 because it's definition isn't the log function
+(as defined for the \verb|log| method) but rather calls the \verb|log| function which
+generates another context in which \verb|this| is not defined anymore.
+The behavior is thus the same than for lines 17 and 18, which binds \verb|this| to the global object,
+and prints the global variable \verb|x = 1|.
 
 \subsubsection{Dynamic typing and implicit conversions}%
 \label{ssub:dynamic_typing_and_implicit_conversions}
@@ -482,17 +438,17 @@ before multiplication with the number 7.
 	caption={Weak typing in JavaScript (implicit conversion).},
 	label={lst:weak-js}
 ]{assets/code/weak.js}
-\comment{}{3e exemple ajout\'e grace \`a tforgione}
+
 By combining dynamic types, and implicit conversions,
 JavaScript often generates extremely surprising situations,
 resulting in unexpected behaviors.
 It can also lead to very original use cases.
 In 2010, an informal code obfuscation competition resulted in the creation
 of a subset of JavaScript containing only six characters~\cite{jsfuck},
-``['', ``]'', ``('', ``)'', ``!'' and ``+'',
+\verb|[|, \verb|]|, \verb|(|, \verb|)|, \verb|!| and \verb|+|,
 able to represent any valid JavaScript code.
-The value ``false'' would be obtained with ``![]'',
-since negation of an empty array returns ``false'' according to JavaScript specification.
+The value \verb|false| would be obtained with \verb|![]|,
+since negation of an empty array returns \verb|false| according to JavaScript specification.
 Numbers, characters, and other language constructs are obtained through similar
 implicit conversion tricks.
 
@@ -510,7 +466,7 @@ For JavaScript developers previous to 2015,
 the error ``undefined is not a function'' was \comment{famous for not being helpful}{n\'ecessite une r\'ef\'erence}.
 This error would very often rise from a typo somewhere in the code.
 Due to the dynamic nature of JavaScript, the error can be reported late in the call stack.
-Indeed, even if an error in the code might create an ``undefined'' value,
+Indeed, even if an error in the code might create an \verb|undefined| value,
 it is only later when called, that an uncaught error would trigger.
 As shown in Figure~\ref{fig:undefined-improved}, browsers are more helpful now,
 at the cost of loosing an iconic error for all JavaScript developers.
@@ -530,37 +486,40 @@ as a compilation target to run code in a browser.
 \label{ssub:multitier}
 
 Haxe was probably the first production ready language to target JavaScript, in 2006.
-At this time, there was no JIT, and JavaScript performances were \replace{n't great either}{fairly limited}.
-\remove{Yet s} \add{S}ome people were \add{nonetheless} trying to make the Web a video and gaming platform.
-Flash, a multimedia platform running the ActionScript language was the \replace{rising star}{most popular solution} at the time.
-In 2005, YouTube \replace{made use of}{was for example relying on} a Flash player to distribute videos.
-Haxe was created by Nicolas Cannasse~\cite{haxe-interview} with the clear purpose to remove the overhead of composing heterogeneous components like a Flash client,
-a Web server, and additional JavaScript \remove{glue} \replace{when designing Web games}{for Web games design}.
+At this time, there was no JIT, and JavaScript performances were fairly limited.
+Some people were nonetheless trying to make the Web a video and gaming platform.
+Flash, a multimedia platform running the ActionScript language was the most popular solution at the time.
+In 2005, \textsf{YouTube} was for example relying on a Flash player to distribute videos.
+Haxe was created by Nicolas Cannasse~\cite{haxe-interview} with the clear purpose
+of removing the overhead of composing heterogeneous components like a Flash client,
+a Web server, and additional JavaScript for Web games design.
 
-Many other languages \add{later} followed that \replace{trend}{path} of using the same language
-for server and client code, sometimes called ``isomorphic'' frameworks.
+Many other languages later followed that path of using the same language
+for server and client code, sometimes called ``isomorphic'' frameworks,
+or multi-tier programming environments.
 Google announced their Google Web Toolkit (GWT) in May 2006~\cite{gwt},
 enabling Java developers to build client applications.
 The Ocsigen framework by V. Balat et al.~\cite{balat2006ocsigen} in 2006
-allowed building fully featured applications in the OCaml programming language.
-The Opal compiler~\cite{opalrb} \replace{transforms}{translates} ruby code into JavaScript,
-\comment{enabling full stack Ruby with the rails framework for the backend.}{too technical, to be made clearer; what is rails ?}
+allowed building Web applications in the OCaml programming language.
+The Opal compiler~\cite{opalrb} translates Ruby code into JavaScript,
+enabling full stack Ruby Web applications.
 Today, most programming languages can target JavaScript,
 including Python, C, Erlang, Haskell, etc.
 
-Around the same period, academic research \replace{is}{has} also \add{been} trying to solve
-what we call \comment{multi-tier web programming}{to be defined ??} with unique new languages like Links
+Around the same period, academic research has also been trying to solve
+multi-tier web programming with unique new languages like Links
 by E. Cooper et al.~\cite{cooper2006links},
 or Hop by Serrano et al.~\cite{serrano2006hop} in 2006.
 Those efforts are continuing with for example
 A. Chlipala et al.~\cite{chlipala2015ur} who created the Ur/Web variant
 of the Ur modeling language,
 or Sinha et al.~\cite{sinha2015simplifying} with the WebNat programming language in 2015.
+According to~\cite{sinha2015simplifying} however,
+experienced Web developers require fine grained control of the generate code,
+debugging tools, deployment and configurations features
+for designing complex real-world Web applications.
 Unfortunately, those research attempts at novel ways of programming the Web
-are not \add{yet} adopted by \replace{the programmers}{developers}.
-According to~\cite{sinha2015simplifying},
-one of the key \comment{factors}{factors of what? of not adopting multi tier programming? if so, to be made clearer}   is that experienced Web programmers want fine grained
-control on the generated code for designing complex applications.
+are not mature enough yet to be adopted by developers.
 
 \subsubsection{JavaScript as the main target}%
 \label{ssub:javascript_as_the_main_target}
@@ -577,33 +536,37 @@ and Reason~\cite{reason} (also known as ReasonML) in 2016 by Jordan Walke (who i
 also the original designer of the React framework we will discuss later).
 
 One can notice that appart from Dart, which is heavily object-oriented,
-those new languages \remove{for the client} follow the functional paradigm.
-\comment{It is not estranged}{TODO : check this expression} from guaranties brought by
-functional programming that we will develop when exploring the Elm programming language.
+those new languages follow the functional paradigm.
+It may be related to guaranties brought by functional programming
+that we will develop when exploring the Elm programming language.
 
-\comment{A note about the Dart language, it has been abandonned for Web programming,
-but found a new home in the Flutter framework%~\cite{flutter}
-, released in 2017,
-targeting mainly native development of mobile applications on iOS and Android.}{pas certain que ce soit utile}
-
-\comment{}{sur cette section je reste un peu sur ma faim ; tu listes des frameworks, tu dis qu'ils sont fonctionnels pour des raisons qu'on d\'etaillera plus tard mais cela apporte finalement assez peu d'info}
+\comment{}{A: sur cette section je reste un peu sur ma faim ; tu listes des frameworks, tu dis qu'ils sont fonctionnels pour des raisons qu'on d\'etaillera plus tard mais cela apporte finalement assez peu d'info}
+\comment{}{M: Ok, alors c'est pas des frameworks, c'est des languages de programmation.
+Mais contrairement à la section précédente, ce ne sont pas des languages pré-existants
+qui ont été adaptés pour générer du JS,
+mais des language créés spécifiquement dans le but de faire du frontend web.
+Et contrairement aux sections suivantes, ce ne sont pas juste des superset ou légère
+variations de JS.
+Peut-être je devrais mettre en avant le fait que si tant de nouveaux languages
+sont créés from scratch spécifiquement dans le but de générer du JS,
+c'est parce qu'il y a un vrai besoin de diversité et d'approches différentes de JS pour le Web ?}
 
 \subsubsection{Gradually typed JavaScript}%
 \label{ssub:gradually_typed_javascript}
 
 Coding with a completely different language is a rather extreme approach
-which can \replace{feel overwhelming}{be disturbing for developers}.
+which can be disturbing for developers.
 From this observation, both Microsoft and Facebook decided to bring
-new contributions to the JavaScript ecosystem \replace{in}{under} the form of gradual typing.
+new contributions to the JavaScript ecosystem under the form of gradual typing.
 Gradual typing is a type system where values are partially typed.
 Some may be typed, and consequently static typing rules are verified,
 and some may be untyped, left for compile-time verifications.
 
 In October 2012, Microsoft released TypeScript~\cite{bierman2014understanding},
-a superset of JavaScript, \replace{enabling}{introducing} \comment{}{ajouter "facultatif", ce qui explique la prochaine phrase}  type annotations.
+a superset of JavaScript, introducing optional type annotations.
 As a consequence, any valid JavaScript program is also a valid TypeScript program.
 This property was most certainly the major success factor of TypeScript.
-Programs can be \comment{ported}{TO BE CHECKED} progressively to benefit from static analysis.
+Programs can be ported progressively to benefit from static analysis.
 Listing~\ref{lst:add-ts} exhibits the core type annotation feature of TypeScript.
 
 \lstinputlisting[%
@@ -614,34 +577,34 @@ Listing~\ref{lst:add-ts} exhibits the core type annotation feature of TypeScript
 
 Another benefit of static typing that JavaScript developers are discovering when
 switching to TypeScript is the improved IDE support,
-with \add{includes for example} better autocompletion tools, jumping to definitions \replace{and other support from your editor}{etc}.
+which includes for example better autocompletion tools, jumping to definitions, etc.
 
 In 2014, another tool named Flow and led by Facebook~\cite{chaudhuri2017fast}
 enabled gradual typing of JavaScript.
-Ultimately, TypeScript seems to \replace{have taken the biggest part of the cake}{be the most popular one},
+Ultimately, TypeScript seems to be the most popular one,
 but choosing between the two will most likely depend on how well they integrate
-with \comment{your working framework}{tournure non standard pour un manuscrit de these}.
+with the JavaScript framework and tools used in the corresponding application.
 
 \subsubsection{JavaScript transpilation}%
 \label{ssub:javascript_transpilation}
 
 Despite increasing language complexity
 as explained in Section~\ref{ssub:organic_growth_and_backward_compatibility},
-ES2015 and later specifications brought very appreciated \add{new} features \remove{to the table},
-\replace{many}{often} influenced by other languages like CoffeeScript.
-The ``async / await'' pair of keywords is such example of syntax
-\comment{improving on complexity}{pas clair : improving ou increasing} of the code control flow.
+ES2015 and later specifications brought very appreciated new features,
+often influenced by other languages like CoffeeScript.
+The \verb|async / await| pair of keywords is such example of syntax
+reducing complexity of the code control flow.
 New specifications, however, are not always immediately available in all browsers,
 especially mobile versions.
-But there \replace{is}{exists} one version of JavaScript fully supported on all browsers, ES5.
+But there exists one version of JavaScript fully supported on all browsers, ES5.
 Inspired by the \comment{traceur}{TO BE CHECKED} tool by Google engineers,
-Sebastian McKenzie \comment{jumped head first}{trop familier} into writing 6to5~\cite{babel}
+Sebastian McKenzie started writing \textsf{6to5}~\cite{babel}
 on September 2014, at the age of 17.
-His 6to5 project, now renamed Babel, is known as a JavaScript ``transpiler'',
+His \textsf{6to5} project, now renamed \textsf{Babel}, is known as a JavaScript ``transpiler'',
 i.e.\ a program converting recent JavaScript source code into another (older) version
 of JavaScript source code.
-Today, Babel has become one of the most used tools
-with 7 million weekly downloads on npm.
+Today, \textsf{Babel} has become one of the most popular tools
+with 7 million weekly downloads on \textsf{npm}.
 
 
 \section{Frontend Web programming}%
@@ -652,7 +615,7 @@ with 7 million weekly downloads on npm.
 \label{sub:single_page_application_spa_}
 
 In a desire to improve user experience in Web applications,
-code location has been shifting from server to client.
+code location has progressively been shifting from server to client.
 Since 2009, a Web framework named AngularJS~\cite{hevery2009declarative} strongly pushed
 the Web actors toward writing ``Single Page Applications'' (SPA).
 A Single Page Application gets its name from the fact that only one
@@ -665,9 +628,8 @@ then process the answer and re-render the HTML page accordingly.
 Since February 2005, this technique was popularized under the name Ajax~\cite{ajax}
 by Jesse James Garret and is represented in Figure~\ref{fig:spa}.
 Ajax stands for asynchronous JavaScript and XML,
-though today exchanged data is mostly in the JSON format (JavaScript Object Notation) instead of XML,
+though today data is mostly exchanged in the JSON format (JavaScript Object Notation) instead of XML,
 and occasionally just raw bytes depending on use cases and protocols.
-Let's describe briefly today's leading Web frameworks, namely Angular, React and Vue.
 
 \begin{figure}[ht]
 	\centering
@@ -675,70 +637,6 @@ Let's describe briefly today's leading Web frameworks, namely Angular, React and
 	\caption{Difference between traditional Web applications and Single Page Application (SPA). A traditional application will ask the server to generate a new HTML page to access the required content. A SPA will just ask for the required data and render it in the client directly.}%
 	\label{fig:spa}
 \end{figure}
-
-\subsubsection{Angular}%
-\label{ssub:angular}
-
-AngularJS~\cite{hevery2009declarative} goes back to 2009, when Miško Hevery and Adam Abrons
-where trying to sell online storage services through software at getangular.com.
-The project wasn't successful enough, and so they made <angular/> open source.
-Miško Hevery was later recruited at Google, working on their feedback project.
-The story, as told by Miško Hevery and Brad Green at Google I/O 2013~\cite{angularjs-googleio},
-says that it took Miško three weeks (though he had bet two) to rewrite a six-month work
-with 17000 lines of code into 1500 lines of code with <angular/>.
-Impressed, Brad decided to embrace the <angular/> project under Google's wing
-and it got rebranded AngularJS with a new logo.
-In 2016, Google released its successor, renamed Angular (without the JS part).
-An important difference is that Angular is using TypeScript instead of JavaScript.
-The key feature of Angular/AngularJS is declarative two-way data binding,
-showcased in Listing~\ref{lst:angularjs}.
-Another important design decision is that Angular is trying
-to provide a fully featured and coherant framework
-capable of handling most use cases you will ever encounter.
-
-\lstinputlisting[%
-  language=HTML,
-  caption={Two-way data binding in AngularJS.},
-  label={lst:angularjs}
-]{assets/code/angularjs.html}
-
-\subsubsection{React}%
-\label{ssub:react}
-
-Contrary to Angular, React is designed to solve a very specific use case,
-which is how to build user interfaces.
-As such it doesn't care about how you store data,
-or manage routing of the SPA with the url.
-The core feature of React is its Virtual DOM that we will explain soon.
-It provides one-way data binding between the state of a React component
-and its rendering in the DOM.\@
-The syntax used for the binding is showcased in Listing~\ref{lst:reactjs}.
-
-\lstinputlisting[%
-  language=ES6,
-  caption={React example showing the state and render function of a component.},
-  label={lst:reactjs}
-]{assets/code/react.js}
-
-
-\subsubsection{Vue}%
-\label{ssub:vue}
-
-Vue describes itself as a progressive framework,
-meaning it provides core features targetting a small scope,
-and other opt-in layers bringing more functionalities.
-In a sense, it shares advantages and inconvenients of both
-React and Angular, with a different balance point.
-It mostly uses one-way data bindings,
-but also provides inbuilt conveniences to simulate two-way data binding
-through attaching event listeners when using the ``v-model'' property.
-An example is given in Listing~\ref{lst:vuejs}.
-
-\lstinputlisting[%
-  language=HTML,
-  caption={Simulated two-way data binding in Vue using the ``v-model'' property.},
-  label={lst:vuejs}
-]{assets/code/vue.html}
 
 
 \subsection{Functional reactive programming}%
@@ -762,6 +660,77 @@ to a modularized, transpiled, minified, gzipped compilation target.
 \subsection{How to choose?}%
 \label{sub:how_to_choose_}
 
+\subsubsection{Angular}%
+\label{ssub:angular}
+
+AngularJS~\cite{hevery2009declarative} dates back to 2009, when Miško Hevery and Adam Abrons
+were trying to sell online storage services through software at getangular.com.
+The project wasn't successful enough, and so they made <angular/> open source.
+Miško Hevery was later recruited at Google to work on a new project.
+The story, as told by Miško Hevery and Brad Green at Google I/O 2013~\cite{angularjs-googleio},
+says that it took Miško three weeks (though he had bet two) to rewrite a six-month work
+with 17000 lines of code into 1500 lines of code with <angular/>.
+Impressed, Brad decided to embrace the <angular/> project under Google's wing
+and it got rebranded AngularJS with a new logo.
+In 2016, Google released its successor, renamed Angular (without the JS part).
+An important difference is that Angular is using TypeScript instead of JavaScript.
+The key feature of Angular/AngularJS is \comment{declarative two-way data binding,}
+{Bien expliquer dans la partie reactive programming.}
+showcased in Listing~\ref{lst:angularjs}.
+Another important design decision is that Angular is trying
+to provide a \comment{fully featured and coherant framework
+capable of handling most use cases you will ever encounter.}
+{trop vague, illustrer avec un example?}
+
+\lstinputlisting[%
+  language=HTML,
+  caption={Two-way data binding in AngularJS.},
+  label={lst:angularjs}
+]{assets/code/angularjs.html}
+
+\subsubsection{React}%
+\label{ssub:react}
+
+Contrary to Angular, React is designed to solve a very specific use case,
+which is how to build user interfaces.
+As such it doesn't care about how you store data,
+or manage routing of the SPA with the url.
+The core feature of React is its Virtual DOM \comment{that we will explain soon.}
+{Bien expliquer dans la partie sur le VDOM}
+It provides \comment{one-way data binding}{expliquer dans section reactive programming} between the state of a React component
+and its rendering in the DOM.\@
+The syntax used for the binding is showcased in Listing~\ref{lst:reactjs}.
+
+\lstinputlisting[%
+  language=ES6,
+  caption={React example showing the state and render function of a component.},
+  label={lst:reactjs}
+]{assets/code/react.js}
+
+
+\subsubsection{Vue}%
+\label{ssub:vue}
+
+\comment{Vue describes itself as a progressive framework,
+meaning it provides core features targetting a small scope,
+and other opt-in layers bringing more functionalities.
+In a sense, it shares advantages and inconvenients of both
+React and Angular, with a different balance point.
+It mostly uses one-way data bindings,
+but also provides inbuilt conveniences to simulate two-way data binding
+through attaching event listeners when using the \texttt{v-model} property.}{Pas clair}
+An example is given in Listing~\ref{lst:vuejs}.
+
+\lstinputlisting[%
+  language=HTML,
+  caption={Simulated two-way data binding in Vue using the \texttt{v-model} property.},
+  label={lst:vuejs}
+]{assets/code/vue.html}
+
+
+\subsubsection{Summary}%
+\label{ssub:summary}
+
 All three frameworks provide data binding between the state of the application
 and its rendering, making the user interface declarative and reactive.
 Angular and React are the more mature projects with
@@ -769,13 +738,13 @@ the biggest community.
 Angular provides a solution covering most aspects needed for a SPA,
 while React is focused on the user interface and will often be paired
 with libraries to manage state efficiently like Redux.
-Vue has a lower barrier to entry, like React,
+\comment{Vue has a lower barrier to entry}{?}, like React,
 but also a coherent set of opt-in functionalities making it an all-in-one solution similar to Angular.
 In order to produce small and compatible applications,
 they all require multiple techniques such as modularization,
 transpilation or minification, effectively making Web development similar
 to static and compiled development environments.
-Knowing all this, I will argue that we can use Elm,
+Knowing all this, I will argue that we should instead use Elm,
 a functional programming language compiling to JavaScript.
 In the next section I will detail how it can bring
 all the advantages of other Web frameworks,
@@ -785,8 +754,17 @@ and a more reliable application at the end.
 \section{Elm}%
 \label{sec:elm}
 
+\begin{displayquote}
+	\textit{``Il semble que la perfection soit atteinte non quand il n’y a plus rien à ajouter,
+	mais quand il n’y a plus rien à retrancher''}
+	--- Antoine de Saint-Exupéry, Terre des Hommes, chapitre III, L'avion, 1939.
+\end{displayquote}
+
 Elm is a statically typed functional programming language for building Web applications.
-Its syntax comes from the ML family of languages, similar to Haskell and OCaml.
+Its syntax comes from the Meta Language (ML) family of languages, similar to Haskell and OCaml.
+It strives for simplicity by removing non essential features
+like custom operators in version 0.19,
+and by avoiding functional programming jargon such as monads, functors, etc.
 The home page of the language claims that Elm generates JavaScript
 with great performances and no runtime exceptions.
 In the following sections, we will see how its properties enable such a claim.
@@ -803,7 +781,7 @@ Side effects are important to handle to build applications that are not predeter
 at startup, but we will explain later how they are managed withing The Elm Architecture (TEA).
 
 Listing~\ref{lst:sideeffectjs} gives examples of functions that cannot be directly
-transcribed from JavaScript to Elm due to side effects.
+translated from JavaScript to Elm due to side effects.
 Pure functions are also sometimes called ``referentially transparent''
 though the meaning of this terminology is unclear depending on sources.
 The important property is that calling a pure function with the same arguments
@@ -835,8 +813,8 @@ Tuples like (Int, Float), and records (or objects) are the most common product t
 Their names come from the properties on cardinality if we consider types as sets.
 Indeed, a tuple of three booleans have a cardinality of 8 if you consider
 all possible combinations, which is the product $2\times2\times2$.
-Sum types are referred to as ``custom types'' in Elm.
-They are defined with the ``type'' keyword.
+Sum types are referred to as ``custom types'' in Elm terminology.
+They are defined with the \verb|type| keyword.
 Few examples of custom types definitions are provided in Listing~\ref{lst:customtype-elm}.
 \comment{}{OneOfThreeBools as 6 distinct elements, 2 + 2 + 2}
 
@@ -853,11 +831,11 @@ Concretely, consider that we are modeling accessibility of a site
 depending on the logged status of users.
 Typically, in a language without sum types, like JavaScript,
 the user will be modeled with two fields as in Listing~\ref{lst:userjs}.
-Initially the ``loggedIn'' field will be false and the user name empty.
-And as soon as the user is logged in,
-the corresponding field will have the value ``true'',
+Initially the \verb|loggedIn| field will be false and the user name empty.
+As soon as the user is logged in,
+the corresponding field will have the value \verb|true|,
 and the name will be filled with the user name.
-But what happens when the ``loggedIn'' field is ``false'' but
+But what happens when the \verb|loggedIn| field is \verb|false| and
 the name is filled with something like ``John Doe''.
 In theory this state should never be reached if we are carefull in our implementation,
 but in practice, bugs tend to fill every possible crack,
@@ -902,13 +880,13 @@ The former do not return values while the latter do.
 Appart from imports, Elm code contains only top level definitions and expressions.
 Listing~\ref{lst:expressionelm} provides example of Elm expressions
 for conditions or loops.
-All branches of conditions (``if'' expressions) must have a value of the same type.
-Without an ``else'' branch, the code will not compile.
-Not having ``for'' loops statements is among the thoughest functional
-concepts to learn for begginers.
+All branches of conditions (\verb|if| expressions) must have a value of the same type.
+Without an \verb|else|  branch, the code will not compile.
+Not having \verb|for| loops statements is among the toughest functional
+concepts to learn for beginners.
 In a language with only expressions,
 loops need to be expressed either with recursive functions,
-or with higher order functions, like ``List.foldl'' in the length example.
+or with higher order functions, like \verb|List.foldl| in the length example.
 
 \lstinputlisting[%
   language=Elm,
@@ -922,9 +900,9 @@ or with higher order functions, like ``List.foldl'' in the length example.
 
 Pattern matching is a branching mechanism based on the structure of a type.
 Any custom type can be matched to one of its different variants
-with the ``case ... of'' syntax as shown in Listing~\ref{lst:pattern-matching-elm}.
+with the \verb|case ... of| syntax as shown in Listing~\ref{lst:pattern-matching-elm}.
 Any lowercase variable in the pattern will be bound to the corresponding data,
-like the ``name'' variable here.
+like the \verb|name| variable here.
 
 \lstinputlisting[%
   language=Elm,
@@ -934,7 +912,7 @@ like the ``name'' variable here.
 
 In javascript, one can fairly easily forget to handle a case,
 or willingly only process the ``happy path'' for prototyping speed.
-In Elm, if I remove the ``Anonymous'' branch,
+In Elm, if I remove the \verb|Anonymous| branch,
 the compiler will refuse to compile the code
 with the message showed in Listing~\ref{lst:missing-pattern-elm}
 
@@ -945,11 +923,11 @@ with the message showed in Listing~\ref{lst:missing-pattern-elm}
 ]{assets/code/pattern-match-missing.elm}
 
 As suggested in the hint of the compiler error,
-we can also use the ``Debug.todo "message"'',
+we could also use \verb|Debug.todo "message"| in the \verb|Anonymous| branch,
 which is very useful for the rapid prototyping phase.
-Remark that the ``Debug.todo'' function will make the program crash
+Remark that the \verb|Debug.todo| function will make the program crash
 if reached at runtime.
-For this reason, all functions from the ``Debug'' module
+For this reason, all functions from the \verb|Debug| module
 are forbidden in code compiled in release mode.
 
 
@@ -1040,14 +1018,14 @@ At Elm Europe 2017, Matthew Griffith made a presentation
 entitled ``Understanding style''~\cite{griffithstyle}.
 In this work, he identifies the most problematic aspect of layout being
 that there is no clear way to identify when it is incorrect.
-There is not even an unhelpful ``undefined is not a function'' in CSS resolution.
+There is not even an unhelpful ``undefined is not a function'' error in CSS resolution.
 Basically an error in layout and style is just the unexpected.
 With this in mind he created library, now named elm-ui~\cite{griffithelmui},
 aiming at providing the guaranty that if your code compiles,
 the layout if fully specified.
 They key property of the library is that its base building block,
-the ``el'' element only has one child,
-instead of a list like in the case of a ``div'' HTML element.
+the \verb|el| element only has one child,
+instead of a list like in the case of a \verb|div| HTML element.
 Also, building blocks with multiple children must have explicit layout.
 Listing~\ref{lst:elm-ui} showcases how functional composition of UI elements
 and an attention on naming enable building of clear and robust user interfaces.
@@ -1059,3 +1037,9 @@ The corresponding user interface is provided in Figure~\ref{fig:elm-ui}.
   label={lst:elm-ui},
   basicstyle=\scriptsize\ttfamily
 ]{assets/code/elm-ui.elm}
+
+
+\subsection{Reliable packages}%
+\label{sub:reliable_packages}
+
+Enforced semantic versioning + security (no side effects)
