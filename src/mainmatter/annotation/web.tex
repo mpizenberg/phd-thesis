@@ -1047,4 +1047,24 @@ The corresponding user interface is provided in Figure~\ref{fig:elm-ui}.
 \subsection{Reliable packages}%
 \label{sub:reliable_packages}
 
-Enforced semantic versioning + security (no side effects)
+
+Elm packages are versioned using
+the semantic versioning specification~\cite{semanticversioning},
+with the MAJOR.MINOR.PATCH schema.
+The major number is incremented when changes breaking the API are introduced,
+such as removing a function or modifying its type signature.
+The minor number is incremented when new values or functions are introduced.
+Finally the patch number is incremented when nothing else than internal
+non-exposed implementation are modified.
+Since Elm uses total functions, it is able to programmatically compute
+version number increments with the \verb|elm bump| command.
+As a consequence, upgrading your dependencies is guarantied by the compiler
+to not break one code as long as they don't increase the major number.
+
+Another advantage of having pure, total functions is that type signatures are not lying,
+implying that one can immediately identify functions capable of triggering side effects.
+At the current state of the Elm language,
+the only places where side effects can happen are
+ports to JavaScript (forbidden in packages), commands and HTML.
+Therefore, a dependency that doesn't expose functions with commands or HTML
+in their type signatures will not be able to steal bitcoins or launch nuclear warheads.
