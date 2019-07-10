@@ -914,7 +914,12 @@ In javascript, one can fairly easily forget to handle a case,
 or willingly only process the ``happy path'' for prototyping speed.
 In Elm, if I remove the \verb|Anonymous| branch,
 the compiler will refuse to compile the code
-with the message showed in Listing~\ref{lst:missing-pattern-elm}
+with the message showed in Listing~\ref{lst:missing-pattern-elm}.
+This is the main reason why the \verb|Nothing| value in Elm,
+approximately equivalent to the \verb|null| value in JavaScript
+will never trigger a runtime exception.
+Everywhere it may appear, i.e.\ everywhere the \verb|Maybe| type is used,
+Elm will guaranty at compile type that this case is handled.
 
 \lstinputlisting[%
   language=Elm,
