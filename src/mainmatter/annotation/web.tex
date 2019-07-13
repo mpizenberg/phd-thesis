@@ -639,10 +639,67 @@ and occasionally just raw bytes depending on use cases and protocols.
 \end{figure}
 
 
-\subsection{Functional reactive programming}%
+\subsection{Reactive programming}%
 \label{sub:functional_reactive_programming}
 
-Elm, FRP research papers.
+In 2007, Sean Parent gave a talk at Google~\cite{parent2007talk, parent2007pdf}
+on declarative user interface logic and building
+the "Property Model Library" at Adobe~\cite{jarvi2008property}.
+An analysis of Adobe's desktop applications code highlighted that a third of it
+is devoted to event handling logic,
+and that half of the bugs exist in this portion of the code.
+
+Reactive programming is a paradigm focusing on manipulation of time-varying values.
+It is especially suited for event-driven applications such as graphical user interfaces (GUI),
+and tries to solve many of the issues brought by asynchronous callbacks.
+In a survey on reactive programming~\cite{bainomugisha2013survey},
+E. Bainomugisha et al. classify approaches along six axes:
+representation of time-varying values, evaluation model, lifting operations,
+multidirectionality, glitch avoidance, and support for distribution.
+
+Representation of time-varying values and lifting operations
+mostly depend on the underlying programming language.
+Statically typed languages, will require a differentiation in the type
+between a normal value and a time-varying one,
+thus also needing "lifting" operations i.e. ways of transforming
+functions working on regular values (like sum of two numbers)
+into functions that operate on their time-varying version.
+Dynamically type languages may figure this out at runtime,
+and consequently avoid usage of lifting operators.
+
+The evaluation model can be of two kinds,
+push-based, pull-based, and sometimes a mix of the two.
+The most common evaluation mechanism is push-based,
+meaning once a time-varying value changes,
+it pushes the change to other values depending on it.
+A pull mechanism however usually relies of lazy evaluation languages such as Haskell.
+The major issue of pulling is that the system may suddenly
+require many depending past values and that will often result high memory consumption
+and program pauses due to burst of computations.
+Push-based evaluation has the advantage of lower memory usage
+and quicker response, but may introduce temporary inconsistent states called glitches
+if propagation of changes are pushed in a wrong order.
+
+Most research on the topic have occurred in the context
+of functional reactive programming (FRP), following Fran~\cite{elliott1997functional} in 1997.
+Almost none of those research projects however are being
+picked up for use in production.
+Even Elm~\cite{czaplicki2013asynchronous} that got some traction in the Web industry,
+decided to move away from FRP~\cite{elm017farewell} with its 0.17 release in 2016.
+The reason for the move in Elm and low adoption of reactive programming in general
+is probably due to the big learning curve for the concepts.
+A recent JavaScript "compiler" project named Svelte~\cite{TODO}
+is trying to reintroduce reactive foundations with minimal alterations
+to the JavaScript language.
+It is too soon to predict if this approach will be successful,
+even though it is getting traction.
+
+One important aspect of reactive programming that has been picked up however,
+is the declarative nature of binding graphical user interfaces to the
+underlying data such that when the data changes, the interface is automatically updated.
+This is often called one-way or two-way data binding depending on if
+modifications of the user interface also immediately pushes changes to the associated data.
+
 
 \subsection{Virtual DOM}%
 \label{sub:virtual_dom}
