@@ -767,13 +767,6 @@ and at the new frame.
 Representing the DOM as an intermediate data structure also have many benefits regarding testing
 and enable writing pure visualization functions (not performing any side effect).
 
-\subsection{Assets compilation}%
-\label{sub:assets_compilation}
-
-How JavaScript switched from a human readable interpreted file,
-to a modularized, transpiled, minified, gzipped compilation target.
-
-
 \subsection{How to choose?}%
 \label{sub:how_to_choose_}
 
@@ -857,9 +850,10 @@ while React is focused on the user interface and will often be paired
 with libraries to manage state efficiently like Redux.
 \comment{Vue has a lower barrier to entry}{?}, like React,
 but also a coherent set of opt-in functionalities making it an all-in-one solution similar to Angular.
-In order to produce small and compatible applications,
-they all require multiple techniques such as modularization,
-transpilation or minification, effectively making Web development similar
+In order to produce small application code compatible with most browsers,
+one also should add transpilation, minification, and other preprocessing
+tasks readying the code and assets for serving them on the Web.
+We effectively end up making Web development similar
 to static and compiled development environments.
 Knowing all this, I will argue that we should instead use Elm,
 a functional programming language compiling to JavaScript.
