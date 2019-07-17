@@ -706,8 +706,66 @@ modifications of the user interface also immediately pushes changes to the assoc
 \subsection{Virtual DOM}%
 \label{sub:virtual_dom}
 
-Why modifying the DOM directly is a mistake.
-Understanding the animation frame loop.
+The document object model (DOM) is the hierarchical structure of elements
+composing an HTML page.
+In order to understand what a virtual DOM is, and why it is useful,
+we first need to understand how the browser renders the DOM.
+
+\begin{figure}[ht]
+\includegraphics[width=\columnwidth]{assets/img/dom-rendering.pdf}
+\caption{Rendering process of a Web page.}%
+\label{fig:dom-rendering}
+\end{figure}
+
+The rendering process is depicted in Figure~\ref{fig:dom-rendering}.
+First, the browser needs to build the DOM and the CSSOM trees.
+The CSSOM is the equivalent of the DOM but for the hierarchy of CSS (styling) properties.
+When combining the DOM and the CSSOM, the browser generates a render tree,
+which contains all the visible nodes with their computed styles.
+From the render tree, the browser can compute the layout of the page,
+i.e. the exact position and sizes of all visible elements in the Web page.
+Finally, the browser can ``paint'' the actual pixels on screen.
+This used to be done in two phases,
+first paint different virtual layers of related elements,
+then compose and render those different layers on screen.
+Recently, new rendering engines tend to combine those steps
+into a process similar to those of game engines.
+For more information on browsers rendering engine,
+Lin Clark~\cite{clark-stylo, clark-webrender} also wrote
+two enlightning blog posts on that subject.
+
+In theory, everytime JavaScript code modifies the DOM or CSS properties,
+the whole process should be called to rerender the page.
+In practice, the browser framerate approximates the screen's one.
+Therefore, the ``paint'' step only occurs roughly 60 times per second.
+The layout however, may need to be recomputed at a higher framerate.
+For example, reading the \verb|offsetX| and \verb|offsetY| properties
+of a mouse event to get the current coordinates of the mouse while annotating images,
+will require a reflow (recomputation of layout) if the DOM or CSSOM has changed.
+Unfortunately that is exactly what we do when annotating images.
+We retrieve mouse coordinates in the image,
+and then draw the associated annotation on top.
+This alternation of modifying the DOM and reading properties needing reflow
+is the worst source of performance drops when happening at high frequencies.
+Listing~\ref{lst:layout-reflow} is an example of code showcasing this issue.
+Computing this loop with \verb|nbiter = 1000| takes 200ms on \textsf{Chrome}
+while splitting the loop in two loops takes 3ms.
+
+\lstinputlisting[%
+  language=ES6,
+  caption={Example code forcing layout recomputation by intertwining layout read and CSSOM write.},
+  label={lst:layout-reflow}
+]{assets/code/layout-reflow.js}
+
+A virtual DOM is the combination of a data structure and an update mechanism
+circumventing this kind of issues by batching all DOM modifications once per frame.
+Instead of directly modifying the DOM,
+one should modify the virtual DOM data structure.
+Usually, the library providing the virtual DOM implementation will update the DOM at each frame
+thanks to a diffing algorithm between the versions of the virtual DOM data structure at last frame
+and at the new frame.
+Representing the DOM as an intermediate data structure also have many benefits regarding testing
+and enable writing pure visualization functions (not performing any side effect).
 
 \subsection{Assets compilation}%
 \label{sub:assets_compilation}
