@@ -77,8 +77,8 @@ Web applications have become full-fledged applications with almost
 the same capabilities as desktop ones.
 They feature functionalities like 3D graphics, audio processing or interactive elements,
 and are sometimes called rich web applications.
-Similar concepts like \comment{``progressive web applications'' (PWA)}{Not explained actually ...},
-or ``single page applications'' (SPA) are also explained in the following sections.
+Associated concepts such as ``single page applications'' (SPA)
+are also explained in the following sections.
 In the next section, we will dive into the cornerstone of Web pages dynamism, JavaScript.
 
 
@@ -114,8 +114,7 @@ starting around 2008 when Google released its Chrome browser.
 On September 2, 2008, Google announced a new Web browser called Chrome~\cite{google-chrome}.
 Its main selling feature was a new JavaScript engine called V8,
 greatly improving the browser performances on web applications making
-heavy use of JavaScript like their email client \comment{Gmail}
-{should we use sans serif font for all names like \textsf{Gmail}.}
+heavy use of JavaScript like their email client Gmail.
 Note that performance in a browser depends on many factors
 such that network latency, DOM computation, page rendering or JavaScript processing.
 In this section, we will specifically focus on JavaScript execution performances.
@@ -198,9 +197,6 @@ hinders the performances, and consequently will permanently mark
 the section as not to be optimized anymore.
 For more information on JIT compilation, Lin Clark~\cite{clark-jit}
 wrote an enlightning introductory blog post.
-
-Figure (\alert{TODO faire un schema timeline}) outlines the differences between
-interpreting and JITing regarding the ratio of time spent on each phase.
 
 
 \subsection{Explosion of JavaScript}%
@@ -463,14 +459,15 @@ implicit conversion tricks.
 \end{figure}
 
 For JavaScript developers previous to 2015,
-the error ``undefined is not a function'' was \comment{famous for not being helpful}{n\'ecessite une r\'ef\'erence}.
-This error would very often rise from a typo somewhere in the code.
+the error ``undefined is not a function'' had become a meme in the online community.
+This error would very often rise from a typo somewhere in the code,
+generating an \verb|undefined| value instead of a function.
 Due to the dynamic nature of JavaScript, the error can be reported late in the call stack.
 Indeed, even if an error in the code might create an \verb|undefined| value,
-it is only later when called, that an uncaught error would trigger.
+it is only later when called as a function that an uncaught error would trigger.
 As shown in Figure~\ref{fig:undefined-improved}, browsers are more helpful now,
 at the cost of loosing an iconic error for all JavaScript developers.
-Yet not having a compile step prevents advanced static analysis of the code,
+Yet, not having a compile step prevents advanced static analysis of the code,
 and at the same time lengthen the feedback loop to fix errors.
 
 
@@ -489,7 +486,7 @@ Haxe was probably the first production ready language to target JavaScript, in 2
 At this time, there was no JIT, and JavaScript performances were fairly limited.
 Some people were nonetheless trying to make the Web a video and gaming platform.
 Flash, a multimedia platform running the ActionScript language was the most popular solution at the time.
-In 2005, \textsf{YouTube} was for example relying on a Flash player to distribute videos.
+In 2005, YouTube was for example relying on a Flash player to distribute videos.
 Haxe was created by Nicolas Cannasse~\cite{haxe-interview} with the clear purpose
 of removing the overhead of composing heterogeneous components like a Flash client,
 a Web server, and additional JavaScript for Web games design.
@@ -597,13 +594,13 @@ reducing complexity of the code control flow.
 New specifications, however, are not always immediately available in all browsers,
 especially mobile versions.
 But there exists one version of JavaScript fully supported on all browsers, ES5.
-Inspired by the \comment{traceur}{TO BE CHECKED} tool by Google engineers,
+Inspired by the Traceur compiler created by Google engineers~\cite{traceur},
 Sebastian McKenzie started writing \textsf{6to5}~\cite{babel}
 on September 2014, at the age of 17.
-His \textsf{6to5} project, now renamed \textsf{Babel}, is known as a JavaScript ``transpiler'',
+His \textsf{6to5} project, now renamed Babel, is known as a JavaScript ``transpiler'',
 i.e.\ a program converting recent JavaScript source code into another (older) version
 of JavaScript source code.
-Today, \textsf{Babel} has become one of the most popular tools
+Today, Babel has become one of the most popular tools
 with 7 million weekly downloads on \textsf{npm}.
 
 
@@ -644,7 +641,7 @@ and occasionally just raw bytes depending on use cases and protocols.
 
 In 2007, Sean Parent gave a talk at Google~\cite{parent2007talk, parent2007pdf}
 on declarative user interface logic and building
-the "Property Model Library" at Adobe~\cite{jarvi2008property}.
+the ``Property Model Library'' at Adobe~\cite{jarvi2008property}.
 An analysis of Adobe's desktop applications code highlighted that a third of it
 is devoted to event handling logic,
 and that half of the bugs exist in this portion of the code.
@@ -663,7 +660,7 @@ Representation of time-varying values and lifting operations
 mostly depend on the underlying programming language.
 Statically typed languages, will require a differentiation in the type
 between a normal value and a time-varying one,
-thus also needing "lifting" operations i.e. ways of transforming
+thus also needing ``lifting'' operations i.e. ways of transforming
 functions working on regular values (like sum of two numbers)
 into functions that operate on their time-varying version.
 Dynamically type languages may figure this out at runtime,
@@ -690,7 +687,7 @@ Even Elm~\cite{czaplicki2013asynchronous} that got some traction in the Web indu
 decided to move away from FRP~\cite{elm017farewell} with its 0.17 release in 2016.
 The reason for the move in Elm and low adoption of reactive programming in general
 is probably due to the big learning curve for the concepts.
-A recent JavaScript "compiler" project named Svelte~\cite{harrissvelte}
+A recent JavaScript ``compiler'' project named Svelte~\cite{harrissvelte}
 is trying to reintroduce reactive foundations with minimal alterations
 to the JavaScript language.
 It is too soon to predict if this approach will be successful,
@@ -748,8 +745,9 @@ and then draw the associated annotation on top.
 This alternation of modifying the DOM and reading properties needing reflow
 is the worst source of performance drops when happening at high frequencies.
 Listing~\ref{lst:layout-reflow} is an example of code showcasing this issue.
-Computing this loop with \verb|nbiter = 1000| takes 200ms on \textsf{Chrome}
+Computing this loop with \verb|nbiter = 1000| takes 200ms on Chrome
 while splitting the loop in two loops takes 3ms.
+This pattern is known under the name ``layout thrashing''.
 
 \lstinputlisting[%
   language=ES6,
@@ -784,9 +782,9 @@ Impressed, Brad decided to embrace the <angular/> project under Google's wing
 and it got rebranded AngularJS with a new logo.
 In 2016, Google released its successor, renamed Angular (without the JS part).
 An important difference is that Angular is using TypeScript instead of JavaScript.
-The key feature of Angular/AngularJS is \comment{declarative two-way data binding,}
-{Bien expliquer dans la partie reactive programming.}
-showcased in Listing~\ref{lst:angularjs}.
+The key feature of Angular/AngularJS is declarative two-way data binding
+between the application state and the view,
+showcased in Listing~\ref{lst:angularjs} with the \verb|myCtrl| Angular controller.
 Another important design decision is that Angular is trying
 to provide a \comment{fully featured and coherant framework
 capable of handling most use cases you will ever encounter.}
@@ -805,9 +803,9 @@ Contrary to Angular, React is designed to solve a very specific use case,
 which is how to build user interfaces.
 As such it doesn't care about how you store data,
 or manage routing of the SPA with the url.
-The core feature of React is its Virtual DOM \comment{that we will explain soon.}
-{Bien expliquer dans la partie sur le VDOM}
-It provides \comment{one-way data binding}{expliquer dans section reactive programming} between the state of a React component
+The core feature of React is its virtual DOM.
+It avoids layout thrashing and provides one-way data binding
+between the state of a React component
 and its rendering in the DOM.\@
 The syntax used for the binding is showcased in Listing~\ref{lst:reactjs}.
 
@@ -926,8 +924,9 @@ Indeed, a tuple of three booleans have a cardinality of 8 if you consider
 all possible combinations, which is the product $2\times2\times2$.
 Sum types are referred to as ``custom types'' in Elm terminology.
 They are defined with the \verb|type| keyword.
-Few examples of custom types definitions are provided in Listing~\ref{lst:customtype-elm}.
-\comment{}{OneOfThreeBools as 6 distinct elements, 2 + 2 + 2}
+Few examples of custom types definitions are provided in Listing~\ref{lst:customtype-elm},
+including the \verb|OneOfThreeBools| sum type,
+which may contain 6 distinct elements $(2 + 2 + 2)$.
 
 \lstinputlisting[%
   language=Elm,
@@ -974,9 +973,7 @@ By design, custom types prevents an entire family of bugs.
 
 Functions are qualified as ``total'' when they are guarantied
 to return a result for every possible valid input.
-\comment{}{Actually find a precise definition here.}
-\comment{}{Advantages of total functions.}
-Elm has two properties helping in the quest of total functions,
+The Elm language has two properties resulting in functions being total,
 \begin{itemize}
 	\item exhaustive pattern matching on custom types,
 	\item and no statement, only expressions.
@@ -1038,7 +1035,7 @@ Elm will guaranty at compile type that this case is handled.
   label={lst:missing-pattern-elm}
 ]{assets/code/pattern-match-missing.elm}
 
-As suggested in the hint of the compiler error,
+As suggested in the hint given in the compiler error,
 we could also use \verb|Debug.todo "message"| in the \verb|Anonymous| branch,
 which is very useful for the rapid prototyping phase.
 Remark that the \verb|Debug.todo| function will make the program crash
