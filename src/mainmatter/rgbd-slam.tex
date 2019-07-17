@@ -16,12 +16,30 @@ Introduce RGB-D SLAM algorithms.
 		\item Loop closure
 	\end{itemize}
 	\item Direct VS indirect methods
+	\begin{itemize}
+		\item Feature points (sift, fast, orb, ...)
+		\item Direct formulation
+	\end{itemize}
 \end{itemize}
 
 \chapter{Contribution on RGB-D Visual Odometry}%
 \label{cha:contribution_on_rgb_d_visual_odometry}
 
 Explain vors (pas encore publié).
+
+\begin{itemize}
+	\item RGB-D Tracking Evaluation
+	\item Visual Odometry in Rust (vors)
+	\begin{itemize}
+		\item Candidate points selection (coarse to fine)
+		\item Multi-resolution image gradients
+		\item Multi-resolution direct image alignment
+		\item Levenberg-Marquardt (non-linear optimization)
+		\item Gradients of the reprojection function (inverse compositional)
+		\item Robust optimization techniques
+		\item Photometric term in the residuals
+	\end{itemize}
+\end{itemize}
 
 \chapter{Performant Web Applications}%
 \label{cha:performant_web_applications}
