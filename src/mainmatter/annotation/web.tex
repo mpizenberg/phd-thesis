@@ -917,8 +917,8 @@ developed by Rod Burstall, Dave MacQueen and Don Sannella~\cite{burstall1980hope
 Since then, they have been popularized by functional programming languages
 such as Haskell or OCaml.
 Usually, algebraic data types include product types and sum types.
-Product types are types regrouping multiple data together under the same name.
-Tuples like (Int, Float), and records (or objects) are the most common product types.
+Product types are types regrouping multiple data together under the same structure.
+Tuples like \verb|(Int, Float)|, and records (or objects) are the most common product types.
 Their names come from the properties on cardinality if we consider types as sets.
 Indeed, a tuple of three booleans have a cardinality of 8 if you consider
 all possible combinations, which is the product $2\times2\times2$.
@@ -1136,8 +1136,8 @@ Basically an error in layout and style is just the unexpected.
 With this in mind he created library, now named elm-ui~\cite{griffithelmui},
 aiming at providing the guaranty that if your code compiles,
 the layout if fully specified.
-They key property of the library is that its base building block,
-the \verb|el| element only has one child,
+The key property of the library is that its base building block,
+the \verb|el| element, only has one child,
 instead of a list like in the case of a \verb|div| HTML element.
 Also, building blocks with multiple children must have explicit layout.
 Listing~\ref{lst:elm-ui} showcases how functional composition of UI elements
