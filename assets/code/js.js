@@ -1,6 +1,3 @@
-// Global counter to keep track of the clicks.
-let count = 0;
-
 // Function creating a paragraph element containing
 // only the number given in parameter.
 function makeParagraph(n) {
@@ -12,6 +9,9 @@ function makeParagraph(n) {
 
 // Create a reference to the button in the HTML document.
 let theButton = document.getElementById("the-button");
+
+// Global counter to keep track of the clicks.
+let count = 0;
 
 // Attach an event triggering on clicks on the button.
 // When clicking we add a paragraph containing

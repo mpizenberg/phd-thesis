@@ -1,17 +1,21 @@
-% \documentclass[draft]{book}
-\documentclass[]{book}
+\documentclass[a4paper, twoside]{book}
+% \documentclass[a4paper, twoside, draft]{book}
+
+% Add biding offset for the center margin of the two-sided book.
+% Import before tlsflyleaf page.
+\usepackage[bindingoffset=1cm]{geometry}
 
 % Page de garde université Toulouse (pre-2018)
 % http://tlsflyleaf.onada.fr
 \usepackage[ED=MITT-ImgInf, Ets=INP]{tlsflyleaf}
 
-% Add bibliography to table of contents
-\usepackage[chapter,nottoc]{tocbibind}
-
+\usepackage[]{fancyhdr} % Custom header and footer
+\usepackage[chapter,nottoc]{tocbibind} % Add bibliography to table of contents
+\usepackage{minitoc} % ToC for chapters
+% \usepackage[]{datetime} % Write date and time in header to identify version
 \usepackage[T1]{fontenc} % 8-bits font encoding
 % \usepackage{graphicx} % Already imported by tlsflyleaf
 \usepackage{subcaption} % Using subfigures
-\usepackage{minitoc} % ToC for chapters
 \usepackage{booktabs} % For formal tables
 \usepackage{makecell} % Line break in cell
 \usepackage[final, hidelinks]{hyperref} % For hyperlinks

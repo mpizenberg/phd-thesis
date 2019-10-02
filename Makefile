@@ -11,7 +11,7 @@ compress = gs -sDEVICE=pdfwrite -dPDFSETTINGS=/$(1) -dCompatibilityLevel=1.4 -dN
 
 # Latex command to build pdf file.
 latexmk = export TEXINPUTS=.:./tlsflyleaf/: && latexmk -pdf -quiet -f -pdflatex="pdflatex -interaction=nonstopmode" -outdir=$(outdir) $(1) $(rootfile)
-# latexmk = export TEXINPUTS=.:./tlsflyleaf/: && latexmk -pdf -outdir=$(outdir) $(1) $(rootfile)
+latexmk-verbose = export TEXINPUTS=.:./tlsflyleaf/: && latexmk -pdf -outdir=$(outdir) $(1) $(rootfile)
 
 # Build PDF version adapted to printers.
 printer: pdf
@@ -20,6 +20,10 @@ printer: pdf
 # Build PDF version adapted to screens.
 screen: pdf
 	$(call compress,screen)
+
+# Build PDF version of the thesis manuscript.
+verbose: $(rootfile)
+	$(call latexmk-verbose)
 
 # Build PDF version of the thesis manuscript.
 pdf: $(rootfile)

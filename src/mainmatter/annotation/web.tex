@@ -1,7 +1,7 @@
 \chapter{Reliable Web Applications}%
 \label{cha:reliable_web_applications}
 
-\minitoc
+\minitoc%
 
 \section{What is the Web?}%
 \label{sec:web}
@@ -46,11 +46,11 @@ Apple Safari (15.9\%) and Mozilla Firefox (5.1\%).
 The three pillars of Web applications are HTML, CSS and JavaScript.
 HTML, for ``HyperText Markup Language'' is a description language
 organizing a page information as a hierarchy of tagged content.
-In Listing~\ref{lst:html}, a \verb|body| tag contains three other tags,
+In Listing~\ref{lst:html}, a \verb|body| tag contains four other tags,
 a title \verb|h1| (h for header), a paragraph \verb|p|, an image \verb|img|
 and a button not yet linked to any action.
 This hierarchical organization of an HTML page is call the DOM,
-for Document Object Model.
+for ``Document Object Model''.
 CSS, for ``Cascading Style Sheet'', complements HTML by styling
 the content of associated HTML documents.
 Listing~\ref{lst:css} shows how one would add a left margin of 20 pixels
@@ -1027,7 +1027,7 @@ This is the main reason why the \verb|Nothing| value in Elm,
 approximately equivalent to the \verb|null| value in JavaScript
 will never trigger a runtime exception.
 Everywhere it may appear, i.e.\ everywhere the \verb|Maybe| type is used,
-Elm will guaranty at compile type that this case is handled.
+Elm will guaranty at compile time that this case is handled.
 
 \lstinputlisting[%
   language=Elm,
@@ -1124,7 +1124,7 @@ the program compiles, it is functionally correct.
 Layout however, traditionally relies both on HTML and CSS rules,
 intrinsically hard to debug due to their cascading nature
 since a CSS rule may apply to all children of a DOM element.
-In~\cite{sinha2015simplifying}, Sinha et al. identified user interface design
+In~\cite{sinha2015simplifying}, Sinha et al.\ identified user interface design
 as the main difficulty in Web development.
 
 At Elm Europe 2017, Matthew Griffith made a presentation
@@ -1133,7 +1133,7 @@ In this work, he identifies the most problematic aspect of layout being
 that there is no clear way to identify when it is incorrect.
 There is not even an unhelpful ``undefined is not a function'' error in CSS resolution.
 Basically an error in layout and style is just the unexpected.
-With this in mind he created library, now named elm-ui~\cite{griffithelmui},
+With this in mind he created a library, now named elm-ui~\cite{griffithelmui},
 aiming at providing the guaranty that if your code compiles,
 the layout if fully specified.
 The key property of the library is that its base building block,

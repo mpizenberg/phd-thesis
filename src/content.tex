@@ -4,6 +4,19 @@
 % Page de garde
 \makeflyleaf%
 
+% Customize header and footer
+\fancypagestyle{plain}{%  the preset of fancyhdr
+    \fancyhf{} % clear all header and footer fields
+    \fancyfoot[C]{\thepage} % except the center
+    \renewcommand{\headrulewidth}{0pt}
+    \renewcommand{\footrulewidth}{0pt}}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[LE]{\leftmark}
+\fancyhead[RO]{\rightmark}
+\fancyhead[LO]{\today}
+\fancyfoot[CE,CO]{\thepage}
+
 % Dédicaces
 \chapter*{Dedications}%
 \label{cha:dedications}
@@ -15,7 +28,7 @@
 \input{src/frontmatter/abstract.tex}
 
 % Table des matières
-\dominitoc
+\dominitoc%
 \tableofcontents
 
 % Main matter ########################################################
