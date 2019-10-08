@@ -42,4 +42,4 @@ clean-all:
 	rm -rf $(outdir)
 
 # Phony targets will always trigger a re-run.
-.PHONY: clean-all clean watch pdf
+.PHONY: clean-all clean watch pdf verbose
