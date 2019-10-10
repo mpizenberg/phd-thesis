@@ -1,0 +1,55 @@
+\ProvidesPackage{mymaths}
+
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amsfonts}
+\usepackage{mathtools}
+\usepackage{bm} % bold maths
+
+\newcommand*\conj[1]{\overline{#1}}
+\newcommand*\mean[1]{\overline{#1}}
+\newcommand{\E}{\mathbb{E}} % Euclidean space
+\newcommand{\C}{\mathbb{C}} % Complex set
+\newcommand{\R}{\mathbb{R}} % Real set
+\newcommand{\RR}[2]{\mathbb{R}^{#1 \times{} #2}} % Real set
+\newcommand{\Rn}{\mathbb{R}^n}
+\newcommand{\Rm}{\mathbb{R}^m}
+\newcommand{\Rmn}{\mathbb{R}^{m \times{} n}}
+\newcommand{\M}{\mathcal{M}} % Matrix set
+\newcommand{\inv}[1]{#1^{-1}} % Inverse
+\newcommand{\pinv}[1]{#1^{\dagger}} % Pseudo Inverse
+\newcommand{\tr}[1]{#1^{\top}} % Transpose
+\newcommand{\Set}[2]{\{\, #1 \mid{} #2 \,\}}
+
+% MATRICES #################################################
+
+% Inline small matrix
+\newcommand{\inmatrix}[1]{%
+	\left(\begin{smallmatrix} #1 \end{smallmatrix} \right)
+}
+
+% Hat operator skew-symmetric matrix
+\newcommand{\hatmat}[3]{%
+	\begin{pmatrix}
+		  0   & -{#3} &  {#2} \\
+		 {#3} &   0   & -{#1} \\
+		-{#2} &  {#1} &   0
+	\end{pmatrix}
+}
+
+% Diagonal matrix where you specify top left and bottom right elements
+\newcommand{\diagtwo}[2]{%
+	\begin{pmatrix}
+		{#1}   & \ldots & 0      \\
+		\vdots & \ddots & \vdots \\
+		0      & \ldots & {#2}
+	\end{pmatrix}
+}
+
+% MISC #####################################################
+
+% requires mathtools
+\DeclarePairedDelimiterX{\inner}[2]{\langle}{\rangle}{#1, #2} % Inner product
+
+% Few theorem-like environments
+\newtheorem{theorem}{Theorem}
