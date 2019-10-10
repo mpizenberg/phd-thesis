@@ -1,24 +1,126 @@
 \chapter{Performant Web Applications}%
 \label{cha:performant_web_applications}
 
-History of native code on the Web: Java, Flash, nacl, etc.
+\minitoc%
+
+\section{A Brief History of Native Code in the Client}%
+\label{sec:native_client}
+
+History of native code on the Web: Java, Flash, nacl, wasm.
+Flash, ActionScript programming language.
+
+------------------------- Java Applet
+
+Appeared in 1995 with the first version of Java.
+Unlike JS, Java applets had access to 3D hardware acceleration,
+so used for computer intensive tasks and visualizations.
+(Until HTML5, canvas and webgl)
+
+Break accessibility. No screen readers.
+No Java applets in mobile browsers.
+Security relies on users approving ("trust") an applet.
+
+
+In 2013, browsers deprecate NPAPI (Netscape Plugin API).
+In 2018, September, Java applets are removed from Java SE 11.
+
+
+------------------------- Flash
+
+https://web.archive.org/web/20080120200126/http://www.adobe.com:80/macromedia/events/john_gay/index.html
+
+In 1993, Jonathan Gay, Charlie Jackson, Michelle Welsh founded FutureWave Software.
+In 1995, after discussions at Siggraph,
+the company decided to focus on web animation with product "FutureSplash Animator".
+The Simpsons website in 1996 was done with FutureSplash.
+They gained reputation with Microsoft and Disney and sold the company to Macromedia.
+It becamed Macromedia Flash 1.0.
+In 2001, 50 people working on it. and Flash Player was the most ubiquitous software on the internet.
+
+https://www.apple.com/hotnews/thoughts-on-flash/
+Thoughts on Flash, Steve Jobs, April 2010.
+ - Flash is proprietary
+ - Flash is the number one reason Macs crash
+ - Flash has security flaws
+ - Flash uses more energy than hardware accelerated H264 video in HTML5
+ - Flash is not adapted to touch interactions
+ - Flash hinders platform improvements on Apple products
+
+https://www.cvedetails.com/product/6761/Adobe-Flash-Player.html?vendor_id=53
+In 2015, 329 CVEs, 283 leading to arbitrary code execution.
+
+In 2000, Flash 5 with ActionScript was released.
+In 2002, Flash 6, video support.
+In 2005, Chad Hurley, Steve Chen and Jawed Karim launched YouTube, with Flash.
+In 2007, iPhone, no Flash.
+
+https://www.nngroup.com/articles/flash-99-percent-bad/
+Usability consultant Jakob Nielsen published an Alertbox in 2000 entitled,
+Flash: 99\% Bad,
+stating that "Flash tends to degrade websites for three reasons:
+ - it encourages design abuse,
+ - it breaks with the Web's fundamental interaction principles,
+ - and it distracts attention from the site's core value."
+
+In July 2017, Adobe announced end support for Flash in 2020.
+
+------------------------- NaCl
+
+Native Client (NaCl) project in chrome
+A lot of C and C++ code already written.
+Secure execution of native code.
+-> Changing the compiler to produce only "secure" code, inside a sandbox.
+-> no plugin "please install"
+-> check at runtime if the application respect the safety rules, or shutdown.
+
+Plugins have historically been the number one source of web browser vulnerabilities.
+
+Pepper API, mirror of the Browser API, for NaCl code.
+built-in flash using Pepper and Pdf reader using Pepper.
+
+NaCl is architecture specific. Started with the GCC toolchain.
+Need to go through the Chrome web store.
+
+PNaCl, an intermediate representation, compile on the fly. Uses Clang.
+Based on the LLVM toolchain.
+
+Focused on desktop, no mobile for now.
+
+------------------------
+
+Java and Flash are technologies owned by companies, this does not integrate well with the Web.
+Asm.js was just JS. "Don't break the web".
+WebAssembly is a W3C spec, it went through the process, not against it.
+Wasm is also small. Flash and Java Applets needed to download a runtime. and PNaCl was built
+on top of LLVM IR, a bit unstable.
+Wasm does not force you to use a specific language like Flash or Java.
+
+Wasm has security in mind, it runs in the same sandbox than JS.
+
+\section{Emscripten}%
+\label{sec:Emscripten}
 
 \begin{itemize}
-	\item WebAssembly
-	\begin{itemize}
-		\item Minimum Viable Product (MVP)
-		\item Bright future: wasi, wapm, ...
-	\end{itemize}
-	\item History of Emscripten
-	\begin{itemize}
-		\item LLVM
-		\item asmJS
-		\item wasm
-	\end{itemize}
-	\item C++ portability pitfalls
-	\item Rust to wasm (wasm-bindgen)
-	\begin{itemize}
-		\item Rust programming language
-		\item Wasm-bindgen
-	\end{itemize}
+	\item LLVM
+	\item asmJS
+	\item wasm
+\end{itemize}
+
+\section{WebAssembly}%
+\label{sec:WebAssembly}
+
+\begin{itemize}
+	\item Minimum Viable Product (MVP)
+	\item Bright future: wasi, wapm, ...
+\end{itemize}
+
+\section{C++ portability pitfalls}%
+\label{sec:cpp_pitfalls}
+
+\section{Rust and WebAssembly}%
+\label{sec:rust_wasm}
+
+\begin{itemize}
+	\item Rust programming language
+	\item Wasm-bindgen
 \end{itemize}
