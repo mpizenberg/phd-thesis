@@ -3,25 +3,8 @@
 
 \minitoc%
 
-Explain vors (pas encore publié).
-
-\begin{itemize}
-	\item RGB-D Tracking Evaluation
-	\item Visual Odometry in Rust (vors)
-	\begin{itemize}
-		\item Candidate points selection (coarse to fine)
-		\item Multi-resolution image gradients
-		\item Multi-resolution direct image alignment
-		\item Levenberg-Marquardt (non-linear optimization)
-		\item Gradients of the reprojection function (inverse compositional)
-		\item Robust optimization techniques
-		\item Photometric term in the residuals
-	\end{itemize}
-\end{itemize}
-
-
-RGB-D Tracking Evaluation [github]
--------------------------
+\section{RGB-D Tracking Evaluation}%
+\label{sec:rgbd-tracking-evaluation}
 
 Un dépot pour faciliter la comparaison d’algorithmes d’odométrie visuelle RGB-D. Les tests sont basés sur le dataset TUM RGB-D, ou tout dataset compatible (comme ICL-NUIM qui est un dataset synthétique). En l’état actuel des choses, des programmes de test sont prêts pour les algos suivants :
 - OpenCV, en trois versions :
@@ -48,15 +31,17 @@ Pour analyser et comparer les trajectoires, j’ai fait un programme qui prends 
 
 Pour explorer rapidement ces résultats, j’utilise un outil de visualisation de données nommé data-voyager [github] [online]. Les derniers résultats en date, ça donne :
 
-[image]
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=\linewidth]{assets/img/rpe-2019-04-04.png}
+	\caption{Relative pose error (rpe)}%
+	\label{fig:rpe-eval}
+\end{figure}
 
 En moyenne, notre algo robuste est le meilleur. Plus d’infos sur le code d’évaluation dans le readme du dépot. Plus d’infos sur notre algo dans la section sur vors.
 
-
-
-VORS
-------------
-
+\section{Visual Odometry in Rust (vors)}%
+\label{sec:vors}
 
 Ce qui a démarré comme un espoir d’apporter des améliorations aux algos d’odométrie visuelle existants (en particulier DSO [github]) s’est fini en une récriture, de zéro, d’un “framework/library” d’odométrie visuelle en Rust. Les avantages techniques de Rust par rapport à C++ sont nombreux pour repartir d’une base saine mais je ne m’étends pas plus là-dessus (plus d’info dans le readme).
 
@@ -126,3 +111,25 @@ La multiplication du nombre de paramètres dans le code n’est pas une bonne ch
 Les paramètres liés aux implémentations robustes :
 - Le seuil à partir duquel un résidu est abandonné (pas ajouté dans les jacobiens). Pour le moment ce seuil a donné des résultats pas trop mauvais à 50.
 - Le coefficient “de coupure” correspond à l’approche robuste associée. Intuitivement, le point de bascule entre la zone convex et la zone concave de la fonction.
+
+\subsection{Coarse to Fine Candidate Points Selection}%
+\label{sub:candidates}
+
+\subsection{Multi-Resolution Image Gradients}%
+\label{sub:multires-gradients}
+
+\subsection{Multi-Resolution Direct Image Alignment}%
+\label{sub:multires-direct-image-alignment}
+
+\subsection{Levenberg-Marquardt Optimization}%
+\label{sub:lm-optimization}
+
+\subsection{Gradients of the Reprojection Function with an Inverse Compositional Formulation}%
+\label{sub:gradients-inverse-compostional}
+
+\subsection{Robust Optimization Techniques}%
+\label{sub:robust-optim}
+
+\subsection{Photometric Term in the Residuals}%
+\label{sub:photometric-residual}
+
