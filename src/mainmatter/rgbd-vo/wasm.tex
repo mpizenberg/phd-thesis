@@ -36,7 +36,7 @@ the Java programming language was created.
 It appeared with a companion technology called Java Applet,
 designed to run Java applications in the browser.
 The Java Virtual Machine (JVM) was hosted by browsers,
-enabling much better performances than JavaScript at this time.
+enabling much better performances than JavaScript at that time.
 As an example, Brendon C. Glazer worked on interactive ray tracing
 of VRML scenes with Java applets in 1999~\cite{Glazer1999InteractiveRT}.
 Figure~\ref{fig:glazer-thesis} depicts how the applet would appear
@@ -59,7 +59,7 @@ Applets would have to get approved by a browser user and then gain rights
 equivalent to a native application on your desktop.
 Unfortunately, just like terms of service, most people just click ``agree''
 and move on.
-In addition, the Java Runtime Environment (JRE) has had hundreds security
+In addition, the Java Runtime Environment (JRE) has had hundreds of security
 vulnerabilities~\cite{JreCve} in its lifetime.
 This represents a serious security threat for browser vendors.
 Java applets were eventually entirely removed from Java SE 11, in 2018.
@@ -106,46 +106,62 @@ it has numerous security flaws~\cite{FlashCVE}, and is the number one reason Mac
 
 Consequently, with the advent of HTML5 surrounding technologies regarding multimedia capabilities,
 and the improved performances of JavaScript, Flash became obsolete.
-So in July 2017, Adobe announced end support for Flash in 2020.
+So in July 2017, Adobe announced end support of Flash in 2020.
 
 \subsection{Google Native Client (NaCl)}%
 \label{sub:nacl}
 
+Java applets and Flash were never trully considered ``native''
+since they involved third party virtual machines.
+You would not compile your code directly to machine instructions
+but to an intermediate bytecode representation for Java applets,
+or just using a JIT compiler for ActionScript (Flash) code.
+They provided however great performances improvements when compared
+to JavaScript before 2008 and the arrival of JavaScript JIT compilers with the V8 engine.
+But around 2009 and 2010, two new projects named Native Client (NaCl) and Emscripten
+respectively emerged from research at Google and Mozilla.
+We will hold on Emscripten for now and explain first what NaCl was about.
 
-------------------------- NaCl
+At this period of time, native code was already running in browsers,
+usually via an old plugin interface called the ``Netscape Plugin API'' (NPAPI).
+This is how the JVM, the Flash player or PDF readers for example
+would be integrated in browsers.
+So from the observation that the Web had trully become a rich multimedia platform,
+and that native code was already running in browsers via plugins,
+a team of Google engineers explored a way to generalize and improve security
+of any native C or C++ code execution in browsers~\cite{yee2009native}.
+This would in theory unlock high performances for any Web application.
+But it would need a sandboxed and secure new set of APIs
+to make sure that those applications would not execute any malicious code via the browser.
+That is how the Native Client (NaCl) project,
+and its associated API called Pepper Plugin API (PPAPI) started in 2009.
+I'll make the assumption that you got the NaCl and pepper joke \ldots
 
-Native Client (NaCl) project in chrome
-A lot of C and C++ code already written.
-Secure execution of native code.
--> Changing the compiler to produce only "secure" code, inside a sandbox.
--> no plugin "please install"
--> check at runtime if the application respect the safety rules, or shutdown.
+The two main downsides of this approach are the security and portability concerns.
+Even though NaCl code would run into a sandboxed environment,
+enforcing both security and accessibility to classical desktop resources
+requires a continuous effort from browser vendors,
+now needing to secure two different sandboxed environment,
+NaCl and JavaScript, instead of one.
+Portability was also a concern since any NaCl code would need to be compiled
+to all target architectures where the browser need to run.
+In practice, only x86 intel architectures were fully supported,
+going against the nature of the Web, supposed to run on all platforms.
+This limitation was the reason for the birth of the Portable Native Client project.
 
-Plugins have historically been the number one source of web browser vulnerabilities.
+Portable Native Client (PNaCl, pronounced like the word ``pinnacle'', you get this one?),
+was a work by A. Donovan et al.~\cite{donovan2010pnacl} aiming at distributing
+NaCl programs in an intermediate pre-compiled neutral instruction-set format,
+preventing the need to compile directly to all target architectures.
+Concretely, the format chosen was the Low-Level Virtual Machine (LLVM) bitcode.
+Unfortunately, this intermediate representation bitcode is a fast moving target,
+and retrocompatibility is not a main objective of the LLVM project.
+It means that PNaCl code could become obsolete at a fast pace,
+also a deal breaker for Web standards.
+With the reluctance of other vendors to adopt a non-specified Google initiative,
+and the appeal of another rising approach coming from Emscripten,
+PNaCl was finally deprecated in 2017.
 
-Pepper API, mirror of the Browser API, for NaCl code.
-built-in flash using Pepper and Pdf reader using Pepper.
-
-NaCl is architecture specific. Started with the GCC toolchain.
-Need to go through the Chrome web store.
-
-PNaCl 2013.
-https://blog.chromium.org/2013/10/chrome-31-beta-android-application.html
-PNaCl, an intermediate representation, compile on the fly. Uses Clang.
-Based on the LLVM toolchain.
-
-Focused on desktop, no mobile for now.
-
-------------------------
-
-Java and Flash are technologies owned by companies, this does not integrate well with the Web.
-Asm.js was just JS. "Don't break the web".
-WebAssembly is a W3C spec, it went through the process, not against it.
-Wasm is also small. Flash and Java Applets needed to download a runtime. and PNaCl was built
-on top of LLVM IR, a bit unstable.
-Wasm does not force you to use a specific language like Flash or Java.
-
-Wasm has security in mind, it runs in the same sandbox than JS.
 
 \section{Emscripten}%
 \label{sec:Emscripten}
