@@ -6,63 +6,111 @@
 \section{A Brief History of Native Code in the Client}%
 \label{sec:native_client}
 
-History of native code on the Web: Java, Flash, nacl, wasm.
-Flash, ActionScript programming language.
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\linewidth]{assets/img/wasm-timeline.pdf}
+	\caption{Events releated to the birth and growth of WebAssembly.}%
+	\label{fig:wasm-timeline}
+\end{figure}
 
-------------------------- Java Applet
+Being able to run high performance code in the browser
+unlocks many use cases, including scientific computing.
+Yet, it remains a challenging task.
+Resources often refers to this as ``native'' code
+but the terminology is rather vague.
+Depending on the context, it may have one of the following meanings,
+\begin{enumerate}
+\setlength\itemsep{-0.5em}
+	\item code statically compiled directly to the target architecture and running from the browser,
+	\item code compiled from a typical ``native'' language such as C or C++,
+	\item or anything that is not generating JavaScript.
+\end{enumerate}
+The distinction between those and how they relate to ``native'' code
+will be made clearer after a brief history of high performance code in browsers.
 
-Appeared in 1995 with the first version of Java.
-Unlike JS, Java applets had access to 3D hardware acceleration,
-so used for computer intensive tasks and visualizations.
-(Until HTML5, canvas and webgl)
+\subsection{Java Applets}%
+\label{sub:java_applets}
 
-Break accessibility. No screen readers.
-No Java applets in mobile browsers.
-Security relies on users approving ("trust") an applet.
+In 1995, just four years after the birth of the Web,
+the Java programming language was created.
+It appeared with a companion technology called Java Applet,
+designed to run Java applications in the browser.
+The Java Virtual Machine (JVM) was hosted by browsers,
+enabling much better performances than JavaScript at this time.
+As an example, Brendon C. Glazer worked on interactive ray tracing
+of VRML scenes with Java applets in 1999~\cite{Glazer1999InteractiveRT}.
+Figure~\ref{fig:glazer-thesis} depicts how the applet would appear
+in a Web page at that time.
+Since 1998 Java applets have also had access to 3D hardware acceleration~\cite{Java3dAPISpec}
+whereas JavaScript waited until 2011 for WebGL in HTML5 canvas.
 
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=\linewidth]{assets/img/glazer-thesis.jpg}
+	\caption{Interactive ray tracing applet from Brendon C. Glazer master thesis (1999).}%
+	\label{fig:glazer-thesis}
+\end{figure}
 
-In 2013, browsers deprecate NPAPI (Netscape Plugin API).
-In 2018, September, Java applets are removed from Java SE 11.
+On the down side, Java applets would break accessibility of the Web.
+Screen readers would not be able to parse the content of the dedicated
+applet area in the page.
+The security model of Java applets was also quite risky.
+Applets would have to get approved by a browser user and then gain rights
+equivalent to a native application on your desktop.
+Unfortunately, just like terms of service, most people just click ``agree''
+and move on.
+In addition, the Java Runtime Environment (JRE) has had hundreds security
+vulnerabilities~\cite{JreCve} in its lifetime.
+This represents a serious security threat for browser vendors.
+Java applets were eventually entirely removed from Java SE 11, in 2018.
 
+\subsection{Flash}%
+\label{sub:Flash}
 
-------------------------- Flash
+In his ``History of Flash''~\cite{HistoryFlash}, Jonathan Gay retraces the early days of Flash.
+In 1993, he, Charlie Jackson and Michelle Welsh founded FutureWave Software
+but their initial vector drawing application did not draw much attention (pun intended).
+After discussions at Siggraph 1995, the company decided to focus on a web animation
+product named ``FutureSplash Animator''.
+It gained reputation with Microsoft and Disney using it and as a consequence,
+was acquired by Macromedia and rebranded ``Flash'' in 1996.
 
-https://web.archive.org/web/20080120200126/http://www.adobe.com:80/macromedia/events/john\_gay/index.html
+Contrary to Java applets, Flash use cases started very narrow.
+It provided a simple and efficient solution to build and share animations on the web,
+giving a visual advantage over pure HTML documents.
+In year 2000, Flash 5 was released, with the ActionScript programming language,
+bringing even more potential to Flash-based websites.
+Two years later, in 2002, Flash 6 brought support for real-time messaging protocols,
+enabling video and audio streaming capabilities.
+This represents roughly 8 years until 2010 when such capabilities are also
+supported through HTML5 in most browsers.
+In the meantime, highly influencial projects shaped the Web thanks to Flash.
+You may have heard of Chad Hurley, Steve Chen and Jawed Karim who launched
+YouTube in 2005, based on Flash.
 
-In 1993, Jonathan Gay, Charlie Jackson, Michelle Welsh founded FutureWave Software.
-In 1995, after discussions at Siggraph,
-the company decided to focus on web animation with product "FutureSplash Animator".
-The Simpsons website in 1996 was done with FutureSplash.
-They gained reputation with Microsoft and Disney and sold the company to Macromedia.
-It becamed Macromedia Flash 1.0.
-In 2001, 50 people working on it. and Flash Player was the most ubiquitous software on the internet.
+In spite of the many advantages of Flash and ActionScript over classic Web pages,
+it also had similar flaws than Java applets.
+In October 2000, usability consultant Jakob Nielsen published a short article
+entitled ``Flash: 99\% Bad''~\cite{FlashBadNielsen} stating that
+``Flash technology tends to discourage usability for three reasons:
+it makes bad design more likely,
+it breaks with the Web's fundamental interaction style,
+and it consumes resources that would be better spent enhancing a site's core value.''
+Apple also played a huge role in Flash decline.
+In 2007 the iPhone launched without Flash support,
+leading to Steve Jobs, then Apple CEO, writing in 2010 an oppen letter called
+``Thoughts on Flash''~\cite{FlashJobs}
+in which he explains why Flash was doomed to disappear.
+Among those reasons, Flash is proprietary, going against open Web standards,
+it has numerous security flaws~\cite{FlashCVE}, and is the number one reason Macs crash.
 
-https://www.apple.com/hotnews/thoughts-on-flash/
-Thoughts on Flash, Steve Jobs, April 2010.
- - Flash is proprietary
- - Flash is the number one reason Macs crash
- - Flash has security flaws
- - Flash uses more energy than hardware accelerated H264 video in HTML5
- - Flash is not adapted to touch interactions
- - Flash hinders platform improvements on Apple products
+Consequently, with the advent of HTML5 surrounding technologies regarding multimedia capabilities,
+and the improved performances of JavaScript, Flash became obsolete.
+So in July 2017, Adobe announced end support for Flash in 2020.
 
-https://www.cvedetails.com/product/6761/Adobe-Flash-Player.html?vendor\_id=53
-In 2015, 329 CVEs, 283 leading to arbitrary code execution.
+\subsection{Google Native Client (NaCl)}%
+\label{sub:nacl}
 
-In 2000, Flash 5 with ActionScript was released.
-In 2002, Flash 6, video support.
-In 2005, Chad Hurley, Steve Chen and Jawed Karim launched YouTube, with Flash.
-In 2007, iPhone, no Flash.
-
-https://www.nngroup.com/articles/flash-99-percent-bad/
-Usability consultant Jakob Nielsen published an Alertbox in 2000 entitled,
-Flash: 99\% Bad,
-stating that "Flash tends to degrade websites for three reasons:
- - it encourages design abuse,
- - it breaks with the Web's fundamental interaction principles,
- - and it distracts attention from the site's core value."
-
-In July 2017, Adobe announced end support for Flash in 2020.
 
 ------------------------- NaCl
 
@@ -81,6 +129,8 @@ built-in flash using Pepper and Pdf reader using Pepper.
 NaCl is architecture specific. Started with the GCC toolchain.
 Need to go through the Chrome web store.
 
+PNaCl 2013.
+https://blog.chromium.org/2013/10/chrome-31-beta-android-application.html
 PNaCl, an intermediate representation, compile on the fly. Uses Clang.
 Based on the LLVM toolchain.
 
