@@ -6,13 +6,6 @@
 \section{A Brief History of Native Code in the Client}%
 \label{sec:native_client}
 
-\begin{figure}[h]
-	\centering
-	\includegraphics[width=\linewidth]{assets/img/wasm-timeline.pdf}
-	\caption{Events releated to the birth and growth of WebAssembly.}%
-	\label{fig:wasm-timeline}
-\end{figure}
-
 Being able to run high performance code in the browser
 unlocks many use cases, including scientific computing.
 Yet, it remains a challenging task.
@@ -162,34 +155,61 @@ With the reluctance of other vendors to adopt a non-specified Google initiative,
 and the appeal of another rising approach coming from Emscripten,
 PNaCl was finally deprecated in 2017.
 
+\subsection{Emscripten and asm.js}%
+\label{sub:emscripten-asmjs}
 
-\section{Emscripten}%
-\label{sec:Emscripten}
+Out of curiosity, Mozilla engineer Alon Zakai started to work around 2010
+on a project to explore the limitations of compiling C++ code to JavaScript.
+It was the start of the Emscripten project~\cite{zakai2011emscripten}.
+Emscripten base idea consists in converting LLVM bitcode to JavaScript.
+LLVM originated from the work of
+Chris Lattner and Vikram Adve~\cite{lattner2004llvm} on a compiler framework
+and an intermediate code representation, optimized for compiler transformations.
+It reduces the language-architecture complexity from $\mathcal{O}(mn)$ to $\mathcal{O}(m+n)$
+since languages do not need to compile to every target like x86 or Arm,
+and instead can just target LLVM which in turn knows how to compile to each
+instruction set architecture (ISA) as depicted in Figure~\ref{fig:llvm}.
 
-Faisons un bref détour "historique". Alon Zakai, qui travaille à Mozilla, a démarré un projet perso autour de 2010 par curiosité (vidéo, autre vidéo). Il se demandait s’il était possible de transformer du code C++ en du code JavaScript pour le faire tourner dans un navigateur. C’est le début de emscripten. Emscripten transforme du code LLVM en JavaScript. LLVM est ce qu’on appelle une représentation intermédiaire (IR) qui permet à du code humain (C++, rust, ...) d’être transformé en code LLVM qui lui même est après transformé en code spécifique à une architecture (32 bits, 64 bits x86 intel, ARM, embarqué, ...).
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\linewidth]{assets/img/llvm.pdf}
+	\caption{LLVM Compiler Infrastructure}%
+	\label{fig:llvm}
+\end{figure}
 
-Et donc ce que Alon Zakai a démarré en 2010 c’est une nouvelle "cible" : JavaScript. Initialement c’était assez lent, loin d’être optimisé. Après quelques itérations, avec l’aide de Luke Wagner qui travaillait sur le compilateur JavaScript, ils ont formalisé une syntaxe spécifique. Un sous-ensemble de JavaScript qui peut être facilement reconnu par le compilateur du navigateur et optimisé bien plus efficacement. Cette syntaxe ressemblait à ça
+After few iterations with the help of Luke Wagner, working on JavaScript compilation at Mozilla,
+Emscripten was able to output JavaScript code running at roughly 2x to 4x native speed.
+This specific subset of JavaScript was formalized under the name asm.js in 2013~\cite{herman2013asm}.
+The asm.js code for a sum function is presented in Listing~\ref{lst:add-asmjs}.
+As you can see, it makes use of JavaScript operations doing nothing,
+like the bitwise-or with 0, except cohercing values to certain types.
+You would not want to write asm.js code by hand, but for a compiler,
+it enables certain kinds of optimizations not possible with traditional
+hand-written JavaScript code.
+Yet it is a strict subset of JavaScript and can still run in any browser,
+whether or not they have a specialized handling of asm.js.
 
-function sum(x, y) {
-    var x = x | 0;  // x is a 32-bit value
-    var y = y | 0;  // so is y
-    return (x+y) | 0; // 32-bit addition, no type or overflow checks
-}
+\lstinputlisting[%
+	language=JavaScript,
+	caption={Sum of two 32-bit integers in asm.js.},
+	label={lst:add-asmjs}
+]{assets/code/add-asm.js}
 
-Normalement, lorsque l’on fait x + y en JavaScript, le compilateur doit vérifier les types des deux variables dynamiquement choisir la bonne opérations somme en conséquence. Le faire au runtime est très coûteux. Alors qu’avec cette syntaxe, formalisée sous le nom de asm.js, le compilateur peut directement émettre l’instruction processeur de somme de deux entiers 32 bits. Après avoir intégré la techno avec des équipes de Unity et Unreal pour faire tourner leur moteur de jeu dans le navigateur, la preuve de concept était faite. Il s’en est suivi un peu de diplomatie entre les gros du web (Google, Microsoft, Mozilla) pour formaliser WebAssembly, le successeur de asm.js.
+The performances without the need of any plugin convinced companies with huge
+code bases to join the effort.
+The Unreal game engine was ported, Autodesk AutoCAD, Adobe Lightroom,
+Facebook image compressions uploading code, OpenCV and many others.
+With the success of Emscripten and asm.js as a proof of concept,
+all major browser vendors came together to formalize a new specification
+known today as WebAssembly.
+Figure~\ref{fig:wasm-timeline} summarizes major events leading to the creation of WebAssembly.
 
-Ce petit détour permet de comprendre ce qu’est emscripten, comment le projet à évolué jusqu’à aujourd’hui où on peut l’utiliser pour compiler du code C/C++ vers wasm. La clé de la compréhension c’est ce schéma :
-
-Code source (C++) -> LLVM IR -> Emscripten -> WebAssembly
-
-Donc Emscripten a besoin du bitcode LLVM pour pouvoir compiler une base de code C++. En particulier, il n’est pas possible d’utiliser les bibliothèques précompilées (les “.so”) fournies par les OS dans les packages (apt-get install ...) dans ses dépendances. Toute dépendance (et ce récursivement) doit être recompilée avec Emscripten depuis le code source, et liée statiquement à la compilation de notre propre code. Par défaut, pour faciliter la vie, Emscripten intègre déjà la majorité de la librairie standard (std), et de certaines autres bibliothèques (SDL pour les applis graphiques, ...).
-
-
-\begin{itemize}
-	\item LLVM
-	\item asmJS
-	\item wasm
-\end{itemize}
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\linewidth]{assets/img/wasm-timeline.pdf}
+	\caption{Events releated to the birth of WebAssembly.}%
+	\label{fig:wasm-timeline}
+\end{figure}
 
 \section{WebAssembly}%
 \label{sec:WebAssembly}
@@ -198,6 +218,16 @@ Donc Emscripten a besoin du bitcode LLVM pour pouvoir compiler une base de code 
 	\item Minimum Viable Product (MVP)
 	\item Bright future: wasi, wapm, ...
 \end{itemize}
+
+WebAssembly: A New Compilation Target for the Web - Luke Wagner, April 12, 2016: https://youtu.be/89WPNeLnEyA
+WebAssembly: Under the hood with Mozilla, March 7, 2017: https://youtu.be/o52\_5qAJhNg
+
+
+Ce petit détour permet de comprendre ce qu’est emscripten, comment le projet à évolué jusqu’à aujourd’hui où on peut l’utiliser pour compiler du code C/C++ vers wasm. La clé de la compréhension c’est ce schéma :
+
+Code source (C++) -> LLVM IR -> Emscripten -> WebAssembly
+
+Donc Emscripten a besoin du bitcode LLVM pour pouvoir compiler une base de code C++. En particulier, il n’est pas possible d’utiliser les bibliothèques précompilées (les “.so”) fournies par les OS dans les packages (apt-get install ...) dans ses dépendances. Toute dépendance (et ce récursivement) doit être recompilée avec Emscripten depuis le code source, et liée statiquement à la compilation de notre propre code. Par défaut, pour faciliter la vie, Emscripten intègre déjà la majorité de la librairie standard (std), et de certaines autres bibliothèques (SDL pour les applis graphiques, ...).
 
 \section{C++ portability pitfalls}%
 \label{sec:cpp_pitfalls}

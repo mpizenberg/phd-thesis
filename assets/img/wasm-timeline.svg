@@ -114,16 +114,16 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.7"
-     inkscape:cx="311.11512"
-     inkscape:cy="344.45755"
+     inkscape:zoom="2.8"
+     inkscape:cx="172.94155"
+     inkscape:cy="184.06958"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"
      inkscape:window-width="1920"
-     inkscape:window-height="1016"
+     inkscape:window-height="1043"
      inkscape:window-x="0"
-     inkscape:window-y="1107"
+     inkscape:window-y="0"
      inkscape:window-maximized="1"
      fit-margin-top="0"
      fit-margin-left="0"
@@ -387,7 +387,7 @@
          x="69.169685"
          y="133.3363"
          style="stroke-width:0.26458332px"
-         id="tspan5097">Deprecate NPAPI, availability of PNaCl in Chrome</tspan><tspan
+         id="tspan5097">Deprecate NPAPI, PNaCl in Chrome, asm.js standardized</tspan><tspan
          sodipodi:role="line"
          x="69.169685"
          y="138.62798"
@@ -1277,6 +1277,20 @@
          style="fill:#654ff0" />
       <path
          id="path5305-4-4-6"
+         d="m 142.16,329.81 h 40.56 l 27.69,147.47 h 0.5 l 33.28,-147.47 h 37.94 l 30.06,149.28 h 0.59 l 31.56,-149.28 h 39.78 L 332.43,546.5 H 292.18 L 262.37,399.03 h -0.78 L 229.68,546.5 h -41 z m 287.69,0 h 63.94 l 63.5,216.69 H 515.45 L 501.64,498.28 H 428.8 l -10.66,48.22 h -40.75 z m 24.34,53.41 -17.69,79.5 h 55.06 l -20.31,-79.5 z"
+         inkscape:connector-curvature="0"
+         style="fill:#ffffff" />
+    </g>
+    <g
+       id="g5317-6-0-5"
+       transform="matrix(0.00883976,0,0,0.00883976,60.481776,128.68553)">
+      <path
+         id="path5303-6-0-6"
+         d="m 376,0 c 0,1.08 0,2.16 0,3.3 0,38.76 -31.42,70.17 -70.17,70.17 -38.76,0 -70.17,-31.42 -70.17,-70.17 v 0 c 0,-1.14 0,-2.22 0,-3.3 L 0,0 V 612 H 612 V 0 Z"
+         inkscape:connector-curvature="0"
+         style="fill:#654ff0" />
+      <path
+         id="path5305-4-4-3"
          d="m 142.16,329.81 h 40.56 l 27.69,147.47 h 0.5 l 33.28,-147.47 h 37.94 l 30.06,149.28 h 0.59 l 31.56,-149.28 h 39.78 L 332.43,546.5 H 292.18 L 262.37,399.03 h -0.78 L 229.68,546.5 h -41 z m 287.69,0 h 63.94 l 63.5,216.69 H 515.45 L 501.64,498.28 H 428.8 l -10.66,48.22 h -40.75 z m 24.34,53.41 -17.69,79.5 h 55.06 l -20.31,-79.5 z"
          inkscape:connector-curvature="0"
          style="fill:#ffffff" />
