@@ -197,12 +197,12 @@ whether or not they have a specialized handling of asm.js.
 
 The performances without the need of any plugin convinced companies with huge
 code bases to join the effort.
-The Unreal game engine was ported, Autodesk AutoCAD, Adobe Lightroom,
-Facebook image compressions uploading code, OpenCV and many others.
+The Unreal game engine was ported, Autodesk AutoCAD~\cite{autocadweb}, Adobe Lightroom,
+Facebook image compressions uploading code, OpenCV~\cite{taheri2018opencv} and many others.
 With the success of Emscripten and asm.js as a proof of concept,
 all major browser vendors came together to formalize a new specification
 known today as WebAssembly.
-Figure~\ref{fig:wasm-timeline} summarizes major events leading to the creation of WebAssembly.
+Figure~\ref{fig:wasm-timeline} summarizes main events leading to the creation of WebAssembly.
 
 \begin{figure}[h]
 	\centering
@@ -214,23 +214,50 @@ Figure~\ref{fig:wasm-timeline} summarizes major events leading to the creation o
 \section{WebAssembly}%
 \label{sec:WebAssembly}
 
+WebAssembly, abreviated Wasm, is an instruction set with a binary format,
+and a stack-based virtual machine able to execute those programs~\cite{haas2017bringing}.
+
+\subsection{Relation to Previous Technologies}%
+\label{sub:wasm_previous}
+
+Just like Flash and Java applets, WebAssembly,
+is executed by a virtual machine.
+Similarly to NaCl, the Wasm runtime is sandboxed,
+preventing it from accessing data outside of its context.
+And as asm.js, Wasm does not require any plugin.
+It has been developed as a Web standard and implemented
+by all major Web browsers, desktop and mobile, since 2017.
+Unlike asm.js however, Wasm is distributed in a binary format,
+meaning it is more efficient to send over the network and to parse,
+drastically reducing the loading time of Web pages.
+WebAssembly has been built drawing lessons from the past and is going to endure
+for the following reasons.
+
 \begin{itemize}
-	\item Minimum Viable Product (MVP)
-	\item Bright future: wasi, wapm, ...
+	\item It is a Web standard and a collective effort from all browser vendors.
+	\item It is the low level missing piece of the Web,
+		complementing JavaScript where more control over performances is needed.
+	\item It has strong security guaranties, and a sound type system~\cite{watt2018mechanising}.
+	\item It theoretically enables any programming language to run on the Web.
 \end{itemize}
+
+\subsection{WebAssembly Minimum Viable Product (MVP)}%
+\label{sub:wasm-mvp}
+
+\subsection{WebAssembly Bright Future}%
+\label{sub:wasm-future}
+
+wasi, wapm, wasmer, interface types
 
 WebAssembly: A New Compilation Target for the Web - Luke Wagner, April 12, 2016: https://youtu.be/89WPNeLnEyA
 WebAssembly: Under the hood with Mozilla, March 7, 2017: https://youtu.be/o52\_5qAJhNg
 
-
-Ce petit détour permet de comprendre ce qu’est emscripten, comment le projet à évolué jusqu’à aujourd’hui où on peut l’utiliser pour compiler du code C/C++ vers wasm. La clé de la compréhension c’est ce schéma :
+\section{C++ portability pitfalls}%
+\label{sec:cpp_pitfalls}
 
 Code source (C++) -> LLVM IR -> Emscripten -> WebAssembly
 
 Donc Emscripten a besoin du bitcode LLVM pour pouvoir compiler une base de code C++. En particulier, il n’est pas possible d’utiliser les bibliothèques précompilées (les “.so”) fournies par les OS dans les packages (apt-get install ...) dans ses dépendances. Toute dépendance (et ce récursivement) doit être recompilée avec Emscripten depuis le code source, et liée statiquement à la compilation de notre propre code. Par défaut, pour faciliter la vie, Emscripten intègre déjà la majorité de la librairie standard (std), et de certaines autres bibliothèques (SDL pour les applis graphiques, ...).
-
-\section{C++ portability pitfalls}%
-\label{sec:cpp_pitfalls}
 
 Example with image reading in OpenCV.
 Had to rewrite PNG decoder.
