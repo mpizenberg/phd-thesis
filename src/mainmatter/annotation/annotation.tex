@@ -4,15 +4,23 @@
 \adjustmtc
 \minitoc%
 
-Defining Image Annotation. \\
+In this chapter, we introduce the concept of image annotation, and review the body of work that have been researched in this domain. 
+
+Bur first, what is image annotation? The most simple way to put it would be ton consder it as the process of augmenting an image with information. This information can be of various nature (we review the existing annotation in section ???), and is typically provided by a human operator, also called annotator. 
+
+We could consider photogrammetry as the first historical example of image annotation, long before digital images even existed. The process of measuring distances and lengths of the real world from 2D images requires annotating these distances and lengths in the image space, before inferring the values in 3D. Similarly, early techniques in the old cinema involved manually editing the filmstrip to create special effects, which is a form of annotation.
+
+Digital imaging has progressively brought new needs for image annotation. The first digital image was scanned from a photograph in 1957 by Russell Kirsch, and the first digital camera was built in 1975 by the Kodak engineer Steve Sasson. Commercial models of digital cameras became really available in the 1990s, and from then the volume of digital images produced grew exponentially every year.
+
+In the meantime the computer vision community, which originated from the artificial intelligence one, became more and more interested in machine learning. Machine learning designates a class of algorithms in which a model learns from experience, materialized by data samples. One sub-domain of machine, called supervised machine learning, requires in particular annotated samples, meaning that a label should be assigned to each piece of data and an algorithm is trained to predict this label. Supervised machine learning gained traction in the 1990s during which some applications reached high enough maturity to be exploited commercially. A famous example of this is the digit recognition algorithm from Lecun et al. \cite{blabla} which was used by AT&T to automatically process cheques in ATMs. A nowadays popular dataset, called MNIST (Mixed National Institute of Standards and Technology) was created for this work; this dataset associates labels (digits, from 0 to 9) to $28\times 28$ pixel images of handwritten figures. 
+
+This dataset illustrates how image annotation could be used to produce desirable applications, and is only a small example of what has now become a classic pipeline to solve problems in the computer vision community. Note that while we focus this chapter on computer vision (because image annotation has become key in this community), the machine learning pipeline we introduce is also used in many other problems such as audio processing or natural language processing. 
+
+Theoretical results in machine learning postulate that problems of great complexity could be adressed with this technique, provided that (i) there exists a model of sufficient capacity to cope with the problem complexity, and (ii) a sufficiently large sample of annotated data is available. Some thresholds have been established by the community to estimate what "sufficiently large" means \cite{bla bla}, but computer vision problems typically requires millions of (annotated) images to be solved with an acceptable performance. Models relying on deep neural networks are nowadays the most popular techniques in machine learning, but other models (such as deep random forests for example, used in the human body pose estimation embedded in the Kinect \cite{blabla}) may still be considered depending on the application. Note that an important field of today's research now focus on learning on few samples; this field regroups the notions of semi-supervised learning, weakly-supervised learning, one-shot and few-shots learning, etc. 
+
+ 
 
 
-
-A look at history:
-\begin{itemize}
-	\item Before digital images? Photogrammetry. Images were annotated to help human understanding, measurement
-	\item Since digital images: machine learning then deep learning
-\end{itemize}
 
 
 Different types of problem that require annotation:
