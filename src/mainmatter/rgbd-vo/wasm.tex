@@ -245,8 +245,16 @@ for the following reasons.
 \subsection{Compilation to WebAssembly}%
 \label{sub:compile-wasm}
 
-WebAssembly: A New Compilation Target for the Web - Luke Wagner, April 12, 2016: https://youtu.be/89WPNeLnEyA
-WebAssembly: Under the hood with Mozilla, March 7, 2017: https://youtu.be/o52\_5qAJhNg
+Currently WebAssembly does not provide a garbage collector.
+Therefore, there are two main approaches to compile to WebAssembly.
+If your programming language enable memory management at compile time,
+such as C, C++ or Rust, the simplest way is to target LLVM intermediate representation.
+Emscripten enables compilation to WebAssembly from C and C++.
+Rust can either use Emscripten as a backend or directly the wasm32 target of LLVM.\@
+Otherwise, if your programming language requires a runtime for features such as garbage collection,
+the entire runtime needs to be ported to WebAssembly in addition the actual program.
+This is for example the case of Blazor, a .NET (Microsoft) library
+enabling the creation of Single Page Applications written in C\#.
 
 \subsection{WebAssembly Minimum Viable Product (MVP)}%
 \label{sub:wasm-mvp}
@@ -339,8 +347,6 @@ discribing the different aspects of computer environments preventing work reprod
 Yet, Solomon Hykes, the original author of Docker shared on twitter that
 if WebAssembly and its system interface existed in 2008, he wouldn't have
 needed to create Docker~\cite{hykes2019twitter}. ``That's how important it is'' as he said.
-
-
 
 \section{C++ portability pitfalls}%
 \label{sec:cpp_pitfalls}
