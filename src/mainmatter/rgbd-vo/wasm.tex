@@ -220,10 +220,11 @@ and a stack-based virtual machine able to execute those programs~\cite{haas2017b
 \subsection{Relation to Previous Technologies}%
 \label{sub:wasm_previous}
 
-Just like Flash and Java applets, WebAssembly,
+Just like Flash and Java applets, WebAssembly code
 is executed by a virtual machine.
 Similarly to NaCl, the Wasm runtime is sandboxed,
-preventing it from accessing data outside of its context.
+preventing it from accessing data outside of its context
+and compromising the security of the underlying machine.
 And as asm.js, Wasm does not require any plugin.
 It has been developed as a Web standard and implemented
 by all major Web browsers, desktop and mobile, since 2017.
@@ -241,16 +242,105 @@ for the following reasons.
 	\item It theoretically enables any programming language to run on the Web.
 \end{itemize}
 
+\subsection{Compilation to WebAssembly}%
+\label{sub:compile-wasm}
+
+WebAssembly: A New Compilation Target for the Web - Luke Wagner, April 12, 2016: https://youtu.be/89WPNeLnEyA
+WebAssembly: Under the hood with Mozilla, March 7, 2017: https://youtu.be/o52\_5qAJhNg
+
 \subsection{WebAssembly Minimum Viable Product (MVP)}%
 \label{sub:wasm-mvp}
+
+The first version of WebAssembly, initially released on March 2017,
+is called a minimum viable product (MVP).
+This consensus aimed at producing a simple yet functional specification and implementation
+for all major browser vendors.
+Concretely, the Wasm MVP offers roughly the same capabilities than asm.js.
+It has only four types, integers and floating point numbers in 32 and 64 bits,
+and manages memory as a unique contiguous block of bytes.
+New features such as
+threads, SIMD, exception handling, reference types, garbage collection, tail call optimization,
+are currently being worked on and delayed to the after-MVP phase.
 
 \subsection{WebAssembly Bright Future}%
 \label{sub:wasm-future}
 
-wasi, wapm, wasmer, interface types
+A common pun in WebAssembly communities is to describe it as ``neither Web, nor assembly''.
+Although slightly caricatural, the WebAssembly specification does not require any Web component.
+As a matter of fact, just like JavaScript broke out of the browser with Node,
+many non-browser WebAssembly runtimes have already been created, such as Wasmer~\cite{wasmer}
+and Wasmtime~\cite{wasmtime}.
 
-WebAssembly: A New Compilation Target for the Web - Luke Wagner, April 12, 2016: https://youtu.be/89WPNeLnEyA
-WebAssembly: Under the hood with Mozilla, March 7, 2017: https://youtu.be/o52\_5qAJhNg
+Since Wasm is basically a performant sandboxed calculator,
+interop capabilities with files or the network
+must be provided in the form of imports and exports of a Wasm module.
+In the browser, those are passed to the module at the initialization call from JavaScript.
+But outside of the browser, as in Wasmer for example,
+imports and exports have to be provided by the runtime environment.
+If we want to be able to use the same Wasm module in those two different contexts,
+we need to have a common interface specification,
+which can have different implementations in each runtime environment.
+
+In order to adress those points, the WebAssembly working group
+is standardizing a system interface under the name
+WebAssembly System Interface (WASI~\cite{wasi}) and a types interface
+known as WebAssembly Interface Types~\cite{wait}.
+As shown in the demonstration video available on YouTube~\cite{waitvideo},
+it is now possible to create a Wasm library in Rust for example,
+and then call it from the Web, Node, Rust, but even Python or any language
+capable of embedding a WebAssembly runtime.
+
+\subsection{Why this Matters for Research}%
+\label{sub:matter-research}
+
+A growing number of actors are worrying about research
+reproducibility~\cite{claerbout1992electronic, buckheit1995wavelab}
+in computational sciences.
+Nick Barnes published an article on Nature News~\cite{barnes2010publish}
+encouraging researchers to publish even bad code instead of none.
+
+IPOL Journal~\cite{limare2011ipol}, Image Processing On Line, is an initiative supported by
+the French space agency CNES and the European Research Council.
+Its goal is to publish both precise algorithm descriptions and certified implementations,
+and making them available on an online platform.
+Due to performance constraints, they rejected most garbage collected languages
+interpreted or based on virtual machines such as Python and Java,
+and only accept Fortran, C and C++ implementations with strict portability requirements.
+In order to mitigate security risks, authors are uniquely identified.
+Exposure to malicious data, such as images uploaded by online users,
+is reduced by system restrictions and careful examination of the source code during review.
+WebAssembly would have been a perfect fit for this project if it had existed in 2010
+since it provides a solution for secure, performant and portable code.
+
+The Association for Computing Machinery (ACM) recently revised its
+artifact review and badging policies~\cite{acm2018badging},
+based on the International Vocabulary for Metrology.
+A work is considered repeatable if the results are obtainable on multiple trials,
+within the same team and experimental setup.
+It is considered replicable if another team is capable of getting the same results
+while reusing the provided artifact and same experimental setup.
+Finally it is considered reproducible if the results can be reproduced
+with different teams and experimental setup, without using the provided artifacts.
+In accordance to these guidelines, ACM Multimedia, the ACM conference targetting multimedia
+research, has setup a reproducibility review process,
+based on companion papers~\cite{acmmmreproducibility}.
+Companion papers are distinct from the main paper.
+They must be provided with associated artifacts and describe precisely
+how to replicate the findings of the associated original paper contribution.
+
+Containarization of the development environment with tools such as Docker
+is a new practice reducing dependency conflicts.
+It has been picked up by the machine learning community,
+especially when needing to use different versions of languages and tools
+for deep learning tasks in separate projects.
+Carl Boettiger even wrote a paper entitled
+``An introduction to Docker for reproducible research''~\cite{boettiger2015introduction}
+discribing the different aspects of computer environments preventing work reproducibility.
+Yet, Solomon Hykes, the original author of Docker shared on twitter that
+if WebAssembly and its system interface existed in 2008, he wouldn't have
+needed to create Docker~\cite{hykes2019twitter}. ``That's how important it is'' as he said.
+
+
 
 \section{C++ portability pitfalls}%
 \label{sec:cpp_pitfalls}
