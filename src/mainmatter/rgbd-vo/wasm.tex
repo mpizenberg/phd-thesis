@@ -351,6 +351,8 @@ needed to create Docker~\cite{hykes2019twitter}. ``That's how important it is'' 
 \section{C++ Portability Pitfalls}%
 \label{sec:cpp_pitfalls}
 
+https://emscripten.org/docs/porting/guidelines/portability\_guidelines.html
+
 \subsection{No Dynamic Linking to OS Libraries}%
 \label{sub:no_dynamic_linking}
 
@@ -376,7 +378,24 @@ Par contre, je n’ai pas fait de tests minimalistes avec les autres dépendance
 \section{Rust and WebAssembly}%
 \label{sec:rust_wasm}
 
+\subsection{The Rust Programming Language}%
+\label{sub:rust_language}
+
 \begin{itemize}
-	\item Rust programming language
-	\item Wasm-bindgen
+	\item Algebraic data types
+	\item Immutability by default
+	\item Ownership
+	\item Zero cost abstractions
+\end{itemize}
+
+\subsection{WebAssembly in Rust}%
+\label{sub:wasm_in_rust}
+
+https://rustwasm.github.io/docs/book/reference/crates.html
+
+\begin{itemize}
+	\item wasm-bindgen
+	\item wasm-pack
+	\item js-sys
+	\item web-sys
 \end{itemize}
