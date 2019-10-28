@@ -348,8 +348,11 @@ Yet, Solomon Hykes, the original author of Docker shared on twitter that
 if WebAssembly and its system interface existed in 2008, he wouldn't have
 needed to create Docker~\cite{hykes2019twitter}. ``That's how important it is'' as he said.
 
-\section{C++ portability pitfalls}%
+\section{C++ Portability Pitfalls}%
 \label{sec:cpp_pitfalls}
+
+\subsection{No Dynamic Linking to OS Libraries}%
+\label{sub:no_dynamic_linking}
 
 Code source (C++) -> LLVM IR -> Emscripten -> WebAssembly
 
@@ -360,6 +363,11 @@ Had to rewrite PNG decoder.
 
 
 DVO par exemple a des dépendances à OpenCV, Eigen, Boost, et Sophus. J’ai donc commencé par voir si j’arrive à compiler un programme minimaliste OpenCV avec Emscripten. Tout de suite les ennuis ont démarré. Au début, je n’ai même pas réussi à utiliser le build wasm de OpenCV (cf question sur stackoverflow). Je m’en suis finalement sorti, pour bloquer sur l’étape d’après, lire une image (cf question sur le forum OpenCV). En effet, dans la version wasm de OpenCV, la fonction imread a été remplacée par une méthode purement JavaScript qui prend un canvas en paramètre, et va donc directement récupérer la matrice depuis le canvas sans faire le décodage. Je pense que cette stratégie a été utilisée parce qu’en interne, la fonction imread OpenCV utilise la fonction imdecode, qui elle-même fait appel à une douzaine d’autres bibliothèques (libjpeg, libtiff, libpng, ...). J’ai essayé d’ajouter moi-même le module contenant la fonction imdecode au build wasm d’OpenCV mais je n’ai pas réussi à compiler ce module. J’ai tout un tas d’erreurs de "missing symbol" etc.
+
+\subsection{Low Level Native or Architecture Specific Code}%
+\label{sub:low_level_code}
+
+setjmp / longjmp, big-endian, asm x86.
 
 Ce n’est pas entièrement sans espoir, il faut le savoir ! Notamment, je n’ai besoin que du décodage png. Et libpng fait partie de ces quelques lib déjà intégrées à emscripten. En théorie je pourrais donc remplacer le code de décodage (cv::imdecode) par l’utilisation de libpng directement. Un des soucis c’est que l’API de libpng est super difficile à comprendre pour moi. Mais en théorie, le reste d’OpenCV qui est utilisé dans DVO fait partie du sous-ensemble qui devrait marcher.
 
