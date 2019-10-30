@@ -2,6 +2,7 @@
 \label{cha:performant_web_applications}
 
 \minitoc%
+\clearpage
 
 \section{A Brief History of Native Code in the Client}%
 \label{sec:native_client}
@@ -220,10 +221,11 @@ and a stack-based virtual machine able to execute those programs~\cite{haas2017b
 \subsection{Relation to Previous Technologies}%
 \label{sub:wasm_previous}
 
-Just like Flash and Java applets, WebAssembly,
+Just like Flash and Java applets, WebAssembly code
 is executed by a virtual machine.
 Similarly to NaCl, the Wasm runtime is sandboxed,
-preventing it from accessing data outside of its context.
+preventing it from accessing data outside of its context
+and compromising the security of the underlying machine.
 And as asm.js, Wasm does not require any plugin.
 It has been developed as a Web standard and implemented
 by all major Web browsers, desktop and mobile, since 2017.
@@ -241,38 +243,248 @@ for the following reasons.
 	\item It theoretically enables any programming language to run on the Web.
 \end{itemize}
 
+\subsection{Compilation to WebAssembly}%
+\label{sub:compile-wasm}
+
+Currently WebAssembly does not provide a garbage collector.
+Therefore, there are two main approaches to compile to WebAssembly.
+If your programming language enables memory management at compile time,
+such as C, C++ or Rust, the simplest way is to target LLVM intermediate representation.
+Emscripten enables compilation to WebAssembly from C and C++.
+Rust can either use Emscripten as a backend or directly the wasm32 target of LLVM.\@
+Otherwise, if your programming language requires a runtime for features such as garbage collection,
+the entire runtime needs to be ported to WebAssembly in addition the actual program.
+This is for example the case of Blazor, a .NET (Microsoft) library
+enabling the creation of Single Page Applications written in C\#.
+
 \subsection{WebAssembly Minimum Viable Product (MVP)}%
 \label{sub:wasm-mvp}
+
+The first version of WebAssembly, initially released on March 2017,
+is called a minimum viable product (MVP).
+This consensus aimed at producing a simple yet functional specification and implementation
+for all major browser vendors.
+Concretely, the Wasm MVP offers roughly the same capabilities than asm.js.
+It has only four types, integers and floating point numbers in 32 and 64 bits,
+and manages memory as a unique contiguous block of bytes.
+New features such as threads,
+SIMD, exception handling, reference types, garbage collection or tail call optimization,
+are currently being worked on and delayed to the after-MVP phase.
 
 \subsection{WebAssembly Bright Future}%
 \label{sub:wasm-future}
 
-wasi, wapm, wasmer, interface types
+A common pun in WebAssembly communities is to describe it as ``neither Web, nor assembly''.
+Although slightly caricatural, the WebAssembly specification does not require any Web component.
+As a matter of fact, just like JavaScript broke out of the browser with Node,
+many non-browser WebAssembly runtimes have already been created, such as Wasmer~\cite{wasmer}
+and Wasmtime~\cite{wasmtime}.
 
-WebAssembly: A New Compilation Target for the Web - Luke Wagner, April 12, 2016: https://youtu.be/89WPNeLnEyA
-WebAssembly: Under the hood with Mozilla, March 7, 2017: https://youtu.be/o52\_5qAJhNg
+Since Wasm is basically a performant sandboxed calculator,
+interop capabilities with files or the network
+must be provided in the form of imports and exports of a Wasm module.
+In the browser, those are passed to the module at the initialization call from JavaScript.
+But outside of the browser, as in Wasmer for example,
+imports and exports have to be provided by the runtime environment.
+If we want to be able to use the same Wasm module in those two different contexts,
+we need to have a common interface specification,
+which can have different implementations in each runtime environment.
 
-\section{C++ portability pitfalls}%
+In order to adress those points, the WebAssembly working group
+is standardizing a system interface under the name
+WebAssembly System Interface (WASI~\cite{wasi}) and a types interface
+known as WebAssembly Interface Types~\cite{wait}.
+As shown in the demonstration video available on YouTube~\cite{waitvideo},
+it is now possible to create a Wasm library in Rust for example,
+and then call it from the Web, Node, Rust, but even Python or any language
+capable of embedding a WebAssembly runtime.
+
+\subsection{Why this Matters for Research}%
+\label{sub:matter-research}
+
+A growing number of actors are worrying about research
+reproducibility~\cite{claerbout1992electronic, buckheit1995wavelab}
+in computational sciences.
+Nick Barnes published an article on Nature News~\cite{barnes2010publish}
+encouraging researchers to publish even bad code instead of none.
+
+IPOL Journal~\cite{limare2011ipol}, Image Processing On Line, is an initiative supported by
+the French space agency CNES and the European Research Council.
+Its goal is to publish both precise algorithm descriptions and certified implementations,
+and making them available on an online platform.
+Due to performance constraints, they rejected most garbage collected languages
+interpreted or based on virtual machines such as Python and Java,
+and only accept Fortran, C and C++ implementations with strict portability requirements.
+In order to mitigate security risks, authors are uniquely identified.
+Exposure to malicious data, such as images uploaded by online users,
+is reduced by system restrictions and careful examination of the source code during review.
+WebAssembly would have been a perfect fit for this project if it had existed in 2010
+since it provides a solution for secure, performant and portable code.
+
+The Association for Computing Machinery (ACM) recently revised its
+artifact review and badging policies~\cite{acm2018badging},
+based on the International Vocabulary for Metrology.
+A work is considered repeatable if the results are obtainable on multiple trials,
+within the same team and experimental setup.
+It is considered replicable if another team is capable of getting the same results
+while reusing the provided artifact and same experimental setup.
+Finally it is considered reproducible if the results can be reproduced
+with different teams and experimental setup, without using the provided artifacts.
+In accordance to these guidelines, ACM Multimedia, the ACM conference targetting multimedia
+research, has setup a reproducibility review process,
+based on companion papers~\cite{acmmmreproducibility}.
+Companion papers are distinct from the main paper.
+They must be provided with associated artifacts and describe precisely
+how to replicate the findings of the associated original paper contribution.
+
+Containarization of the development environment with tools such as Docker
+is a new practice reducing dependency conflicts.
+It has been picked up by the machine learning community,
+especially when needing to use different versions of languages and tools
+for deep learning tasks in separate projects.
+Carl Boettiger even wrote a paper entitled
+``An introduction to Docker for reproducible research''~\cite{boettiger2015introduction}
+discribing the different aspects of computer environments preventing work reproducibility.
+Yet, Solomon Hykes, the original author of Docker shared on twitter that
+if WebAssembly and its system interface existed in 2008, he wouldn't have
+needed to create Docker~\cite{hykes2019twitter}. ``That's how important it is'' as he said.
+
+\section{C++ Portability Pitfalls}%
 \label{sec:cpp_pitfalls}
 
-Code source (C++) -> LLVM IR -> Emscripten -> WebAssembly
+Not every C or C++ project can be ported to WebAssembly.
+There are three main factors of non portability,
+Web limitations, no low level architecture specific code and no system dynamic linking.
 
-Donc Emscripten a besoin du bitcode LLVM pour pouvoir compiler une base de code C++. En particulier, il n’est pas possible d’utiliser les bibliothèques précompilées (les “.so”) fournies par les OS dans les packages (apt-get install ...) dans ses dépendances. Toute dépendance (et ce récursivement) doit être recompilée avec Emscripten depuis le code source, et liée statiquement à la compilation de notre propre code. Par défaut, pour faciliter la vie, Emscripten intègre déjà la majorité de la librairie standard (std), et de certaines autres bibliothèques (SDL pour les applis graphiques, ...).
+\subsection{Web Limitations}%
+\label{sub:web_limitations}
 
-Example with image reading in OpenCV.
-Had to rewrite PNG decoder.
+High performance code may rely on parallelization to speed up processing.
+Due to security concerns, parallelization methods such as multithreading
+or SIMD are currently a work in progress but not usable by default in browsers.
 
+\subsection{Low Level Native or Architecture Specific Code}%
+\label{sub:low_level_code}
 
-DVO par exemple a des dépendances à OpenCV, Eigen, Boost, et Sophus. J’ai donc commencé par voir si j’arrive à compiler un programme minimaliste OpenCV avec Emscripten. Tout de suite les ennuis ont démarré. Au début, je n’ai même pas réussi à utiliser le build wasm de OpenCV (cf question sur stackoverflow). Je m’en suis finalement sorti, pour bloquer sur l’étape d’après, lire une image (cf question sur le forum OpenCV). En effet, dans la version wasm de OpenCV, la fonction imread a été remplacée par une méthode purement JavaScript qui prend un canvas en paramètre, et va donc directement récupérer la matrice depuis le canvas sans faire le décodage. Je pense que cette stratégie a été utilisée parce qu’en interne, la fonction imread OpenCV utilise la fonction imdecode, qui elle-même fait appel à une douzaine d’autres bibliothèques (libjpeg, libtiff, libpng, ...). J’ai essayé d’ajouter moi-même le module contenant la fonction imdecode au build wasm d’OpenCV mais je n’ai pas réussi à compiler ce module. J’ai tout un tas d’erreurs de "missing symbol" etc.
+Other high performance code may rely on architecture specific constraints.
+For example, x86 assembly is not portable to other platforms.
+Code requiring a big-endian physical ordering of memory,
+i.e.\ starting multi-bytes data types with the most significant byte,
+will not work since WebAssembly makes the assumption of a little-endian machine,
+such as in the case of x86, ARM or RISC-V.
 
-Ce n’est pas entièrement sans espoir, il faut le savoir ! Notamment, je n’ai besoin que du décodage png. Et libpng fait partie de ces quelques lib déjà intégrées à emscripten. En théorie je pourrais donc remplacer le code de décodage (cv::imdecode) par l’utilisation de libpng directement. Un des soucis c’est que l’API de libpng est super difficile à comprendre pour moi. Mais en théorie, le reste d’OpenCV qui est utilisé dans DVO fait partie du sous-ensemble qui devrait marcher.
+\subsection{No Dynamic Linking to OS Libraries}%
+\label{sub:no_dynamic_linking}
 
-Par contre, je n’ai pas fait de tests minimalistes avec les autres dépendances de DVO (eigen, boost, sophus) donc rien ne dit qu’on serait au bout de nos ennuis.
+Emscripten is at its core an LLVM backend (cf Figure~\ref{fig:llvm})
+targetting the WebAssembly instruction set.
+A WebAssembly module must run in isolation inside the browser
+and thus needs access to every dependency inside the WebAssembly virtual machine.
+Therefore, Emscripten requires the LLVM bitcode of every dependency used.
+In traditional C and C++ environments however, we are used to depending on precompiled
+shared dynamic libraries (.so and .dll files) provided by the OS packages.
+To target WebAssembly, every dependency recursively, must be recompiled
+by Emscripten from source code, and statically linked to our code.
+To ease the process, Emscripten already includes most of the C and C++ the standard libraries,
+in addition to few common libraries for graphical applications such as the SDL.
+
+DVO~\cite{steinbrucker2011real} for example relies on OpenCV, Eigen, Boost and Sophus.
+I tried to build a minimalist OpenCV program with Emscripten
+and trouble began right from the start.
+Unfortunately, OpenCV has only been partially ported to Wasm~\cite{taheri2018opencv}.
+The porting team assumed that, in the context of the Web,
+media would be generated from Web APIs.
+Reading an image for example, is performed through the creation of an HTML canvas,
+loading and decoding the image data, then transfered to an OpenCV matrix.
+Native OpenCV however would use the \verb|imdecode| function,
+itself depending on a dozen of other libraries such as libjpg, libtiff and libpng,
+and not all have been ported to WebAssembly.
+When trying to add the \verb|imdecode| function to the set of ported OpenCV code,
+we currently hit ``missing symbol'' errors due to similar dependency and linking issues.
+In the case of DVO and other RGB-D visual odometry algorithms,
+there is a need to decode 16 bit PNGs for the depth images.
+Until they are supported in Web APIs it won't be possible with OpenCV.
+
+This limitation does not mean that DVO can never be ported to WebAssembly,
+but that it would require a significant amount of work to either
+complete the OpenCV port, or find another image decoding library
+already ported to WebAssembly and adapt DVO code to accomodate it.
+The same could happen for parts of Eigen, Boost and Sophus used in DVO.
 
 \section{Rust and WebAssembly}%
 \label{sec:rust_wasm}
 
+WebAssembly and the Rust programming language are both technologies
+that emerged from research projects at Mozilla.
+Their core communities are thus sharing similar values
+and working in synergy within the Rust and WebAssembly Working Group.
+
+\subsection{The Rust Programming Language}%
+\label{sub:rust_language}
+
+Rust is a programming language focused on safety, speed and concurrency,
+that begun in 2006 as a side project by Mozilla employee Graydon Hoare.
+It has been evolving drastically until 2015, when version 1.0 was announced
+with stability goals in mind.
+Let's start by saying that in 2019, for the fourth year in a row,
+Rust has been elected the most loved programming language
+by respondents of the Stack Overflow's annual developer survey~\cite{rustlovedso}.
+There are thus many reasons why Rust is among the best contestants
+for writing efficient and correct computer vision algorithms.
+We will focus on those related to our task,
+interactive computer vision on the web.
+
+First, Rust uses an LLVM backend so it is capable of targetting WebAssembly by default.
+In addition, Rust has an automatic memory management system called ownership.
+It enables memory safety guarantees at compile time
+without the need of a garbage collector or manual memory management.
+This is important in the context of WebAssembly since it means that Rust code
+can be compiled to Wasm without embedding a big runtime for memory management.
+Ownership in Rust is based on the concept of linear types,
+highly influenced by the work of Girard~\cite{girard1987linear},
+Wadler~\cite{wadler1991there}, Baker~\cite{baker1992lively},
+and Clark et al.~\cite{clarke1998ownership} among others.
+The main idea behind Rust ownership is that every value has
+a unique variable called its owner.
+When this variable goes out of scope, the associated value is realeased from memory.
+Other variables can access this value during its lifetime
+through a borrowing mechanism, similar to references.
+At any time, there must be at most one mutable borrow,
+and there cannot be mutable and immutable borrows at the same time.
+Those constraints are very similar to the read and write constraints
+usually enforced on shared values in concurrent programming.
+
+Finally Rust is not affected by the dynamic linking issues
+we mentioned earlier when targetting WebAssembly in C++.
+Rust 1.0 shipped with a project manager called ``cargo''
+and an online package registry ``crates.io''.
+Cargo manages compilation, modules and external dependencies
+with the use of a very simple project description file named \verb|Cargo.toml|
+placed at the root of a Rust project.
+As a consequence, compiling a pure Rust project will always work
+with a single command \verb|cargo build|.
+It downloads dependencies, locally build and statically link them.
+
+In contrast to the Elm package registry we discussed in Section~\ref{sub:reliable_packages},
+Rust packages follow but do not enforce semantic versioning.
+Similarly to Elm, Rust also provides algebraic data types with pattern matching,
+and immutability by default, thus giving much more confidence than C++
+that when a program compiles it is correct.
+
+\subsection{WebAssembly in Rust}%
+\label{sub:wasm_in_rust}
+
+The WebAssembly tooling ecosystem in Rust is composed of four main projects.
 \begin{itemize}
-	\item Rust programming language
-	\item Wasm-bindgen
+	\item \verb|wasm-bindgen|~\cite{wasmbindgen} facilitates interoperability
+		between Rust and JavaScript with the help of simple annotations.
+	\item \verb|wasm-pack|~\cite{wasmpack} complements \verb|wasm-bindgen|
+		by generating all the JavaScript glue code currently necessary to load and call
+		a WebAssembly module from JavaScript as if it was an ES6 module.
+		\verb|wasm-pack build| basically serves as a replacement to
+		\verb|cargo build| when compiling to WebAssembly.
+	\item \verb|js-sys|~\cite{jssys} provides raw bindings to JavaScript global APIs
+		for projects using wasm-bindgen.
+	\item \verb|web-sys|~\cite{websys} provides raw bindings to Web APIs
+		for projects using wasm-bindgen.
 \end{itemize}
