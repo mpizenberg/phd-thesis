@@ -247,7 +247,7 @@ for the following reasons.
 
 Currently WebAssembly does not provide a garbage collector.
 Therefore, there are two main approaches to compile to WebAssembly.
-If your programming language enable memory management at compile time,
+If your programming language enables memory management at compile time,
 such as C, C++ or Rust, the simplest way is to target LLVM intermediate representation.
 Emscripten enables compilation to WebAssembly from C and C++.
 Rust can either use Emscripten as a backend or directly the wasm32 target of LLVM.\@
@@ -266,8 +266,8 @@ for all major browser vendors.
 Concretely, the Wasm MVP offers roughly the same capabilities than asm.js.
 It has only four types, integers and floating point numbers in 32 and 64 bits,
 and manages memory as a unique contiguous block of bytes.
-New features such as
-threads, SIMD, exception handling, reference types, garbage collection, tail call optimization,
+New features such as threads,
+SIMD, exception handling, reference types, garbage collection or tail call optimization,
 are currently being worked on and delayed to the after-MVP phase.
 
 \subsection{WebAssembly Bright Future}%
@@ -351,29 +351,64 @@ needed to create Docker~\cite{hykes2019twitter}. ``That's how important it is'' 
 \section{C++ Portability Pitfalls}%
 \label{sec:cpp_pitfalls}
 
-https://emscripten.org/docs/porting/guidelines/portability\_guidelines.html
+Not every C or C++ project can be ported to WebAssembly.
+There are three main factors of non portability,
+Web limitations, no low level architecture specific code and no system dynamic linking.
 
-\subsection{No Dynamic Linking to OS Libraries}%
-\label{sub:no_dynamic_linking}
+\subsection{Web Limitations}%
+\label{sub:web_limitations}
 
-Code source (C++) -> LLVM IR -> Emscripten -> WebAssembly
-
-Donc Emscripten a besoin du bitcode LLVM pour pouvoir compiler une base de code C++. En particulier, il n’est pas possible d’utiliser les bibliothèques précompilées (les “.so”) fournies par les OS dans les packages (apt-get install ...) dans ses dépendances. Toute dépendance (et ce récursivement) doit être recompilée avec Emscripten depuis le code source, et liée statiquement à la compilation de notre propre code. Par défaut, pour faciliter la vie, Emscripten intègre déjà la majorité de la librairie standard (std), et de certaines autres bibliothèques (SDL pour les applis graphiques, ...).
-
-Example with image reading in OpenCV.
-Had to rewrite PNG decoder.
-
-
-DVO par exemple a des dépendances à OpenCV, Eigen, Boost, et Sophus. J’ai donc commencé par voir si j’arrive à compiler un programme minimaliste OpenCV avec Emscripten. Tout de suite les ennuis ont démarré. Au début, je n’ai même pas réussi à utiliser le build wasm de OpenCV (cf question sur stackoverflow). Je m’en suis finalement sorti, pour bloquer sur l’étape d’après, lire une image (cf question sur le forum OpenCV). En effet, dans la version wasm de OpenCV, la fonction imread a été remplacée par une méthode purement JavaScript qui prend un canvas en paramètre, et va donc directement récupérer la matrice depuis le canvas sans faire le décodage. Je pense que cette stratégie a été utilisée parce qu’en interne, la fonction imread OpenCV utilise la fonction imdecode, qui elle-même fait appel à une douzaine d’autres bibliothèques (libjpeg, libtiff, libpng, ...). J’ai essayé d’ajouter moi-même le module contenant la fonction imdecode au build wasm d’OpenCV mais je n’ai pas réussi à compiler ce module. J’ai tout un tas d’erreurs de "missing symbol" etc.
+High performance code may rely on parallelization to speed up processing.
+Due to security concerns, parallelization methods such as multithreading
+or SIMD are currently a work in progress but not usable by default in browsers.
 
 \subsection{Low Level Native or Architecture Specific Code}%
 \label{sub:low_level_code}
 
-setjmp / longjmp, big-endian, asm x86.
+Other high performance code may rely on architecture specific constraints.
+For example, x86 assembly is not portable to other platforms.
+Code requiring a big-endian physical ordering of memory,
+i.e.\ starting multi-bytes data types with the most significant byte,
+will not work since WebAssembly makes the assumption of a little-endian machine,
+such as in the case of x86, ARM or RISC-V.
 
-Ce n’est pas entièrement sans espoir, il faut le savoir ! Notamment, je n’ai besoin que du décodage png. Et libpng fait partie de ces quelques lib déjà intégrées à emscripten. En théorie je pourrais donc remplacer le code de décodage (cv::imdecode) par l’utilisation de libpng directement. Un des soucis c’est que l’API de libpng est super difficile à comprendre pour moi. Mais en théorie, le reste d’OpenCV qui est utilisé dans DVO fait partie du sous-ensemble qui devrait marcher.
+\subsection{No Dynamic Linking to OS Libraries}%
+\label{sub:no_dynamic_linking}
 
-Par contre, je n’ai pas fait de tests minimalistes avec les autres dépendances de DVO (eigen, boost, sophus) donc rien ne dit qu’on serait au bout de nos ennuis.
+Emscripten is at its core an LLVM backend (cf Figure~\ref{fig:llvm})
+targetting the WebAssembly instruction set.
+A WebAssembly module must run in isolation inside the browser
+and thus needs access to every dependency inside the WebAssembly virtual machine.
+Therefore, Emscripten requires the LLVM bitcode of every dependency used.
+In traditional C and C++ environments however, we are used to depending on precompiled
+shared dynamic libraries (.so and .dll files) provided by the OS packages.
+To target WebAssembly, every dependency recursively, must be recompiled
+by Emscripten from source code, and statically linked to our code.
+To ease the process, Emscripten already includes most of the C and C++ the standard libraries,
+in addition to few common libraries for graphical applications such as the SDL.
+
+DVO~\cite{steinbrucker2011real} for example relies on OpenCV, Eigen, Boost and Sophus.
+I tried to build a minimalist OpenCV program with Emscripten
+and trouble began right from the start.
+Unfortunately, OpenCV has only been partially ported to Wasm~\cite{taheri2018opencv}.
+The porting team assumed that, in the context of the Web,
+media would be generated from Web APIs.
+Reading an image for example, is performed through the creation of an HTML canvas,
+loading and decoding the image data, then transfered to an OpenCV matrix.
+Native OpenCV however would use the \verb|imdecode| function,
+itself depending on a dozen of other libraries such as libjpg, libtiff and libpng,
+and not all have been ported to WebAssembly.
+When trying to add the \verb|imdecode| function to the set of ported OpenCV code,
+we currently hit ``missing symbol'' errors due to similar dependency and linking issues.
+In the case of DVO and other RGB-D visual odometry algorithms,
+there is a need to decode 16 bit PNGs for the depth images.
+Until they are supported in Web APIs it won't be possible with OpenCV.
+
+This limitation does not mean that DVO can never be ported to WebAssembly,
+but that it would require a significant amount of work to either
+complete the OpenCV port, or find another image decoding library
+already ported to WebAssembly and adapt DVO code to accomodate it.
+The same could happen for parts of Eigen, Boost and Sophus used in DVO.
 
 \section{Rust and WebAssembly}%
 \label{sec:rust_wasm}
