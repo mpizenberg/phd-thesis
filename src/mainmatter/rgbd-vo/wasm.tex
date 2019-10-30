@@ -473,11 +473,18 @@ that when a program compiles it is correct.
 \subsection{WebAssembly in Rust}%
 \label{sub:wasm_in_rust}
 
-https://rustwasm.github.io/docs/book/reference/crates.html
-
+The WebAssembly tooling ecosystem in Rust is composed of four main projects.
 \begin{itemize}
-	\item wasm-bindgen
-	\item wasm-pack
-	\item js-sys
-	\item web-sys
+% \setlength\itemsep{-0.5em}
+	\item \verb|wasm-bindgen|~\cite{wasmbindgen} facilitates interoperability
+		between Rust and JavaScript with the help of simple annotations.
+	\item \verb|wasm-pack|~\cite{wasmpack} complements \verb|wasm-bindgen|
+		by generating all the JavaScript glue code currently necessary to load and call
+		a WebAssembly module from JavaScript as if it was an ES6 module.
+		\verb|wasm-pack build| basically serves as a replacement to
+		\verb|cargo build| when compiling to WebAssembly.
+	\item \verb|js-sys|~\cite{jssys} provides raw bindings to JavaScript global APIs
+		for projects using wasm-bindgen.
+	\item \verb|web-sys|~\cite{websys} provides raw bindings to Web APIs
+		for projects using wasm-bindgen.
 \end{itemize}
