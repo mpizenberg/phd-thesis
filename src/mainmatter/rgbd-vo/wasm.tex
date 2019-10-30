@@ -413,15 +413,62 @@ The same could happen for parts of Eigen, Boost and Sophus used in DVO.
 \section{Rust and WebAssembly}%
 \label{sec:rust_wasm}
 
+WebAssembly and the Rust programming language are both technologies
+that emerged from research projects at Mozilla.
+Their core communities are thus sharing similar values
+and working in synergy within the Rust and WebAssembly Working Group.
+
 \subsection{The Rust Programming Language}%
 \label{sub:rust_language}
 
-\begin{itemize}
-	\item Algebraic data types
-	\item Immutability by default
-	\item Ownership
-	\item Zero cost abstractions
-\end{itemize}
+Rust is a programming language focused on safety, speed and concurrency,
+that begun in 2006 as a side project by Mozilla employee Graydon Hoare.
+It has been evolving drastically until 2015, when version 1.0 was announced
+with stability goals in mind.
+Let's start by saying that in 2019, for the fourth year in a row,
+Rust has been elected the most loved programming language
+by respondents of the Stack Overflow's annual developer survey~\cite{rustlovedso}.
+There are thus many reasons why Rust is among the best contestants
+for writing efficient and correct computer vision algorithms.
+We will focus on those related to our task,
+interactive computer vision on the web.
+
+First, Rust uses an LLVM backend so it is capable of targetting WebAssembly by default.
+In addition, Rust has an automatic memory management system called ownership.
+It enables memory safety guarantees at compile time
+without the need of a garbage collector or manual memory management.
+This is important in the context of WebAssembly since it means that Rust code
+can be compiled to Wasm without embedding a big runtime for memory management.
+Ownership in Rust is based on the concept of linear types,
+highly influenced by the work of Girard~\cite{girard1987linear},
+Wadler~\cite{wadler1991there}, Baker~\cite{baker1992lively},
+and Clark et al.~\cite{clarke1998ownership} among others.
+The main idea behind Rust ownership is that every value has
+a unique variable called its owner.
+When this variable goes out of scope, the associated value is realeased from memory.
+Other variables can access this value during its lifetime
+through a borrowing mechanism, similar to references.
+At any time, there must be at most one mutable borrow,
+and there cannot be mutable and immutable borrows at the same time.
+Those constraints are very similar to the read and write constraints
+usually enforced on shared values in concurrent programming.
+
+Finally Rust is not affected by the dynamic linking issues
+we mentioned earlier when targetting WebAssembly in C++.
+Rust 1.0 shipped with a project manager called ``cargo''
+and an online package registry ``crates.io''.
+Cargo manages compilation, modules and external dependencies
+with the use of a very simple project description file named \verb|Cargo.toml|
+placed at the root of a Rust project.
+As a consequence, compiling a pure Rust project will always work
+with a single command \verb|cargo build|.
+It downloads dependencies, locally build and statically link them.
+
+In contrast to the Elm package registry we discussed in Section~\ref{sub:reliable_packages},
+Rust packages follow but do not enforce semantic versioning.
+Similarly to Elm, Rust also provides algebraic data types with pattern matching,
+and immutability by default, thus giving much more confidence than C++
+that when a program compiles it is correct.
 
 \subsection{WebAssembly in Rust}%
 \label{sub:wasm_in_rust}
