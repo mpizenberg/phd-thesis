@@ -1,6 +1,8 @@
 \chapter{Performant Web Applications}%
 \label{cha:performant_web_applications}
 
+\comment{}{Intro de chapitre avec contexte et annonce de plan.}
+
 \minitoc%
 \clearpage
 
@@ -8,11 +10,11 @@
 \label{sec:native_client}
 
 Being able to run high performance code in the browser
-unlocks many use cases, including scientific computing.
+is useful in many use cases, including for example scientific computing.
 Yet, it remains a challenging task.
-Resources often refers to this as ``native'' code
+Resources often refer to this as ``native'' code
 but the terminology is rather vague.
-Depending on the context, it may have one of the following meanings,
+Depending on the context, ``native'' may have one of the following meanings,
 \begin{enumerate}
 \setlength\itemsep{-0.5em}
 	\item code statically compiled directly to the target architecture and running from the browser,
@@ -20,14 +22,15 @@ Depending on the context, it may have one of the following meanings,
 	\item or anything that is not generating JavaScript.
 \end{enumerate}
 The distinction between those and how they relate to ``native'' code
-will be made clearer after a brief history of high performance code in browsers.
+will be made clearer after the following
+brief history of high performance code in browsers.
 
 \subsection{Java Applets}%
 \label{sub:java_applets}
 
 In 1995, just four years after the birth of the Web,
 the Java programming language was created.
-It appeared with a companion technology called Java Applet,
+It appeared along with a companion technology called Java Applet,
 designed to run Java applications in the browser.
 The Java Virtual Machine (JVM) was hosted by browsers,
 enabling much better performances than JavaScript at that time.
@@ -48,11 +51,11 @@ whereas JavaScript waited until 2011 for WebGL in HTML5 canvas.
 On the down side, Java applets would break accessibility of the Web.
 Screen readers would not be able to parse the content of the dedicated
 applet area in the page.
-The security model of Java applets was also quite risky.
+The security model of Java applets also had some weaknesses.
 Applets would have to get approved by a browser user and then gain rights
-equivalent to a native application on your desktop.
-Unfortunately, just like terms of service, most people just click ``agree''
-and move on.
+equivalent to a native desktop application.
+Unfortunately, just like terms of service,
+\comment{most people just click ``agree'' and move on.}{justify}
 In addition, the Java Runtime Environment (JRE) has had hundreds of security
 vulnerabilities~\cite{JreCve} in its lifetime.
 This represents a serious security threat for browser vendors.
@@ -71,7 +74,7 @@ was acquired by Macromedia and rebranded ``Flash'' in 1996.
 
 Contrary to Java applets, Flash use cases started very narrow.
 It provided a simple and efficient solution to build and share animations on the web,
-giving a visual advantage over pure HTML documents.
+offering a visual advantage over pure HTML documents.
 In year 2000, Flash 5 was released, with the ActionScript programming language,
 bringing even more potential to Flash-based websites.
 Two years later, in 2002, Flash 6 brought support for real-time messaging protocols,
@@ -79,7 +82,7 @@ enabling video and audio streaming capabilities.
 This represents roughly 8 years until 2010 when such capabilities are also
 supported through HTML5 in most browsers.
 In the meantime, highly influencial projects shaped the Web thanks to Flash.
-You may have heard of Chad Hurley, Steve Chen and Jawed Karim who launched
+For example, Chad Hurley, Steve Chen and Jawed Karim launched
 YouTube in 2005, based on Flash.
 
 In spite of the many advantages of Flash and ActionScript over classic Web pages,
@@ -95,8 +98,8 @@ In 2007 the iPhone launched without Flash support,
 leading to Steve Jobs, then Apple CEO, writing in 2010 an oppen letter called
 ``Thoughts on Flash''~\cite{FlashJobs}
 in which he explains why Flash was doomed to disappear.
-Among those reasons, Flash is proprietary, going against open Web standards,
-it has numerous security flaws~\cite{FlashCVE}, and is the number one reason Macs crash.
+Among those reasons, Flash is proprietary, going against open Web standards
+and it has numerous security flaws~\cite{FlashCVE}.
 
 Consequently, with the advent of HTML5 surrounding technologies regarding multimedia capabilities,
 and the improved performances of JavaScript, Flash became obsolete.
@@ -107,7 +110,7 @@ So in July 2017, Adobe announced end support of Flash in 2020.
 
 Java applets and Flash were never trully considered ``native''
 since they involved third party virtual machines.
-You would not compile your code directly to machine instructions
+One would not compile code directly to machine instructions
 but to an intermediate bytecode representation for Java applets,
 or just using a JIT compiler for ActionScript (Flash) code.
 They provided however great performances improvements when compared
@@ -129,7 +132,7 @@ But it would need a sandboxed and secure new set of APIs
 to make sure that those applications would not execute any malicious code via the browser.
 That is how the Native Client (NaCl) project,
 and its associated API called Pepper Plugin API (PPAPI) started in 2009.
-I'll make the assumption that you got the NaCl and pepper joke \ldots
+\comment{}{I'll make the assumption that you got the NaCl and pepper joke \ldots}
 
 The two main downsides of this approach are the security and portability concerns.
 Even though NaCl code would run into a sandboxed environment,
@@ -139,11 +142,11 @@ now needing to secure two different sandboxed environment,
 NaCl and JavaScript, instead of one.
 Portability was also a concern since any NaCl code would need to be compiled
 to all target architectures where the browser need to run.
-In practice, only x86 intel architectures were fully supported,
+In practice, only x86 Intel architectures were fully supported,
 going against the nature of the Web, supposed to run on all platforms.
 This limitation was the reason for the birth of the Portable Native Client project.
 
-Portable Native Client (PNaCl, pronounced like the word ``pinnacle'', you get this one?),
+Portable Native Client (PNaCl, pronounced like the word ``pinnacle''),
 was a work by A. Donovan et al.~\cite{donovan2010pnacl} aiming at distributing
 NaCl programs in an intermediate pre-compiled neutral instruction-set format,
 preventing the need to compile directly to all target architectures.
@@ -179,7 +182,8 @@ instruction set architecture (ISA) as depicted in Figure~\ref{fig:llvm}.
 \end{figure}
 
 After few iterations with the help of Luke Wagner, working on JavaScript compilation at Mozilla,
-Emscripten was able to output JavaScript code running at roughly 2x to 4x native speed.
+Emscripten was able to output JavaScript code
+running roughly two to three times slower than the equivalent C code.
 This specific subset of JavaScript was formalized under the name asm.js in 2013~\cite{herman2013asm}.
 The asm.js code for a sum function is presented in Listing~\ref{lst:add-asmjs}.
 As you can see, it makes use of JavaScript operations doing nothing,
@@ -198,8 +202,10 @@ whether or not they have a specialized handling of asm.js.
 
 The performances without the need of any plugin convinced companies with huge
 code bases to join the effort.
-The Unreal game engine was ported, Autodesk AutoCAD~\cite{autocadweb}, Adobe Lightroom,
-Facebook image compressions uploading code, OpenCV~\cite{taheri2018opencv} and many others.
+The Unreal game engine was ported~\cite{unrealweb},
+Autodesk AutoCAD~\cite{autocadweb},
+Adobe Lightroom~\cite{lightroomweb},
+OpenCV~\cite{taheri2018opencv} and many others.
 With the success of Emscripten and asm.js as a proof of concept,
 all major browser vendors came together to formalize a new specification
 known today as WebAssembly.
@@ -232,14 +238,14 @@ by all major Web browsers, desktop and mobile, since 2017.
 Unlike asm.js however, Wasm is distributed in a binary format,
 meaning it is more efficient to send over the network and to parse,
 drastically reducing the loading time of Web pages.
-WebAssembly has been built drawing lessons from the past and is going to endure
+WebAssembly has been built drawing lessons from the past and is likely to endure
 for the following reasons.
 
 \begin{itemize}
 	\item It is a Web standard and a collective effort from all browser vendors.
 	\item It is the low level missing piece of the Web,
 		complementing JavaScript where more control over performances is needed.
-	\item It has strong security guaranties, and a sound type system~\cite{watt2018mechanising}.
+	\item It offers strong security guaranties, and a sound type system~\cite{watt2018mechanising}.
 	\item It theoretically enables any programming language to run on the Web.
 \end{itemize}
 
@@ -248,12 +254,12 @@ for the following reasons.
 
 Currently WebAssembly does not provide a garbage collector.
 Therefore, there are two main approaches to compile to WebAssembly.
-If your programming language enables memory management at compile time,
+If a programming language enables memory management at compile time,
 such as C, C++ or Rust, the simplest way is to target LLVM intermediate representation.
 Emscripten enables compilation to WebAssembly from C and C++.
 Rust can either use Emscripten as a backend or directly the wasm32 target of LLVM.\@
-Otherwise, if your programming language requires a runtime for features such as garbage collection,
-the entire runtime needs to be ported to WebAssembly in addition the actual program.
+Otherwise, when a programming language requires a runtime for features such as garbage collection,
+the entire runtime needs to be ported to WebAssembly in addition to the actual program.
 This is for example the case of Blazor, a .NET (Microsoft) library
 enabling the creation of Single Page Applications written in C\#.
 
@@ -274,14 +280,15 @@ are currently being worked on and delayed to the after-MVP phase.
 \subsection{WebAssembly Bright Future}%
 \label{sub:wasm-future}
 
-A common pun in WebAssembly communities is to describe it as ``neither Web, nor assembly''.
+A common pun in WebAssembly communities is to describe it
+as ``neither Web, nor assembly''~\cite{jayphelps2019wasm}.
 Although slightly caricatural, the WebAssembly specification does not require any Web component.
 As a matter of fact, just like JavaScript broke out of the browser with Node,
 many non-browser WebAssembly runtimes have already been created, such as Wasmer~\cite{wasmer}
 and Wasmtime~\cite{wasmtime}.
 
 Since Wasm is basically a performant sandboxed calculator,
-interop capabilities with files or the network
+interoperability capabilities with files or the network
 must be provided in the form of imports and exports of a Wasm module.
 In the browser, those are passed to the module at the initialization call from JavaScript.
 But outside of the browser, as in Wasmer for example,
@@ -353,8 +360,8 @@ needed to create Docker~\cite{hykes2019twitter}. ``That's how important it is'' 
 \label{sec:cpp_pitfalls}
 
 Not every C or C++ project can be ported to WebAssembly.
-There are three main factors of non portability,
-Web limitations, no low level architecture specific code and no system dynamic linking.
+There are three main factors of non portability:
+Web limitations, no low-level architecture specific code and no system dynamic linking.
 
 \subsection{Web Limitations}%
 \label{sub:web_limitations}
@@ -381,29 +388,33 @@ targetting the WebAssembly instruction set.
 A WebAssembly module must run in isolation inside the browser
 and thus needs access to every dependency inside the WebAssembly virtual machine.
 Therefore, Emscripten requires the LLVM bitcode of every dependency used.
-In traditional C and C++ environments however, we are used to depending on precompiled
+In traditional C and C++ environments however,
+it is common practice to depend on precompiled
 shared dynamic libraries (.so and .dll files) provided by the OS packages.
-To target WebAssembly, every dependency recursively, must be recompiled
-by Emscripten from source code, and statically linked to our code.
-To ease the process, Emscripten already includes most of the C and C++ the standard libraries,
-in addition to few common libraries for graphical applications such as the SDL.
+\replace{To target WebAssembly, every dependency recursively, must be recompiled
+by Emscripten from source code, and statically linked to our code.}
+{In contrast, Emscripten needs the source code of every direct
+and transitive dependency to produce the LLVM bitcode and then the Wasm code.}
+To ease the process, Emscripten already includes most of the C and C++ standard libraries,
+in addition to few common libraries for graphical applications such as
+Simple DirectMedia Layer (SDL), a cross-platform multimedia library.
 
 DVO~\cite{steinbrucker2011real} for example relies on OpenCV, Eigen, Boost and Sophus.
-I tried to build a minimalist OpenCV program with Emscripten
-and trouble began right from the start.
-Unfortunately, OpenCV has only been partially ported to Wasm~\cite{taheri2018opencv}.
+\remove{I tried to build a minimalist OpenCV program with Emscripten
+and trouble began right from the start.}
+Unfortunately, OpenCV has only been partially ported to WebAssembly~\cite{taheri2018opencv}.
 The porting team assumed that, in the context of the Web,
 media would be generated from Web APIs.
 Reading an image for example, is performed through the creation of an HTML canvas,
-loading and decoding the image data, then transfered to an OpenCV matrix.
+loading and decoding the image data, which is then transferred to an OpenCV matrix.
 Native OpenCV however would use the \verb|imdecode| function,
 itself depending on a dozen of other libraries such as libjpg, libtiff and libpng,
-and not all have been ported to WebAssembly.
+not all of which have been ported to WebAssembly.
 When trying to add the \verb|imdecode| function to the set of ported OpenCV code,
-we currently hit ``missing symbol'' errors due to similar dependency and linking issues.
+one currently hits ``missing symbol'' errors due to similar dependency and linking issues.
 In the case of DVO and other RGB-D visual odometry algorithms,
 there is a need to decode 16 bit PNGs for the depth images.
-Until they are supported in Web APIs it won't be possible with OpenCV.
+Until they are supported in Web APIs it will not be possible with OpenCV.
 
 This limitation does not mean that DVO can never be ported to WebAssembly,
 but that it would require a significant amount of work to either
@@ -426,10 +437,7 @@ Rust is a programming language focused on safety, speed and concurrency,
 that begun in 2006 as a side project by Mozilla employee Graydon Hoare.
 It has been evolving drastically until 2015, when version 1.0 was announced
 with stability goals in mind.
-Let's start by saying that in 2019, for the fourth year in a row,
-Rust has been elected the most loved programming language
-by respondents of the Stack Overflow's annual developer survey~\cite{rustlovedso}.
-There are thus many reasons why Rust is among the best contestants
+There are many reasons why Rust is among the best contestants
 for writing efficient and correct computer vision algorithms.
 We will focus on those related to our task,
 interactive computer vision on the web.
@@ -446,7 +454,7 @@ Wadler~\cite{wadler1991there}, Baker~\cite{baker1992lively},
 and Clark et al.~\cite{clarke1998ownership} among others.
 The main idea behind Rust ownership is that every value has
 a unique variable called its owner.
-When this variable goes out of scope, the associated value is realeased from memory.
+When this variable goes out of scope, the associated value is released from memory.
 Other variables can access this value during its lifetime
 through a borrowing mechanism, similar to references.
 At any time, there must be at most one mutable borrow,
@@ -488,3 +496,15 @@ The WebAssembly tooling ecosystem in Rust is composed of four main projects.
 	\item \verb|web-sys|~\cite{websys} provides raw bindings to Web APIs
 		for projects using wasm-bindgen.
 \end{itemize}
+
+\section{Conclusion}%
+\label{sec:cclwasm}
+
+\begin{itemize}
+	\item Pourquoi ne pas avoir repris DSO ou DVO en C++?
+	\item Faire le lien avec vors
+\end{itemize}
+
+Let's start by saying that in 2019, for the fourth year in a row,
+Rust has been elected the most loved programming language
+by respondents of the Stack Overflow's annual developer survey~\cite{rustlovedso}.
