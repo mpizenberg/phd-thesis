@@ -5,8 +5,8 @@ this document aims at answering the following question.
 How can we leverage user interactions and the Web platform to improve
 fields of computer vision such as image segmentation and visual odometry.
 
-On the one hand, image segmentation is the task of identifying regions in an image
-that are structurally or semantically different.
+On the one hand, image segmentation is the task of identifying precise regions
+in an image that are structurally or semantically different.
 For medical images, it could be localizing cancer cells while
 for urban images, differenciating people, vehicles and traffic signs.
 On the other hand, visual odometry consists in analyzing the video stream of a sensor
@@ -14,10 +14,11 @@ such as a camera to locate and track its trajectory with regard to its environme
 \alert{Put images illustrating image segmentation and visual odometry?}
 
 Thanks to improvements in imaging and algorithms,
-we are now able to automate tasks that would previously only happen in science fiction.
-Let's take self-driving cars as an example.
-Some companies~\cite{audia8} claim to have reached level 3 of SAE classification~\cite{sae-cars},
-meaning the vehicle provides autonomy at limited speed,
+we are now able to automate tasks that were considered science-fiction until recently.
+% Let's take self-driving cars as an example.
+For instance, some companies~\cite{audia8} claim to have reached level 3
+of SAE classification~\cite{sae-cars},
+meaning that self-driving vehicle provides autonomy at limited speed,
 conditionned by locality and weather among other restrictions.
 Nethertheless, we are still far from reaching level 5 of SAE classification
 which requires full autonomy in any driving condition.
@@ -25,13 +26,14 @@ One non-technical reason is that owners of autonomous vehicles would be reluctan
 to accept liability for potential accidents like the incident
 of March 18, 2018, that killed Elaine Herzberg~\cite{elaineherzberg}.
 I believe that such vehicles will only widespread when they are
-safe enought for manufacturers to bear responsability of accidents.
+safe enough for manufacturers to bear responsability of accidents.
 Those capabilities depend on many research fields
-including object detection and segmentation of urban images, and visual odometry.
+including object detection and segmentation of urban images,
+as well as visual odometry.
 The former is required to detect the road, understand traffic signs,
 avoid people, while the latter is needed to precisely record
 the vehicle trajectory, especially in situations where other sensors
-are not available, such as GPS in covered areas.
+are not available or sufficiently precise, such as GPS in covered areas.
 
 There exist many approaches for object detection and image segmentation.
 Today, the ones performing best rely on a field of research named machine learning.
@@ -48,20 +50,20 @@ Annotating an image may take different forms depending on the task,
 whether it is classification, object detection or segmentation.
 In general, it consists in people using image manipulation tools
 to draw rectangles, lines, polygons, and other geometric shapes
-to identify regions of an image and give it a label.
+to identify regions of an image and assign it a label.
 The Microsoft COCO dataset~\cite{lin2014microsoft} for example
 contains 2.5 million labeled instances accross 328k images annotated by humans,
 and required over 22 hours per thousand segmentations.
 For a French worker, 35h a week, 228 day a year, this represents approximately 35 years,
 almost a full career devoted to that single task.
-It is thus understandable that building such datasets must be done with care.
+It is thus understandable that building such datasets must be carefully thought of.
 
 In the first part of this document I will focus on image annotation and segmentation.
 Chapter~\ref{cha:the_image_annotation_problem} introduces in more details
 the image annotation problem and challenges it brings for large, crowdsourced datasets.
 In Chapter~\ref{cha:contribution_outlining}, we focus on the interactive segmentation task.
 Many interactions have been explored in the literature to help segmentation algorithms.
-Most common consist in designating contours~\cite{russell2008labelme},
+The most common consist in designating contours~\cite{russell2008labelme},
 bounding boxes around objects~\cite{rother_grabcut:_2004},
 or interior and exterior scribbles~\cite{mcguinness2010comparative}.
 Crowdsourcing such tasks however implies that non-expert users will have to perform
@@ -69,7 +71,7 @@ those interactions and the distinction between expert and non-expert users is ra
 Inspired by the work of Korinke et al.~\cite{korinke_intuitive_2015, korinke_exploring_2015},
 we present a user study showing the advantages of the outlining interaction
 for crowdsourcing annotations to a non-expert public.
-This work as been published in ACM Multimedia 2017~\cite{pizenberg2017outlining}.
+This work has been published at ACM Multimedia 2017~\cite{pizenberg2017outlining}.
 Another challenge of crowdsourcing is the distribution medium.
 While evaluating an interaction in a small user study does not require complex setup,
 distributing an annotation campaign to thousands of potential users might differ.
@@ -120,8 +122,8 @@ by putting a very high barrier to entry for new approaches to be able
 to reproduce already available results and compare with them.
 One should also note that frozing dependency versions is very risky for security concerns,
 especially in the context of open source contributions.
-Every contributor should be more careful that the entire Microsoft security team
-to avoid 70\% of the CVE related to memory safety in C++~\cite{msrc-safer}.
+\alert{Every contributor should be more careful that the entire Microsoft security team
+to avoid 70\% of the CVE related to memory safety in C++}~\cite{msrc-safer}.
 Research code will eventually reach critical software, such as autonomous vehicles.
 With great research comes great responsability!
 
