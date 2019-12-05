@@ -58,7 +58,7 @@ Today, the ones performing best rely on a field of research named machine learni
 It consists in building prediction models by aggregating knowledge
 from databases of pairs of inputs and outputs called learning datasets.
 There are subtleties within the field
-and not all algorithms perform equal but the general rule is that
+and not all algorithms perform equal but a general rule is that
 the bigger and most accurate the learning dataset is,
 the best will be the detection and segmentation results.
 I will thus not focus on machine learning algorithms
@@ -84,7 +84,7 @@ Many interactions have been explored in the literature to help segmentation algo
 The most common consist in designating contours~\cite{russell2008labelme},
 bounding boxes around objects~\cite{rother_grabcut:_2004},
 or interior and exterior scribbles~\cite{mcguinness2010comparative}.
-Crowdsourcing such tasks however implies that non-expert users will have to perform
+Crowdsourcing such tasks however implies that non-expert users have to perform
 those interactions and the distinction between expert and non-expert users is rarely touched.
 Inspired by the work of Korinke et al.~\cite{korinke_intuitive_2015, korinke_exploring_2015},
 we present a user study showing the advantages of the outlining interaction
@@ -138,17 +138,26 @@ and \verb|src/third_party/| directories.
 Although seemingly matters of engineering, those characteristics actually influence research
 by putting a very high barrier to entry for new approaches to be able
 to reproduce already available results and compare with them.
-One should also note that frozing dependency versions is very risky for security concerns,
-especially in the context of open source contributions.
-\alert{Every contributor should be more careful that the entire Microsoft security team
-to avoid 70\% of the CVE related to memory safety in C++}~\cite{msrc-safer}.
+One should also note that frozing dependency versions brings security concerns,
+since upstream security patches requires manual actions to be replicated.
+This is especially true in the context of open source,
+where we have less control over contributions.
+Even careful companies like Microsoft suffer from C++ memory safety bugs
+for 70\% of their critical security issues~\cite{msrc-safer}.
 Research code will eventually reach critical software, such as autonomous vehicles.
 With great research comes great responsability!
 
-\alert{Put more details on contributions here, like for the first part.}
-In the second part of this document, we will introduce a new visual odometry library,
-started from scratch in the Rust programming language.
-It features for example a new points selection algorithm for the camera tracking.
-We will also discuss how it has been ported to the Web thanks to a new standard called WebAssembly.
-Finally, we will show how we added interactions to the Web application
-to improve the tracking and 3D geometry of the visual odometry thanks to user input.
+In the second part of this document, we will focus on visual odometry.
+Chapter~\ref{cha:rgbd_vo} introduces the visual odometry problem
+and the fundamental geometry tools required to modelize it.
+Since we aspire to run those algorithm directly in the browser,
+Chapter~\ref{cha:performant_web_applications} reviews past and present technologies
+enabling high performance computations on the Web.
+In particular, we detail how to target a new standard called WebAssembly from C++ and Rust.
+In Chapter~\ref{cha:interactive_vo_on_the_web} we present our opensource visual odometry library,
+which features a new points selection algorithm for the camera tracking.
+We started it from scratch in the Rust programming language,
+which allowed us to easily port it to WebAssembly.
+Finally, we showcase an interactive visual odometry Web application,
+enabling improvements on the tracking and 3D geometry results thanks to user interactions.
+A paper describing the opensource library and the interactive application is intended to be published.
