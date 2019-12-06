@@ -32,9 +32,44 @@ We should also mention a parallel effort funded by the Canadian Institute for Ad
 
 While many subsequent work have further improved state-of-the-art classification results, we could synthesize the progress in classification by citing two papers. The first one from Krizhevsky et al. in 2012, nicknamed AlexNet, was probably key in the rise of Deep Learning that followed. AlexNet won the ILSVRC 2012 challenge by a large margin, starting the trend of using deep neural networks to solve computer vision problems. The second paper from He et al in 2015 and often called ResNet, introduced residual blocks (through skip connections) to ease the training of very deep neural networks (up to 1,000 layers!). The 152 layers version of ResNet won the ILSVRC 2015 challenge by reaching an error rate so low that it could be considered below the average human performance. The general trend in subsequent work has been to reach comparable (and even higher) performance than ResNet while reducing the number of parameters and operations to a minimum.  
 
+\vspace{0.5cm}
+
+\begin{center}
+	\begin{tabular}{|c|c|c|c|c|}
+		\hline
+		Dataset & \# classes & \# images & image size & annotation process \\
+		\hline
+		PASCAL VOC & 20 & 11k & any & Mechanical Turk \\
+		ImageNet & 21k & 14M & any & Mechanical Turk \\
+		CIFAR-10 & 10 & 60k & $32 \times 32$ & recruited students \\
+		CIFAR-100 & 100 & 60k & $32 \times 32$ & recruited students \\
+		SUN397 & 397 & 130k & any & LabelMe \\
+		ESP Game & any & 100k & any & the ESP Game \\
+		\hline
+	\end{tabular}
+\end{center}
+\vspace{0.5cm}
+
+Another important topic, that extends in a sense the image classification problem, is the one of \textbf{image captioning}. It consists in describing an image with a set of sentences. Image captioning is a much harder problem than classification, because captions require a higher level of image understanding as well as natural language capabilities to generate valid sentences. In terms of annotations, it is much longer than just assigning a class to an image as well. Another difficulty for data gathering is the quality check of the annotations, since two sentences from two different users may be completely different but still convey the same semantic meaning. 
+
+\vspace{0.5cm}
+
+\begin{center}
+	\begin{tabular}{|c|c|c|c|c|}
+		\hline
+		Dataset & \# captions & \# images & annotation process \\
+		\hline
+		MS COCO \cite{chen2015microsoft} & 1.5M & 330k & Mechanical Turk \\
+		\texttt{nocaps} \cite{agrawal2019nocaps} & 166k & 15k & Mechanical Turk \\
+		Conceptual Captions \cite{sharma-etal-2018-conceptual} & 3.3M & 3.3M & Web crawling \\
+		Flickr30k \cite{flickr30k} & 150k & 30k & Mechanical Turk \\
+		\hline
+	\end{tabular}
+\end{center}
+\vspace{0.5cm}
+
 Different types of problem that require annotation:
 \begin{itemize}
-	\item Image classification: scene (inside/outside : beach, mountain, forest, etc.) and main represented object (see MS COCO)
 	\item Image captioning: describe an image with a set of sentences
 	\item Object detection and localization : object class + bounding box
 	\item Object segmentation : object pixel mask
