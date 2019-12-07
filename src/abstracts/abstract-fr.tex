@@ -1,4 +1,53 @@
 \section*{Résumé}%
 \label{sec:resume}
 
-CF DeepL
+La vision par ordinateur est la science numérique visant à reproduire et à améliorer
+la capacité de la vision humaine à comprendre son environnement.
+Dans cette thèse, nous nous concentrons sur deux domaines de la vision par ordinateur,
+à savoir la segmentation d'image et l'odométrie visuelle.
+Nous montrons l'impact positif qu'apporte l'usage
+d'applications Web interactives pour chacun d'eux.
+
+La première partie de cette thèse porte sur l'annotation et la segmentation d'images.
+Nous définissons dans un premier temps le problème de l'annotation d'images
+et les défis que cela représente pour des grands ensembles de données.
+De nombreuses interactions ont été utilisées dans la littérature
+pour aider les algorithmes de segmentation.
+Les plus courantes consistent à désigner des contours,
+dessiner des boîtes englobantes,
+ou marquer des traits à l'intérieur et à l'extérieur des objets d'intérêt.
+Dans un contexte participatif, les tâches d'annotation sont déléguées
+à un public non-expert, avec des appareils électroniques variés.
+Pour cette raison, nous avons mené une étude utilisateurs montrant
+les avantages de l'entourage par rapport aux autres types d'interactions.
+L'annotation participative pose également un défi de distribution et de récolte du travail
+pour des campagnes avec des milliers d'utilisateurs.
+Nous décrivons comment le langage de programmation Elm nous a aidé à
+construire une application Web d'annotation d'images qui soit fiable.
+Un tour d'horizon des fonctionnalités et de son architecture est proposé,
+ainsi qu'un guide pour le dépoiement dans des services de microtaches comme Amazon Mechanical Turk.
+Cette application est entièrement libre et mise à disposition en ligne.
+
+Dans la seconde partie de cette thèse,
+nous présentons notre bibliothèque libre d'odométrie visuelle directe.
+Nous fournissons une évaluation comparative montrant que notre approche
+est aussi performante que les alternatives actuellement disponibles.
+La formulation du problème d'odométrie visuelle
+repose sur des outils géométriques et des techniques d'optimisation
+nécessitant une grosse puissance de calcul pour fonctionner à 25 images par seconde.
+Puisque nous aspirons à exécuter ces algorithmes sur le Web,
+nous passons en revue les technologies passées et courantes
+fournissant des bonnes performances directement au sein du navigateur Web.
+En particulier, nous détaillons comment cibler une nouvelle plateforme appelée WebAssembly
+à partir des langages de programmation C++ et Rust.
+Notre bibliothèque a été créée entièrement dans le langage de programmation Rust,
+ce qui en a facilité le portage vers WebAssembly.
+Cette propriété nous a permis de mettre en valeur
+une application Web d'odométrie visuelle proposant différents types d'interactions.
+Une barre de temps permet une navigation unidimensionnelle le long de la séquence vidéo.
+Des paires de points peuvent être sélectionnées sur deux images
+de la séquence pour réaligner les caméras et corriger les dérives.
+Des couleurs sont également utilisées pour identifier des parties sélectionnables
+du nuage de points 3D pour réinitialiser les positions de la caméra.
+La combinaison de ces interactions permet d'apporter des améliorations
+sur les résultats du suivi et de la reconstruction du nuage de points 3D.
