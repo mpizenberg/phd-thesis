@@ -52,7 +52,7 @@
 
 \chapter*{Conclusion}%
 \label{cha:conclusion}
-\addcontentsline{toc}{chapter}{Conclusion}
+\addcontentsline{toc}{chapter}{\nameref{cha:conclusion}}
 \input{src/mainmatter/conclusion.tex}
 
 % Back matter #######################################################
@@ -68,3 +68,9 @@
 	src/mainmatter/rgbd-vo/wasm.bib,
 	src/mainmatter/conclusion.bib
 }
+
+\clearpage
+\pagestyle{empty}
+\addcontentsline{toc}{chapter}{Abstracts}
+\input{src/abstracts/abstract-en.tex}
+\input{src/abstracts/abstract-fr.tex}
