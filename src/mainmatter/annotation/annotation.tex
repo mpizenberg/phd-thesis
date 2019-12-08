@@ -55,7 +55,7 @@ Another important topic, that extends in a sense the image classification proble
 \vspace{0.5cm}
 
 \begin{center}
-	\begin{tabular}{|c|c|c|c|c|}
+	\begin{tabular}{|c|c|c|c|}
 		\hline
 		Dataset & \# captions & \# images & annotation process \\
 		\hline
@@ -68,17 +68,52 @@ Another important topic, that extends in a sense the image classification proble
 \end{center}
 \vspace{0.5cm}
 
-Different types of problem that require annotation:
-\begin{itemize}
-	\item Image captioning: describe an image with a set of sentences
-	\item Object detection and localization : object class + bounding box
-	\item Object segmentation : object pixel mask
-	\item Image Segmentation. Semantic Segmentation / Image Parsing : classify all pixels in an image
-	\item Human Pose annotation, shapes segmentation and similarity, etc.
-\end{itemize}
+Important Papers : show and tell \cite{xu2015show} and Transformers-based \cite{sharma-etal-2018-conceptual}
+
+
+On top of naming or precisely describing the objects in an image, many applications require to locate the objects in an image. There are several levels of precision to which this probem can be achieved. The coarser grain application is often coined \textbf{object detection} and consists in drawing a bounding box around the objects.
+
+\vspace{0.5cm}
+
+\begin{center}
+	\begin{tabular}{|c|c|c|c|c|}
+		\hline
+		Dataset & \# classes & \# images & \# instances & annotation process \\
+		\hline
+		MS COCO \cite{chen2015microsoft} & 1.5M & 330k & Mechanical Turk \\
+		PASCAL VOC \cite{} & 166k & 15k & Mechanical Turk \\
+		ImageNet\cite{} & 3.3M & 3.3M & Web crawling \\
+		\hline
+	\end{tabular}
+\end{center}
+\vspace{0.5cm}
+
+Important papers : YOLO v1, v2 and v3, Mask-RCNN, Fast-RCNN and Faster-RCNN ; SSD
+
+The finer grain at which localization can be achieved is at pixel level: this is called \textbf{image segmentation}, or \textbf{image parsing}. This problem can be stated as classifying each pixel in an image.
+
+\vspace{0.5cm}
+
+\begin{center}
+	\begin{tabular}{|c|c|c|c|c|}
+		\hline
+		Dataset & \# classes & \# images & \# instances & annotation process \\
+		\hline
+		MS COCO \cite{chen2015microsoft} & 1.5M & 330k & Mechanical Turk \\
+		PASCAL VOC \cite{} & 166k & 15k & Mechanical Turk \\
+		SUN \cite{} & 3.3M & 3.3M & Web crawling \\
+		\hline
+	\end{tabular}
+\end{center}
+\vspace{0.5cm}
+
+Important papers : FCN, SegNet, UNet, DeepLab, and ... 
+
+
 All these annotations have been extended to video \\ \\
 
 What applications to these problems? \\ \\
+
 
 Different types of interactions for these annotations:
 
@@ -88,7 +123,7 @@ Different types of interactions for these annotations:
 	\item points, lines
 	\item bounding box
 	\item polygon
-	\item crcles, ellipses ??
+	\item circles, ellipses ??
 \end{itemize}
 
 Other important points:
@@ -97,7 +132,7 @@ Other important points:
 	\item implicit/explicit annotations
 	\item Quality check of the annotations? Self-correcion system? Detection of bad annotations?
 	\item expert or non-expert annotation ? Crowdsourcing ?
-	\item QoE of the interaction staken into account?
+	\item QoE of the interactions taken into account?
 \end{itemize}
 
 THE BIG TABLE: datasets and relevant papers, to be classified
