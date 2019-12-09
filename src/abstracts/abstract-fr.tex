@@ -1,7 +1,7 @@
 \section*{Résumé}%
 \label{sec:resume}
 
-La vision par ordinateur est la science numérique visant à reproduire et à améliorer
+La vision par ordinateur est un domaine de l'informatique visant à reproduire et à améliorer
 la capacité de la vision humaine à comprendre son environnement.
 Dans cette thèse, nous nous concentrons sur deux domaines de la vision par ordinateur,
 à savoir la segmentation d'image et l'odométrie visuelle.
@@ -13,19 +13,17 @@ Nous définissons dans un premier temps le problème de l'annotation d'images
 et les défis que cela représente pour des grands ensembles de données.
 De nombreuses interactions ont été utilisées dans la littérature
 pour aider les algorithmes de segmentation.
-Les plus courantes consistent à désigner des contours,
+Les plus courantes consistent à désigner explicitement des contours,
 dessiner des boîtes englobantes,
 ou marquer des traits à l'intérieur et à l'extérieur des objets d'intérêt.
-Dans un contexte participatif, les tâches d'annotation sont déléguées
-à un public non-expert, avec des appareils électroniques variés.
-Pour cette raison, nous avons mené une étude utilisateurs montrant
-les avantages de l'entourage par rapport aux autres types d'interactions.
-L'annotation participative pose également un défi de distribution et de récolte du travail
-pour des campagnes avec des milliers d'utilisateurs.
+Dans un contexte de crowdsourcing, les tâches d'annotation sont déléguées
+à un public non-expert.
+Pour cette raison, nous avons mené une étude utilisateur montrant
+les avantages d'une interaction que nous appelons entourage par rapport aux autres types d'interactions.
 Nous décrivons comment le langage de programmation Elm nous a aidé à
 construire une application Web d'annotation d'images qui soit fiable.
 Un tour d'horizon des fonctionnalités et de son architecture est proposé,
-ainsi qu'un guide pour le dépoiement dans des services de microtaches comme Amazon Mechanical Turk.
+ainsi qu'un guide pour le déploiement dans des services de microtâches comme Amazon Mechanical Turk.
 Cette application est entièrement libre et mise à disposition en ligne.
 
 Dans la seconde partie de cette thèse,
@@ -40,13 +38,13 @@ nous passons en revue les technologies passées et courantes
 fournissant des bonnes performances directement au sein du navigateur Web.
 En particulier, nous détaillons comment cibler une nouvelle plateforme appelée WebAssembly
 à partir des langages de programmation C++ et Rust.
-Notre bibliothèque a été créée entièrement dans le langage de programmation Rust,
+Notre bibliothèque a été implémentée entièrement dans le langage de programmation Rust,
 ce qui en a facilité le portage vers WebAssembly.
-Cette propriété nous a permis de mettre en valeur
+Cette propriété nous a permis de mettre en place
 une application Web d'odométrie visuelle proposant différents types d'interactions.
 Une barre de temps permet une navigation unidimensionnelle le long de la séquence vidéo.
 Des paires de points peuvent être sélectionnées sur deux images
-de la séquence pour réaligner les caméras et corriger les dérives.
+de la séquence pour réaligner les caméras et corriger l'éventuelle dérive.
 Des couleurs sont également utilisées pour identifier des parties sélectionnables
 du nuage de points 3D pour réinitialiser les positions de la caméra.
 La combinaison de ces interactions permet d'apporter des améliorations
