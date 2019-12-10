@@ -5,7 +5,6 @@
 
 \newpage%
 
-\alert{Maybe this abstract here makes no sense}
 Interactive segmentation consists in building a pixel-wise partition
 of an image, into foreground and background regions,
 with the help of user inputs.
@@ -15,7 +14,6 @@ and very few of these work focus on the usability of
 the scribbling interaction.
 In this chapter, we study a very intuitive interaction
 to non-expert users on touch devices, named outlining.
-\alert{Maybe I should introduce the GrabCut algorithm in the previous section?}
 We present an algorithm, built upon the existing GrabCut algorithm,
 which infers both foreground and background models from a single outline.
 We conducted a user study on 20 participants
@@ -64,8 +62,6 @@ the concept of interactive segmentation.
 This problem has often been approached with a task-driven point of view:
 what type of interaction may bring the necessary information
 to significantly help an algorithm achieve an acceptable segmentation?
-\alert{too many paragraphs?}
-
 The users providing the interactions are often supposed
 to have a fair understanding of what segmentation is.
 This assumption is problematic, especially when putting
@@ -116,14 +112,13 @@ easy-to-understand and usable interaction while providing
 a high amount of supervision to obtain a good segmentation.
 
 
-\alert{Maybe this needs some kind of re-organization for the thesis?}
-The rest of the chapter is organized as follows:
-we first review the related work in Section~\ref{sec:soa},
-we then explain our method to compute segmentation masks
+The rest of the chapter is organized as follows.
+We first review the related work on interactive segmentation in Section~\ref{sec:soa}.
+We then explain our method to compute segmentation masks
 from outlining interactions in Section~\ref{sec:method}.
 Finally in Section~\ref{sec:experiment},
-we present our experiments and the results we find
-showing our simple interaction lead to segmentation of good quality.
+we present our experiments and the results
+showing that our simple interaction lead to segmentations of good quality.
 
 
 \section{Related Work}%
@@ -468,7 +463,6 @@ However, we add a post-processing step to (i) extend this foreground
 information and (ii) filter as much false foreground points as possible.
 
 
-\alert{Should we introduce superpixels somewhere before this?}
 To do so, we compute a superpixels segmentation of the image,
 i.e.\ an oversegmentation that groups neighbouring pixels
 with similar colorimetric properties.
@@ -985,11 +979,11 @@ considering the interaction does not require any knowledge
 on image processing or computer vision from the user.
 
 
-Because of all these good properties (simplicity, swiftness, accuracy),
+Thanks to all these good properties (simplicity, swiftness, accuracy),
 outlining appears to be an interesting avenue to explore for the gathering
 of large datasets of image segmentation masks.
 Those datasets are crucial to bring automatic image segmentation algorithms,
 today mostly based on deep learning techniques, to a new level of effectiveness.
-It is our intention to pursue this goal as a future work
-and launch a crowdsourcing campaign to build such datasets.
-\alert{Perfect transition to the study of Marie and DL analysis of Matt LB.}
+It is our intention to pursue this goal so
+we will next introduce an annotation Web application
+built to easily start a crowdsourcing campaign on Amazon Mechanical Turk.
