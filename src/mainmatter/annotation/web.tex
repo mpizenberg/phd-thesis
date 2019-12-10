@@ -3,6 +3,15 @@
 
 \minitoc%
 
+The best way to crowdsource an annotation campaign is to provide a Web application.
+Since online annotators are paid for the task,
+we need the Web application to be as reliable as possible.
+Therefore, in this chapter we review evolutions of the Web
+since its creation in 1991, especially regarding the development
+of reliable frontend applications.
+In particular, we describe how the Elm programming language can help us
+build a bug-free annotation Web application.
+
 \section{What is the Web?}%
 \label{sec:web}
 
@@ -139,9 +148,11 @@ depicted in Listing~\ref{lst:add-js} as an example.
 	label={lst:add-js}
 ]{assets/code/add.js}
 
-\comment{}{If what follows is a quote, it should be made clearer in the presentation.}
+The following text until ``NOTE 2'' is a quote from
+the ECMAScript specification~\cite{ecmascript} detailing
+the complicated process evaluating an addition.
+
 \begin{displayquote}
-According to the ECMAScript specification~\cite{ecmascript},
 the addition operator either performs string concatenation or numeric addition.
 The production ``AdditiveExpression : AdditiveExpression + MultiplicativeExpression''
 is evaluated as follows:
@@ -370,21 +381,26 @@ as explained previously.
 In other object-oriented languages,
 \verb|this| (or \verb|self|) usually refers to the currently used instance of a class.
 According to the specification,
-\textit{The this keyword evaluates to the value of the ThisBinding of the current execution context.} \comment{}{j'avoue que je ne comprends pas trop la phrase en italique}
+\textit{The this keyword evaluates to the value of the ThisBinding of the current execution context}
+which is a little cryptic, so we will explain with a concrete example how \verb|this| behaves.
 JavaScript not being a typical object oriented language,
-\verb|this| can take many shapes, depending on the execution context.
+\verb|this| can take many shapes, depending on the current execution context.
 The execution contexts are in a stack in which new contexts are created and pushed
-whenever code not associated with the current context starts running.
-This typically happens in function calls.
+whenever code not associated with the current context starts running,
+which typically happens for function calls.
 Let's take Listing~\ref{lst:this-js} as an example
 to exhibit some oddities of the \verb|this| value.
+In that example, we first define different contexts for a log function
+whose purpose is to display the content of \verb|this.x|.
+Then, starting at line 17, we actually call those different functions
+to show how complex it is to predict what \verb|this| is going to refer to.
 
 \lstinputlisting[%
 	language=ES6,
 	caption={Value of \texttt{this} in JavaScript.},
 	label={lst:this-js}
 ]{assets/code/this.js}
-\comment{}{Honnetement, j'ai rien compris de cette partie :-(}
+
 By default, if \verb|this| is undefined, as in lines 17 and 18,
 it is binded to the global object.
 At line 11, we define \verb|x = 1| with no keyword,
@@ -532,21 +548,13 @@ on functional reactive programming in 2012,
 and Reason~\cite{reason} (also known as ReasonML) in 2016 by Jordan Walke (who is
 also the original designer of the React framework we will discuss later).
 
-One can notice that appart from Dart, which is heavily object-oriented,
+All this excitement around new languages targetting the Web by considering
+JavaScript as a compilation target confirms that people are actively
+trying to solve JavaScript shortcomings with completely different designs.
+One can also notice that appart from Dart, which is heavily object-oriented,
 those new languages follow the functional paradigm.
 It may be related to guaranties brought by functional programming
 that we will develop when exploring the Elm programming language.
-
-\comment{}{A: sur cette section je reste un peu sur ma faim ; tu listes des frameworks, tu dis qu'ils sont fonctionnels pour des raisons qu'on d\'etaillera plus tard mais cela apporte finalement assez peu d'info}
-\comment{}{M: Ok, alors c'est pas des frameworks, c'est des languages de programmation.
-Mais contrairement à la section précédente, ce ne sont pas des languages pré-existants
-qui ont été adaptés pour générer du JS,
-mais des language créés spécifiquement dans le but de faire du frontend web.
-Et contrairement aux sections suivantes, ce ne sont pas juste des superset ou légère
-variations de JS.
-Peut-être je devrais mettre en avant le fait que si tant de nouveaux languages
-sont créés from scratch spécifiquement dans le but de générer du JS,
-c'est parce qu'il y a un vrai besoin de diversité et d'approches différentes de JS pour le Web ?}
 
 \subsubsection{Gradually typed JavaScript}%
 \label{ssub:gradually_typed_javascript}
@@ -786,9 +794,8 @@ The key feature of Angular/AngularJS is declarative two-way data binding
 between the application state and the view,
 showcased in Listing~\ref{lst:angularjs} with the \verb|myCtrl| Angular controller.
 Another important design decision is that Angular is trying
-to provide a \comment{fully featured and coherant framework
-capable of handling most use cases you will ever encounter.}
-{trop vague, illustrer avec un example?}
+to provide a framework handling the totallity of frontend developer needs,
+while other frameworks target specific, restricted subjects.
 
 \lstinputlisting[%
   language=HTML,
@@ -819,14 +826,13 @@ The syntax used for the binding is showcased in Listing~\ref{lst:reactjs}.
 \subsubsection{Vue}%
 \label{ssub:vue}
 
-\comment{Vue describes itself as a progressive framework,
+Vue describes itself as a progressive framework,
 meaning it provides core features targetting a small scope,
 and other opt-in layers bringing more functionalities.
 In a sense, it shares advantages and inconvenients of both
 React and Angular, with a different balance point.
-It mostly uses one-way data bindings,
-but also provides inbuilt conveniences to simulate two-way data binding
-through attaching event listeners when using the \texttt{v-model} property.}{Pas clair}
+It provides inbuilt conveniences to simulate two-way data binding
+through automatically attaching event listeners when using the \texttt{v-model} property.
 An example is given in Listing~\ref{lst:vuejs}.
 
 \lstinputlisting[%
@@ -846,8 +852,10 @@ the biggest community.
 Angular provides a solution covering most aspects needed for a SPA,
 while React is focused on the user interface and will often be paired
 with libraries to manage state efficiently like Redux.
-\comment{Vue has a lower barrier to entry}{?}, like React,
-but also a coherent set of opt-in functionalities making it an all-in-one solution similar to Angular.
+Thanks to its opt-in layered architecture, Vue like React has a lower barrier to entry
+if we only use its core components.
+But if needed, it also offers a coherent set of functionalities
+making it an all-in-one solution similar to Angular.
 In order to produce small application code compatible with most browsers,
 one also should add transpilation, minification, and other preprocessing
 tasks readying the code and assets for serving them on the Web.
@@ -1176,3 +1184,18 @@ the only places where side effects can happen are
 ports to JavaScript (forbidden in packages), commands and HTML.
 Therefore, a dependency that doesn't expose functions with commands or HTML
 in their type signatures will not be able to steal bitcoins or launch nuclear warheads.
+
+\section*{Conclusion}%
+\label{sec:web-conclusion}
+
+In this chapter, we provided a guided tour of the Web evolutions
+since its beginnings in 1991.
+We identified the tendency to build interfaces in a declarative way
+to reduce the complexity of user interfaces.
+And in order to introduce our technology of choice, the Elm programming language,
+we discussed on the limitations of JavaScript when we value
+the reliability of our applications.
+The following chapter combines the knowledge of Web technologies presented here,
+and the annotation needs required for segmentation datasets.
+It presents an opensource image annotation Web application,
+developed with easy deployment to crowdsourcing platforms in mind.
