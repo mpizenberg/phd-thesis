@@ -2,6 +2,7 @@
 \label{cha:interactive_annotation_on_the_web}
 
 \minitoc%
+\clearpage
 
 \section{Introduction}
 
@@ -18,59 +19,74 @@ The rise and successes of deep learning lead to an increasing need for annotatio
 as training sets should be of a large size for these algorithms to be efficient.
 Yet, researchers still spend time and resources
 to create ad hoc tools to prepare those datasets.
-The application we present in this paper aims at providing a customizable tool
+The application we present in this chapter aims at providing a customizable tool
 to fulfill most image annotation needs.
 
 \begin{table*}[ht]
-
-\begin{tabular}{lclllcc}
+\centering
+\begin{tabular}{lcl}
 Application
 	& Year
-    & Tools
+    & Tools\\
+    \midrule
+LabelMe
+	& 2008
+	& bbox, polygon, iterative semi-automatic segmentation\\
+VIA
+	& 2016
+	& bbox, polygon, point, circle, ellipse\\
+Labelbox
+	& 2018
+	& bbox, polygon, point, line\\
+Dataturks
+	& 2018
+    & bbox, polygon\\
+Ours
+	& 2018
+	& bbox, polygon, point, stroke, outline\\
+\end{tabular}
+
+\caption{Most relevant image annotation Web applications (tools).}%
+\label{tab:web-apps-1}
+\end{table*}
+
+\begin{table*}[ht]
+\centering
+\begin{tabular}{lllll}
+Application
     & \makecell[l]{Configurable\\interface}
     & \makecell[l]{Tasks\\management}
     & Type
     & License \\
     \midrule
 LabelMe
-	& 2008
-    & bbox, polygon, iterative semi-automatic segmentation
     & no
     & Mturk integration
     & server
     & OSS \\
 VIA
-	& 2016
-    & bbox, polygon, point, circle, ellipse
     & no
     & no
     & client
     & OSS \\
 Labelbox
-	& 2018
-    & bbox, polygon, point, line
     & yes
     & yes
     & server
     & private \\
 Dataturks
-	& 2018
-    & bbox, polygon
     & no
     & yes
     & server
     & private \\
 Ours
-	& 2018
-    & bbox, polygon, point, stroke, outline
     & yes
     & Mturk integration
     & client
     & OSS \\
 \end{tabular}
-
-\caption{Most relevant image annotation Web applications.}%
-\label{tab:web-apps}
+\caption{Most relevant image annotation Web applications (application type).}%
+\label{tab:web-apps-2}
 \end{table*}
 
 % \begin{figure*}[ht]
@@ -97,7 +113,7 @@ Ours
 %     \caption{Interfaces of main other Web annotation applications}\label{fig:interfaces}
 % \end{figure*}
 
-Many image annotation applications already exist (Table~\ref{tab:web-apps}).
+Many image annotation applications already exist (Table~\ref{tab:web-apps-1}).
 LabelMe~\cite{russell2008labelme}, one of the most popular,
 provides an interface for drawing bounding boxes and polygons
 around objects in an image.
@@ -234,18 +250,12 @@ The application code is organized in two parts:
 	It is statically serving the content of \verb|server/dist/|
     with compression.
 \item A complete Elm client application, located in the \verb|client/| directory.
-    Elm~\cite{czaplicki2013asynchronous,czaplicki2017elm}
-    isn't a JavaScript framework, it is a functional programming language,
-	compiling to JavaScript to run in browsers.
-	Its syntax is inherited from Haskell but far simpler.
-	The compiled application is 150 KB gzipped,
+    It follows the Elm architecture presented in the previous chapter.
+    We present the model, messages, and specific views of this application in this section.
+    The compiled application weighs 150 kB gzipped,
     which is great for low bandwidth connections.
 \end{itemize}
 
-
-\subsection{The application architecture}
-
-\comment{}{Moved to chapter on reliable web apps.}
 
 \subsection{The model states}
 
@@ -354,7 +364,7 @@ under the \verb|Annotation| namespace:
 		supporting zooming and translations, relative to an image frame.
 \end{itemize}
 If you are interested in creating another rendering target than SVG,
-like canvas, WebGL, \ldots, it would require alternative modules
+like canvas or WebGL, it would require alternative modules
 to \verb|Annotation.Svg| and \verb|Annotation.Viewer|.
 The rest of the code can stay unchanged.
 
@@ -371,18 +381,11 @@ ready to use with Amazon Mechanical Turk (Mturk).
 
 Mturk comes in two sides. A ``requester'' is defining a set of tasks
 while a ``worker'' is performing them.
-Workers are payed by requesters through Mturk service.
+Workers are payed by requesters through the Mturk service.
 The concept of a ``HIT'' (Human Intelligence Task) characterizes the task unit.
 In our case, one HIT means one image to be annotated.
 We describe in details how to setup a campaign with our template
 in the application documentation.
-
-
-\section{Conclusion}
-
-In this paper we have introduced our web-based image annotation application.
-More information is available in the online documentation~\cite{annotationappdoc}.
-The application is still actively developed, we welcome all feedback and contributions.
 
 
 \section{Acknowledgments}
@@ -399,3 +402,14 @@ We would like to thank:
 		@luke for the amazing tool Ellie,
 		@norpan, @jessta, @loganmac, @antew, for your invaluable help on slack.
 \end{itemize}
+
+
+\section{Conclusion}
+
+In this chapter we have introduced our Web-based image annotation application.
+More information is available in the online documentation~\cite{annotationappdoc}.
+Evolutions of this application are still developed in alternative branches to keep
+the master branch in a stable state. We welcome all forms of feedback and contribution.
+
+\alert{Mention usage of this application in a crowdsourcing campaign
+to annotate pascal voc. Add transition to next part of the thesis.}
