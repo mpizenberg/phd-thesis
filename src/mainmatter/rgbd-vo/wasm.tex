@@ -1,10 +1,24 @@
 \chapter{Performant Web Applications}%
 \label{cha:performant_web_applications}
 
-\comment{}{Intro de chapitre avec contexte et annonce de plan.}
-
 \minitoc%
 \clearpage
+
+In the previous chapter we layed the foundation necessary
+to modelize the visual odometry problem.
+Similarly than in the first part of this thesis,
+we want to explore an interactive scenario through the Web.
+Visual odometry however, is slightly different from annotation
+in terms of computational needs.
+Before reviewing our library and interactive application,
+we thus make a small detour toward an analysis of
+performance capabilities in client Web applications.
+Our tour starts with a brief history of ``native'' code in browsers,
+followed by a detailed presentation of WebAssembly,
+a recent technology about to change how we share and distribute
+high performance code.
+Finally we provide an explanation for the choice of the Rust
+programming language for the development of our visual odometry library.
 
 \section{A Brief History of Native Code in the Client}%
 \label{sec:native_client}
@@ -55,7 +69,7 @@ The security model of Java applets also had some weaknesses.
 Applets would have to get approved by a browser user and then gain rights
 equivalent to a native desktop application.
 Unfortunately, just like terms of service,
-\comment{most people just click ``agree'' and move on.}{justify}
+most people click ``agree'' and move on~\cite{obar2018biggest}.
 In addition, the Java Runtime Environment (JRE) has had hundreds of security
 vulnerabilities~\cite{JreCve} in its lifetime.
 This represents a serious security threat for browser vendors.
@@ -132,7 +146,6 @@ But it would need a sandboxed and secure new set of APIs
 to make sure that those applications would not execute any malicious code via the browser.
 That is how the Native Client (NaCl) project,
 and its associated API called Pepper Plugin API (PPAPI) started in 2009.
-\comment{}{I'll make the assumption that you got the NaCl and pepper joke \ldots}
 
 The two main downsides of this approach are the security and portability concerns.
 Even though NaCl code would run into a sandboxed environment,
@@ -351,7 +364,7 @@ especially when needing to use different versions of languages and tools
 for deep learning tasks in separate projects.
 Carl Boettiger even wrote a paper entitled
 ``An introduction to Docker for reproducible research''~\cite{boettiger2015introduction}
-discribing the different aspects of computer environments preventing work reproducibility.
+describing the different aspects of computer environments preventing work reproducibility.
 Yet, Solomon Hykes, the original author of Docker shared on twitter that
 if WebAssembly and its system interface existed in 2008, he wouldn't have
 needed to create Docker~\cite{hykes2019twitter}. ``That's how important it is'' as he said.
@@ -391,17 +404,13 @@ Therefore, Emscripten requires the LLVM bitcode of every dependency used.
 In traditional C and C++ environments however,
 it is common practice to depend on precompiled
 shared dynamic libraries (.so and .dll files) provided by the OS packages.
-\replace{To target WebAssembly, every dependency recursively, must be recompiled
-by Emscripten from source code, and statically linked to our code.}
-{In contrast, Emscripten needs the source code of every direct
-and transitive dependency to produce the LLVM bitcode and then the Wasm code.}
+In contrast, Emscripten needs the source code of every direct
+and transitive dependency to produce the LLVM bitcode and then the Wasm code.
 To ease the process, Emscripten already includes most of the C and C++ standard libraries,
 in addition to few common libraries for graphical applications such as
 Simple DirectMedia Layer (SDL), a cross-platform multimedia library.
 
 DVO~\cite{steinbrucker2011real} for example relies on OpenCV, Eigen, Boost and Sophus.
-\remove{I tried to build a minimalist OpenCV program with Emscripten
-and trouble began right from the start.}
 Unfortunately, OpenCV has only been partially ported to WebAssembly~\cite{taheri2018opencv}.
 The porting team assumed that, in the context of the Web,
 media would be generated from Web APIs.
@@ -427,7 +436,7 @@ The same could happen for parts of Eigen, Boost and Sophus used in DVO.
 
 WebAssembly and the Rust programming language are both technologies
 that emerged from research projects at Mozilla.
-Their core communities are thus sharing similar values
+Though independent, their core communities are thus sharing similar values
 and working in synergy within the Rust and WebAssembly Working Group.
 
 \subsection{The Rust Programming Language}%
@@ -469,7 +478,7 @@ and an online package registry ``crates.io''.
 Cargo manages compilation, modules and external dependencies
 with the use of a very simple project description file named \verb|Cargo.toml|
 placed at the root of a Rust project.
-As a consequence, compiling a pure Rust project will always work
+As a consequence, compiling a pure Rust project will almost always work
 with a single command \verb|cargo build|.
 It downloads dependencies, locally build and statically link them.
 
@@ -485,7 +494,7 @@ that when a program compiles it is correct.
 The WebAssembly tooling ecosystem in Rust is composed of four main projects.
 \begin{itemize}
 	\item \verb|wasm-bindgen|~\cite{wasmbindgen} facilitates interoperability
-		between Rust and JavaScript with the help of simple annotations.
+		between Rust and JavaScript with the help of simple code annotations.
 	\item \verb|wasm-pack|~\cite{wasmpack} complements \verb|wasm-bindgen|
 		by generating all the JavaScript glue code currently necessary to load and call
 		a WebAssembly module from JavaScript as if it was an ES6 module.
@@ -497,14 +506,33 @@ The WebAssembly tooling ecosystem in Rust is composed of four main projects.
 		for projects using wasm-bindgen.
 \end{itemize}
 
+Out of those four projects, \verb|wasm-pack| is considered a tool,
+installed alongside the rest of Rust tooling.
+The three others simply are libraries, added to a project dependencies
+with one line each in the description file \verb|Cargo.toml|.
+
 \section{Conclusion}%
 \label{sec:cclwasm}
 
-\begin{itemize}
-	\item Pourquoi ne pas avoir repris DSO ou DVO en C++?
-	\item Faire le lien avec vors
-\end{itemize}
-
-Let's start by saying that in 2019, for the fourth year in a row,
+The Web is in constant evolution.
+It is also the most ubiquitous platform, accessible from multitude of devices
+such as laptops, tablets, phones and embedded devices.
+Being able to run performant code in Web browsers has thus being a competitive advantage,
+and many technologies have tried to corner that market.
+As we explained however, all those past technologies such as Java applets,
+Flash or Google NaCl have had huge drawbacks, preventing them from standard adoption.
+Recently with the arrival of WebAssembly, we finally arrived at a point where high performance
+code can run in Web browsers with very few inconvenients.
+For this reason, the four major browser vendors, Google, Mozilla, Microsoft and Apple
+all rallied together to define this new standard and implement a minimum viable product in few months.
+We also explained why the current best two languages to target WebAssembly are C++ and Rust.
+While C++ has the original WebAssembly code generator available, called Emscripten,
+the language struggles with building dependencies and legacy non portable code.
+Combined with the intrinsic difficulties of that language to safely build on
+other contributions, we decided to avoid C++ and start fresh with the Rust programming language.
+We can also note that in 2019, for the fourth year in a row,
 Rust has been elected the most loved programming language
 by respondents of the Stack Overflow's annual developer survey~\cite{rustlovedso}.
+So we hope that this choice will also bring more joy to potential future contributors.
+In the next chapter, we will thus introduce our visual odometry library in Rust
+and present its port to an interactive Web application.
