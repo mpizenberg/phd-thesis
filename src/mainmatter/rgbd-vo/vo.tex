@@ -808,34 +808,6 @@ where we have introduced the \textbf{adjoint map on $se(3)$}:
 \end{table}
 
 
-
-\subsection{Euler Angles}%
-\label{sub:euler_angles}
-
-
-\textbf{Euler angles} are local coordinates i.e.\ a parameterization
-that is only correct for a portion of $SO(3)$.\\
-
-Given a basis $(\widehat{w}_1, \widehat{w}_2, \widehat{w}_3)$
-of the Lie algebra $so(3)$, we can define a mapping from $\R^3$
-to the Lie group $SO(3)$ by:
-\[ \alpha :\ (\alpha_1, \alpha_2, \alpha_3) \quad \mapsto \quad
-	\exp( \alpha_1 \widehat{w}_1 + \alpha_2 \widehat{w}_2 + \alpha_3 \widehat{w}_3)
-\]
-The coordinates $(\alpha_1, \alpha_2, \alpha_3)$ are called
-\textbf{Lie-Cartan coordinates of the first kind} relative to the above basis.
-The \textbf{Lie-Cartan coordinates of the second kind} are defined as:
-\[ \beta : (\beta_1, \beta_2, \beta_3) \mapsto
-	\exp(\beta_1 \widehat{w}_1) \exp(\beta_2 \widehat{w}_2) \exp(\beta_3 \widehat{w}_3)
-\]
-\textbf{Euler angles} are just a specific case of Lie-Cartan coordinates
-of the second kind with a basis representing rotation around
-the z-, y-, x-axis
-\[ w_1 = \tr{(0,0,1)}, w_2 = \tr{(0,1,0)}, w_3 = \tr{(1,0,0)} \]
-
-
-
-
 \section{Visual Odometry}%
 \label{sec:visual-odometry}
 
