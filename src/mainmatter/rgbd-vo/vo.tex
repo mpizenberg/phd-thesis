@@ -215,27 +215,6 @@ where $\tr{\pi_1}, \tr{\pi_2}, \tr{\pi_3} \in \R^4$
 are the three rows of the projection matrix $\Pi$.
 
 
-\subsection{Spherical Projection}%
-\label{sub:spherical_projection}
-
-
-The perspective pinhole camera introduced previously considers a planar
-imaging suface. Instead, one can consider a spherical projection surface
-given by the unit sphere
-\[\mathbb{S}^2 \equiv \Set{x \in \R^3}{\|x\| = 1}\]
-The \textbf{spherical projection} of a 3D point $\bm{X}$ is given by:
-\[\pi_s : \R^3 \rightarrow \mathbb{S}^2;\quad
-	\bm{X} \mapsto \bm{x} = \frac{\bm{X}}{\bm{|X|}}\]
-
-The pixel coordinates $\bm{x}'$ as a function of the world coordinates
-$\bm{X}_0$ are:
-\[
-	\lambda\ \bm{x}' = K\ \Pi_0\ g\ \bm{X}_0
-\]
-except that the scalar factor is now $\lambda = |\bm{X}|
-= \sqrt{ X^2 + Y^2 + Z^2 }$.
-
-
 \subsection{Radial Distortion}%
 \label{sub:radial_distortion}
 
