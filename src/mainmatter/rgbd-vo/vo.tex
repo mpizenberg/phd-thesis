@@ -81,6 +81,28 @@ that seems locally correct but have inconsitent depth or gravity, like
 in Figures~[\ref{fig:hogarth_satire},\ref{fig:escher_belvedere}].
 
 
+\subsection{Projective Geometry}%
+\label{sub:projective_geometry}
+
+
+In order to formally write transformations by linear operations,
+we made extensive use of \textbf{homogeneous coordinates} to represent
+3D point as a 4D-vector $(X,Y,Z,1)$ with the last coordinate fixed to 1.
+This normalization is not always necessary. One can represent 3D points
+by a general 4D vector:
+\[
+	\bm{X} = (XW, YW, ZW, W)\ \in\ \R^4
+\]
+In general, an \textbf{n-dimensional projective space} $\mathbb{P}^n$
+is the set of all one-dimensional subspaces (i.e.\ lines through the origin)
+of the vector space $\R^{n+1}$.
+A point $p \in \mathbb{P}^n$ can then be assigned homogeneous coordinates
+$\bm{X} = \tr{(x_1, \ldots, x_{n+1})}$, among which at least one $x$ is nonzero.
+For any nonzero $\lambda \in \R$, the coordinates
+$\bm{Y} = \tr{(\lambda x_1, \ldots, \lambda x_{n+1})}$
+represent the same point $p$.
+
+
 \subsection{Mathematical Representation}%
 \label{sub:mathematical_representation}
 
@@ -246,28 +268,6 @@ Parameters are computed from
 \textbf{distortions of straight lines} (see Figure~\ref{fig:radial_distortion})
 or \textbf{simultaneously with the 3D reconstruction}
 (Zhang '96, Stein '97, Fitzgibbon '01).
-
-
-\subsection{Projective Geometry}%
-\label{sub:projective_geometry}
-
-
-In order to formally write transformations by linear operations,
-we made extensive use of \textbf{homogeneous coordinates} to represent
-3D point as a 4D-vector $(X,Y,Z,1)$ with the last coordinate fixed to 1.
-This normalization is not always necessary. One can represent 3D points
-by a general 4D vector:
-\[
-	\bm{X} = (XW, YW, ZW, W)\ \in\ \R^4
-\]
-In general, an \textbf{n-dimensional projective space} $\mathbb{P}^n$
-is the set of all one-dimensional subspaces (i.e.\ lines through the origin)
-of the vector space $\R^{n+1}$.
-A point $p \in \mathbb{P}^n$ can then be assigned homogeneous coordinates
-$\bm{X} = \tr{(x_1, \ldots, x_{n+1})}$, among which at least one $x$ is nonzero.
-For any nonzero $\lambda \in \R$, the coordinates
-$\bm{Y} = \tr{(\lambda x_1, \ldots, \lambda x_{n+1})}$
-represent the same point $p$.
 
 \section{Representing a Moving Scene (copied)}%
 \label{sec:moving-scene}
