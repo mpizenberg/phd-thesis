@@ -4,81 +4,63 @@
 \minitoc%
 \clearpage
 
-\section{Image Formation (copied)}%
+\section{Modeling Image Capture in a Camera}%
 \label{sec:image-formation}
-
-\alert{Copied from cremers mvg, need reformulation}
 
 \subsection{Historic Remarks}%
 \label{sub:historic_remarks}
 
-
-\begin{figure}[h]
-\centering
-\includegraphics[width=0.5\columnwidth]{assets/img/lippi_feast_herod.jpg}
-\caption{Filippo Lippi, ``The Feast of Herod: Salome's Dance.''
-Fresco, Cappella Maggiore, Duomo, Prato, Italy, c.1460--1464.}%
-\label{fig:lippi_feast_herod}
-\end{figure}
-
-\begin{figure}[h]
-\centering
-\includegraphics[width=0.5\columnwidth]{assets/img/raphael_school_athens.jpg}
-\caption{Raphael, The School of Athens (1509)}%
-\label{fig:raphael_school_athens}
-\end{figure}
-
-\begin{figure}[h]
-\centering
-\includegraphics[width=0.5\columnwidth]{assets/img/durer_perspective_machine.jpg}
-\caption{D\"urer's perspective machine (1525)}%
-\label{fig:durer_perspective_machine}
-\end{figure}
-
 The study of the image formation process has a long history.
-The earliest formulations of the geometry of image formation
-can be traced back to \textbf{Euclid} (4th century B.C.).
-Examples of a partially correct \textbf{perspective projection}
-are visible in the \textbf{frescoes and mosaics of Pompeii} (1 B.C.).\\
-
-These skills seem to have been lost with the fall of the Roman empire.
-Correct perspective projection emerged again around 1000 years later
-in early \textbf{Renaissance art}.\\
-
-Among the proponents of perspective projection are the
-Renaissance artists \textbf{Brunelleschi, Donatello} and \textbf{Alberti}.
-The first treatise on the projection process, \textbf{``Della Pittura''},
-was published by \textbf{Leon Battista Alberti}.\\
-
-Appart from the geometry of image formation, the study of the
-interaction of light with matter was propagated by artists like
-\textbf{Leonardo da Vinci} in the 1500s and by Renaissance painters
-such as \textbf{Caravaggio} and \textbf{Raphael}.\\
-
-In Figure~\ref{fig:lippi_feast_herod} and Figure~\ref{fig:raphael_school_athens}
+Traces of geometric formulations of image formation are present
+in Euclid work (4th century B.C.) and partially correct perspective
+projections are visible in frescoes of Pompeii (1 B.C.).
+These skills also re-emerged in Renaissance art with artists such as
+Brunelleschi, Donatello and Alberti.
+A treatise on the projection process, \textit{``Della Pittura''},
+was published by Leon Battista Alberti in 1435 and influenced
+many Renaissance artists such as Leonardo da Vinci and Raphael.
+In Figure~\ref{fig:raphael_school_athens}
 the perspective emerges from the vanishing point.
-
-\begin{figure}[h]
-\centering
-\includegraphics[width=0.5\columnwidth]{assets/img/hogarth_satire.jpg}
-\caption{Satire by Hogarth 1753}%
-\label{fig:hogarth_satire}
-\end{figure}
-
-\begin{figure}[h]
-\centering
-\includegraphics[width=0.5\columnwidth]{assets/img/escher_belvedere.jpg}
-\caption{Escher, Belvedere 1958}%
-\label{fig:escher_belvedere}
-\end{figure}
-
 D\"urer devised a machine to get a perspectively correct image,
-see Figure~\ref{fig:durer_perspective_machine}.
-It is a manual reproduction of what a camera does today.\\
+represented in Figure~\ref{fig:durer_perspective_machine}.
+It is a manual reproduction of what a camera does today.
 
-Many artists played with those perspective rules to create images
-that seems locally correct but have inconsitent depth or gravity, like
-in Figures~[\ref{fig:hogarth_satire},\ref{fig:escher_belvedere}].
+\begin{figure}[h]
+\centering
+\begin{subfigure}[b]{0.48\textwidth}
+	\includegraphics[width=\textwidth]{assets/img/raphael_school_athens.jpg}
+	\caption{Raphael, The School of Athens (1509)}%
+	\label{fig:raphael_school_athens}
+\end{subfigure}
+\hfill
+\begin{subfigure}[b]{0.46\textwidth}
+	\includegraphics[width=\textwidth]{assets/img/durer_perspective_machine.jpg}
+	\caption{D\"urer's perspective machine (1525)}%
+	\label{fig:durer_perspective_machine}
+\end{subfigure}
+\caption{Usage of perspective projection in Renaissance art.}%
+\end{figure}
+
+Many artists also played with those perspective rules to create images
+that seem locally correct but have inconsitent global depth or gravity
+such as Hogarth (Figure~\ref{fig:hogarth_satire})
+and Escher (Figure~\ref{fig:escher_belvedere}).
+
+\begin{figure}[h]
+\centering
+\begin{subfigure}[b]{0.52\textwidth}
+	\includegraphics[width=\textwidth]{assets/img/hogarth_satire.jpg}
+	\caption{Satire by Hogarth 1753}%
+	\label{fig:hogarth_satire}
+\end{subfigure}
+\hfill
+\begin{subfigure}[b]{0.42\textwidth}
+	\includegraphics[width=\textwidth]{assets/img/escher_belvedere.jpg}
+	\caption{Escher, Belvedere 1958}%
+	\label{fig:escher_belvedere}
+\end{subfigure}
+\caption{Conscious circumvention of perspective projection in art.}%
+\end{figure}
 
 
 \subsection{Projective Geometry}%
@@ -86,14 +68,14 @@ in Figures~[\ref{fig:hogarth_satire},\ref{fig:escher_belvedere}].
 
 
 In order to formally write transformations by linear operations,
-we made extensive use of \textbf{homogeneous coordinates} to represent
+we make extensive use of homogeneous coordinates to represent
 3D point as a 4D-vector $(X,Y,Z,1)$ with the last coordinate fixed to 1.
 This normalization is not always necessary. One can represent 3D points
-by a general 4D vector:
+by a general 4D vector
 \[
-	\bm{X} = (XW, YW, ZW, W)\ \in\ \R^4
+	\bm{X} = (XW, YW, ZW, W)\ \in\ \R^4.
 \]
-In general, an \textbf{n-dimensional projective space} $\mathbb{P}^n$
+In general, an n-dimensional projective space $\mathbb{P}^n$
 is the set of all one-dimensional subspaces (i.e.\ lines through the origin)
 of the vector space $\R^{n+1}$.
 A point $p \in \mathbb{P}^n$ can then be assigned homogeneous coordinates
@@ -103,34 +85,28 @@ $\bm{Y} = \tr{(\lambda x_1, \ldots, \lambda x_{n+1})}$
 represent the same point $p$.
 
 
-\subsection{Mathematical Representation}%
-\label{sub:mathematical_representation}
+\subsection{Pinhole Camera Model}%
+\label{sub:pinhole}
 
 
 \begin{figure}[h]
 \centering
-\includegraphics[width=0.5\columnwidth]{assets/img/pinhole_camera.png}
-\caption{Pinhole camera model}%
+\includegraphics[width=\textwidth]{assets/img/pinhole.pdf}
+\caption{Pinhole camera model.}%
 \label{fig:pinhole_camera}
 \end{figure}
 
-\begin{figure}[h]
-\centering
-\includegraphics[width=0.5\columnwidth]{assets/img/convex_lense.png}
-\caption{Thin convex lense model}%
-\label{fig:convex_lense}
-\end{figure}
-
-Perspective projection emerges by the so-called pinhole camera model
-(see Figure~\ref{fig:pinhole_camera}).
-It's main issue is that the hole has to be very small,
-perventing light to enter the capture device.
-In order to augment the the amount of light we use lenses\\
-
-As visible in (Figure~\ref{fig:convex_lense}), the image is upside down
-in the image plan. In order to avoid dealing with minus signs in the
-equations, we pretend that the image plan is virtually on the same
-side than the object. The perspective thansformation $\pi$ is given by
+Perspective projection emerges from a simplified model
+of a real camera called the pinhole camera,
+represented in Figure~\ref{fig:pinhole_camera}.
+The main issue of such a camera,
+is that the hole has to be very small to get a sharp image,
+preventing light to enter the capture device.
+In order to augment the amount of light, today we use lenses,
+but just as with a pinhole camera, the image is upside down in the image plan.
+In order to avoid dealing with minus signs in the equations,
+we pretend that the image plan is virtually on the same side than the object.
+The perspective transformation $\pi$ modeling this projection is given by
 \[ \pi : \R^3 \rightarrow \R^2; \quad
 	\bm{X} \mapsto x = \pi(\bm{X}) =
 	\begin{pmatrix}
@@ -138,12 +114,11 @@ side than the object. The perspective thansformation $\pi$ is given by
 		f \frac{Y}{Z} \\
 	\end{pmatrix}
 \]
-Where $f$ is the focal length, $X,Y,Z$ are the object coordinates
+where $f$ is the focal length, $X,Y,Z$ are the object coordinates
 in the 3D world, the $z$ axis being the camera axis.
-The one challenge we have to overcome, is that this transformation is non linear.\\
-
-In order to do so, we will use \textbf{homogeneous coordinates},
-which is basically similar to multiplying everything by $Z$:
+The one challenge we have to overcome, is that this transformation is non linear.
+In order to do so, we use homogeneous coordinates,
+which is basically similar to multiplying everything by $Z$,
 \[ Z \bm{x} = Z \begin{pmatrix} x \\ y \\ 1 \end{pmatrix} =
 	\begin{pmatrix}
 		f & 0 & 0 & 0 \\
@@ -155,35 +130,26 @@ which is basically similar to multiplying everything by $Z$:
 	\end{pmatrix}
 	= K_f \Pi_0 \bm{X}
 \]
-Where we have introduced the two matrices
-\[K_f \equiv
+where we have introduced the two matrices
+\[K_f =
 	\begin{pmatrix}
 		f & 0 & 0 \\
 		0 & f & 0 \\
 		0 & 0 & 1 \\
 	\end{pmatrix}
 	\quad \text{and} \quad
-	\Pi_0 \equiv
+	\Pi_0 =
 	\begin{pmatrix}
 		1 & 0 & 0 & 0 \\
 		0 & 1 & 0 & 0 \\
 		0 & 0 & 1 & 0 \\
-	\end{pmatrix}
+	\end{pmatrix}.
 \]
-The matrix $\Pi_0$ is referred to as the \textbf{standard projection matrix}.
-A first order approximation can consider that all object points
-are approximately at the same distance $\lambda > 0$. Thus we obtain:
-\[\lambda \bm{x} = K_f \Pi_0 \bm{X}\]
-
-We know that due to the \textbf{rigid motion of the camera},
-the point $\bm{x}$ \textbf{in camera coordinates} is given as a function
-of the point in \textbf{wold coordinates} $\bm{X}_0$ by:
-\[\bm{X} = R \bm{X}_0 + T\]
-or in homogeneous coordinates:
-\[\bm{X} = g \bm{X}_0 = \begin{pmatrix}R & T \\ 0 & 1\end{pmatrix} \bm{X}_0\]
-In total, the transformation from world coordinates to image coordinates
-is therefore given by:
-\[\boxed{\lambda\ \bm{x} = K_f\ \Pi_0\ g\ \bm{X}_0}\]
+The matrix $\Pi_0$ is referred to as the standard projection matrix.
+We often note the distance to the camera along its axis with $\lambda > 0$ so
+\[
+	\lambda \bm{x} = K_f \Pi_0 \bm{X}.
+\]
 
 
 \subsection{Intrinsic Parameters}%
@@ -191,55 +157,62 @@ is therefore given by:
 
 
 If the camera is not centered at the optical center, we have an additional
-translation $o_x, o_y$. The point were the optical axis intersects
-the image plan is called the \textbf{principal point}.\\
-
+translation $o_x, o_y$. The point where the optical axis intersects
+the image plan is called the principal point.
 If pixels do not have unit scale, we need to introduce
 additional scaling factors $s_x$ and $s_y$.
-If pixels are not rectangular, we also have a \textbf{skew factor} $s_{\theta}$.\\
-
-The transformation from initial real world coordinates to final pixel coordinates
-follows the following steps:
-World (3D, $\bm{X}_0$) $\mapsto$ Camera (3D, $\bm{X}$)
-$\mapsto$ Image (2D, $\bm{x}$) $\mapsto$ Pixel (2D, $\bm{x'}$).\\
-
-The pixel coordinates $\bm{x'} = (x',y',1)$ are given by:
-\[\lambda \begin{pmatrix}x' \\ y' \\ 1\end{pmatrix} =
-	K_s\ K_f\ \Pi_0
-	\begin{pmatrix}X \\ Y \\ Z \\ 1\end{pmatrix}
+And if pixels are not rectangular, we also have a skew factor $s_{\theta}$.
+The transformation from coordinates in the frame of the camera
+to final pixel coordinates has thus the following steps
+\[
+	\text{Camera}\ (\text{3D}, \bm{X})
+		\quad \overset{K_f\Pi_0}{\longrightarrow} \quad
+			\text{Image}\ (\text{2D}, \bm{x})
+		\quad \overset{K_s}{\longrightarrow} \quad
+			\text{Pixel}\ (\text{2D}, \bm{x'}).
 \]
-where
+where the pixel coordinates $\bm{x'} = (x',y',1)$ are given by
+$\lambda\ \bm{x'} = K_s\ K_f\ \Pi_0\ \bm{X}$
+with
 \[K_s = \begin{pmatrix}
 		s_x & s_{\theta} & o_x \\
 		0 & s_y & o_y \\
 		0 & 0 & 1 \\
 	\end{pmatrix}
-	\quad K_f =
+	\quad \text{and} \quad K_f =
 	\begin{pmatrix}
 		f & 0 & 0 \\
 		0 & f & 0 \\
 		0 & 0 & 1 \\
-	\end{pmatrix}
+	\end{pmatrix}.
 \]
-We call $K = K_s\ K_f$ the \textbf{intrinsic parameter matrix}.\\
-
-Therefore, as a function of world coordinates, we have:
-\[\boxed{ \lambda\ \bm{x'} = \Pi\ \bm{X}_0
-	= K\ \Pi_0\ g\ \bm{X}_0}
-\]
-The $3 \times 4$ matrix $\Pi$ is called a \textbf{general projection matrix}.
-If we get rid of $\lambda$ we obtain the following coordinates:
-\[ x' = \frac{\tr{\pi_1} \bm{X}_0}{\tr{\pi_3} \bm{X}_0},\quad
- y' = \frac{\tr{\pi_2} \bm{X}_0}{\tr{\pi_3} \bm{X}_0},\quad
- z' = 1
-\]
-where $\tr{\pi_1}, \tr{\pi_2}, \tr{\pi_3} \in \R^4$
-are the three rows of the projection matrix $\Pi$.
+We call $K = K_s\ K_f$ the intrinsic matrix since it holds
+parameters intrinsic to the camera system, independent from
+the outside 3D world.
 
 
 \subsection{Radial Distortion}%
 \label{sub:radial_distortion}
 
+The intrinsic parameters in the matrix $K$ model linear distortions
+in the transformation to pixel coordinates.
+In practice however, one can also encounter significant
+distortions along the radial axis.
+This is particularly visible in a wide field of view
+or if one uses cheaper cameras such as webcams.
+A simple effective model for such distortions is to use
+\[
+	x = x_d ( 1 + a_1 r^2 + a_2 r^4 ),\quad
+	y = y_d ( 1 + a_1 r^2 + a_2 r^4 )
+\]
+where $\bm{x} = (x_d, y_d)$ is the distorted point,
+and $r^2 = \|\bm{x}\|^2$ is its squared distance to the principal point.
+Usually, $a_1$ and $a_2$ are estimated through a calibration step computed from
+distortions of straight lines as in Figure~\ref{fig:radial_distortion}
+or simultaneously with a 3D reconstruction~\cite{stein1997lens, fitzgibbon2001simultaneous}.
+Other more sophisticated models exist~\cite{devernay1995automatic}
+but we will not enter in details here since we will consider
+that images are rectified as if fitting the pinhole model.
 
 \begin{figure}[h]
 \centering
@@ -248,77 +221,72 @@ are the three rows of the projection matrix $\Pi$.
 \label{fig:radial_distortion}
 \end{figure}
 
-The intrinsic parameters in the matrix $K$ model linear distortions
-in the transformation to pixel coordinates.
-In practice however, one can also encounter significant
-\textbf{distortions along the radial axis}~[\ref{fig:radial_distortion}],
-in particular in a wide field of view is used or if one uses cheaper cameras
-such as webcams.
-A simple effective model for such distortions is:
-\[
-	x = x_d ( 1 + a_1 r^2 + a_2 r^4 ),
-	y = y_d ( 1 + a_1 r^2 + a_2 r^4 )
-\]
-where $\bm{x} \equiv (x_d, y_d)$ is the distorted point,
-$r^2 = \|\bm{x}\|^2$.
-Usually, $a_1$ and $a_2$ are estimated through a calibration step.\\
 
-Other more sophisticated models exist (Devernay and Faugeras '95).
-Parameters are computed from
-\textbf{distortions of straight lines} (see Figure~\ref{fig:radial_distortion})
-or \textbf{simultaneously with the 3D reconstruction}
-(Zhang '96, Stein '97, Fitzgibbon '01).
-
-\section{Representing a Moving Scene (copied)}%
+\section{Modeling Camera Movements}%
 \label{sec:moving-scene}
 
-\alert{Copied from cremers mvg, need reformulation}
+\subsection{Origins of 3D Reconstruction}%
+\label{sub:origins_of_3d_reconstruction}
 
-\subsection{The Origins of 3D Reconstruction}%
-\label{sub:the_origins_of_3d_reconstruction}
-
-The goal to reconstruct the three-dimensional structure of the world from
-a set of two-dimensional views has long history in computer vision.
-It is a classical \textbf{ill-posed problem}, because the reconstruction
-consistent with a given set of observations/images is typically not unique.
-Therefore, one will need to impose additional assumptions.
-Mathematically, the study of geometric relations between a 3D scene
-and the observed 2D projections is based on two types of transformations, namely:
+Aiming to reconstruct a three-dimensional structure of the world from
+a set of two-dimensional views has a long history in computer vision.
+It is generally considered and ill-posed problem since reconstructions
+consistent with a given set of observations/images are typically not unique.
+Therefore, one need to impose additional assumptions.
+The study of geometric relations between a 3D scene
+and observed 2D projections is based on two types of mathematic transformations, namely
 \begin{itemize}
-	\item \textbf{Euclidean motion} or \textbf{rigid body motion}
+	\item Perspective projection, and projective geometry to account for the image formation
+		process we presented in the previous section.
+	\item Euclidean motion or ``rigid body motion''
 		representing the motion of the camera from one frame to the next.
-	\item \textbf{Perspective projection} to account for the image formation
-		process (see pinhole camera, etc).
 \end{itemize}
 
-The notion of perspective projection has its roots among the ancient Greeks
-(Euclid of Alexandria, \roughly{} 400 B.C.) and the Renaissance period
-(Brunelleschi \& Alberti, 1435).
-The study of perspective projection lead to the field of
-\textbf{projective geometry} (Girard Desargues 1648, Gaspard Monge 18th cent).\\
-
-The first work on the problem of multiple view geometry was that of
-\textbf{Erwin Kruppa (1913)} who showed that two views of five points
+The first known work on the problem of multiple view geometry was that of
+Erwin Kruppa (1913) who showed that two views of five points
 are sufficient to determine both the relative tansformation
-(\textbf{motion}) between the two views and the 3D location (\textbf{structure})
-of the points up to finitely many solutions.\\
-
+(``motion'') between the two views and the 3D location (``structure'')
+of the points up to a finite number of solutions.
 A linear algorithm to recover structure and motion from two views based
-on the epipolar constraint was proposed by \textbf{Longuet-Higgins}
-in \textbf{1981}. An entire series of works along these lines was summarized
-in several text books (Faugeras 1993, Kanatani 1993,
-Maybank 1993, Weng et al. 1993).\\
-
-Extensions to three views were developed by Spetsakis and Aloimonos '87, '90
-, and by Shashua '94 and Hartley '95.
-Factorization techniques for multiple views and orthogonal projection were
-developed by Tomasi and Kanade 1992.\\
-
-Depending on communities, the joint estimation of camera motion and 3D location is called
-\textbf{structure and motion} or \textbf{visual SLAM}.
+on the epipolar constraint was proposed by Longuet-Higgins in 1981~\cite{longuet1981computer}.
+Several summarizing text books and papers were also written
+on the subject~\cite{faugeras1993three, weng1993optimal}.
+Extensions to three views~\cite{spetsakis1987closed, shashua1994trilinearity}
+and factorization techniques for multiple views and orthogonal projection were
+also developed~\cite{tomasi1992shape}.
+Depending on communities and context,
+the joint estimation of camera motion and surrounding 3D environment is called
+structure and motion or visual SLAM (simultaneous location and mapping).
+Visual SLAM techniques slightly differ from structure and motion in the sense
+that they are specialized for timely coherent sequences of images such as videos.
+Structure and motion however usually refers to situations where no such assumption
+is done regarding the set of images.
 
 \subsection{3D Space \& Rigid Body Motion}%
 \label{sub:3d_space_rigid_body_motion}
+
+% We know that due to the \textbf{rigid motion of the camera},
+% the point $\bm{x}$ \textbf{in camera coordinates} is given as a function
+% of the point in \textbf{wold coordinates} $\bm{X}_0$ by:
+% \[\bm{X} = R \bm{X}_0 + T\]
+% or in homogeneous coordinates:
+% \[\bm{X} = g \bm{X}_0 = \begin{pmatrix}R & T \\ 0 & 1\end{pmatrix} \bm{X}_0\]
+% In total, the transformation from world coordinates to image coordinates
+% is therefore given by:
+% \[\boxed{\lambda\ \bm{x} = K_f\ \Pi_0\ g\ \bm{X}_0}\]
+
+% Therefore, as a function of world coordinates, we have:
+% \[\boxed{ \lambda\ \bm{x'} = \Pi\ \bm{X}_0
+% 	= K\ \Pi_0\ g\ \bm{X}_0}
+% \]
+% The $3 \times 4$ matrix $\Pi$ is called a \textbf{general projection matrix}.
+% If we get rid of $\lambda$ we obtain the following coordinates:
+% \[ x' = \frac{\tr{\pi_1} \bm{X}_0}{\tr{\pi_3} \bm{X}_0},\quad
+%  y' = \frac{\tr{\pi_2} \bm{X}_0}{\tr{\pi_3} \bm{X}_0},\quad
+%  z' = 1
+% \]
+% where $\tr{\pi_1}, \tr{\pi_2}, \tr{\pi_3} \in \R^4$
+% are the three rows of the projection matrix $\Pi$.
 
 
 \subsubsection{Three-dimensional Euclidean Space}%
