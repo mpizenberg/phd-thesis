@@ -20,8 +20,33 @@
 \newcommand{\pinv}[1]{#1^{\dagger}} % Pseudo Inverse
 \newcommand{\tr}[1]{#1^{\top}} % Transpose
 \newcommand{\Set}[2]{\{\, #1 \mid{} #2 \,\}}
+\newcommand{\twist}[1]{\widehat{#1}}
+\newcommand{\cross}[1]{{#1}_{\times}}
+\newcommand{\sooo}{\mathfrak{so}(3)} % Lie algebra so3
+\newcommand{\seee}{\mathfrak{se}(3)} % Lie algebra se3
 
 % MATRICES #################################################
+
+% Easier vector creation
+\newcommand{\vecxy}[2]{%
+	\begin{pmatrix}
+		{#1} \\ {#2}
+	\end{pmatrix}
+}
+
+% Easier vector creation
+\newcommand{\vecxyz}[3]{%
+	\begin{pmatrix}
+		{#1} \\ {#2} \\ {#3}
+	\end{pmatrix}
+}
+
+% Easier vector creation
+\newcommand{\hvecxyz}[3]{%
+	\begin{pmatrix}
+		{#1} & {#2} & {#3}
+	\end{pmatrix}
+}
 
 % Inline small matrix
 \newcommand{\inmatrix}[1]{%

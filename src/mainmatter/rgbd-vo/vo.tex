@@ -265,6 +265,87 @@ is done regarding the set of images.
 \subsection{3D Space \& Rigid Body Motion}%
 \label{sub:3d_space_rigid_body_motion}
 
+\subsubsection{Three-dimensional Euclidean Space}%
+\label{ssub:three_dimensional_euclidean_space}
+
+The three-dimensional Euclidean space $\E^3$ consists of all points
+$p \in \E^3$ characterized by coordinates
+$\bm{X} = \tr{(X_1, X_2, X_3)} \in \R^3$
+such that $\E^3$ can be identified with $\R^3$.
+By identifying $\E^3$ and $\R^3$,
+one can endow $\E^3$ with a scalar product, a norm and a metric.
+This allows to compute distances, curve lengths, areas and volumes.
+
+
+\subsubsection{Cross Product \& Skew-symmetric Matrices}%
+\label{ssub:cross_product_and_skew_symmetric_matrices}
+
+The cross product of two vectors $\bm{u}$ and $\bm{v}$ in $\R^3$ is a vector orthogonal to both.
+\[
+	\times : \R^3 \times \R^3 \rightarrow \R^3,\quad \bm{u} \times \bm{v} =
+	\begin{pmatrix}
+		u_2v_3 - u_3v_2 \\
+		u_3v_1 - u_1v_3 \\
+		u_1v_2 - u_2v_1
+	\end{pmatrix} \in \R^3.
+\]
+Since $\bm{u} \times \bm{v} = -\bm{v} \times \bm{u}$, the cross product
+also introduces an orientation.
+Fixing $\bm{u}$ induces a linear mapping $\bm{v} \mapsto \bm{u} \times \bm{v}$
+wich can be represented by the skew-symmetric matrix
+\[
+	\twist{u} = \cross{u} = \hatmat{u_1}{u_2}{u_3} \in \RR{3}{3}.
+\]
+such that $\bm{u} \times \bm{v} = \twist{u} \ \bm{v}$.
+In turn, every skew symmetric matrix $M \in \RR{3}{3}$
+verifying $M = -\tr{M}$
+can be identified by a vector $\bm{u} \in \R^3$.
+The operator $\wedge$ (``hat'') defines an isomorphism between $\R^3$
+and the space $\sooo$ of the $3 \times 3$ skew-symmetric matrices.
+Since a similar property is true for twists that we introduce later,
+we will use the notation $\cross{u}$ instead of $\twist{u}$,
+which is a visual reminder that it acts like a cross product.
+Its inverse is denoted by (``vee'') $\vee : \sooo \rightarrow \R^3$.
+
+
+\subsubsection{Rigid-Body Motion}%
+\label{ssub:rigid_body_motion}
+
+A rigid-body motion (or rigid-body transformation)
+is a family of maps preserving the norm and cross product of any two vectors.
+\begin{gather*}
+	g : \R^3 \rightarrow \R^3,\quad \bm{u} \mapsto g(\bm{u}), \\
+	\forall \bm{u} \in \R^3, \quad \|g(\bm{u})\| = \|\bm{u}\|, \\
+	\forall\ \bm{u},\bm{v} \in \R^3, \quad g(\bm{u}) \times g(\bm{v}) =
+		g(\bm{u} \times \bm{v})
+\end{gather*}
+Since norm and scalar product are related by the polarization identity
+one can also state that a rigid-body motion is a map which
+preserves inner product and cross product.
+As a consequence, rigid-body motions also preserve the triple product,
+and therefore volumes.
+\[
+	\forall\ \bm{u}, \bm{v}, \bm{w} \in \R^3, \quad
+	\inner{g(\bm{u})}{g(\bm{v}) \times g(\bm{w})} =
+		\inner{\bm{u}}{\bm{v} \times \bm{w}}.
+\]
+
+Let $\bm{e_1}, \bm{e_2}, \bm{e_3} \in \R^3$
+be the orthonormal oriented vectors of our initial frame.
+We note the transformed vectors $\bm{r_i} = g(\bm{e_i})$
+and $R$ the matrix $R = (\bm{r_1}, \bm{r_2}, \bm{r_3})$
+The first constraint (preservation of scalar product) implies that
+$R$ is an orthogonal matrix $\tr{R}R=R\tr{R}=I$.
+The second property (preservation of cross product) implies that $\det(R) = +1$.
+In other words, $R$ is an element of the group
+$SO(3) = \Set{R \in \RR{3}{3}} {\tr{R}R=I,\ \det(R) = +1}$.
+The motion of the origin can be represented by a translation $\bm{T} \in R^3$.
+Thus the rigid-body motion $g$ can be written as
+\[
+	g(\bm{x}) = R\bm{x} + \bm{T},\quad R \in SO(3),\quad \bm{T} \in \R^3.
+\]
+
+
 % We know that due to the \textbf{rigid motion of the camera},
 % the point $\bm{x}$ \textbf{in camera coordinates} is given as a function
 % of the point in \textbf{wold coordinates} $\bm{X}_0$ by:
@@ -287,101 +368,6 @@ is done regarding the set of images.
 % \]
 % where $\tr{\pi_1}, \tr{\pi_2}, \tr{\pi_3} \in \R^4$
 % are the three rows of the projection matrix $\Pi$.
-
-
-\subsubsection{Three-dimensional Euclidean Space}%
-\label{ssub:three_dimensional_euclidean_space}
-
-The three-dimensional Euclidean space $\E^3$ consists of all points
-$p \in \E^3$ characterized by coordinates
-	\[\bm{X} \equiv \tr{(X_1, X_2, X_3)} \in \R^3\]
-
-such that $\E^3$ can be identified with $\R^3$.
-That means we talk about points ($\E^3$) and coordinates ($\R^3$)
-as if they were the same thing. Given two points $\bm{X}$ and $\bm{Y}$,
-one can define a \textbf{bound vector} as
-	\[v = \bm{Y} - \bm{X} \in \R^3\]
-
-Considering this vector independent of its base point $\bm{Y}$ makes
-it a \textbf{free vector}. The set of free vectors $v \in \R^3$
-forms a linear vector space. By identifying $\E^3$ and $\R^3$,
-one can endow $\E^3$ with a scalar product, a norm and a metric.
-This allows to compute \textbf{distances, curve length, areas or volumes.}
-\[\text{For a curve } \gamma : [0,1] \rightarrow \R^3,\quad
-	l(\gamma) \equiv \int_{0}^1 | \dot{\gamma}(s) | d\!s\]
-
-
-\subsubsection{Cross Product \& Skew-symmetric Matrices}%
-\label{ssub:cross_product_and_skew_symmetric_matrices}
-
-On $\R^3$ one can define a cross product
-\[\times : \R^3 \times \R^3 \rightarrow \R^3,\quad u \times v =
-	\begin{pmatrix}
-		u_2v_3 - u_3v_2 \\
-		u_3v_1 - u_1v_3 \\
-		u_1v_2 - u_2v_1
-	\end{pmatrix} \in \R^3\]
-
-which is a vector \textbf{orthogonal to $u$ and $v$}.
-Since $u \times v = -v \times u$, the cross product introduces an \textbf{orientation}.
-Fixing $u$ induces a linear mapping $v \mapsto u \times v$ wich
-can be represented by the \textbf{skew-symmetric matrix}
-\[\widehat{u} = \hatmat{u_1}{u_2}{u_3} \in \RR{3}{3}\]
-
-In turn, every skew symmetric matrix $M = -\tr{M} \in \RR{3}{3}$
-can be identified with a vector $u \in \R^3$.
-The operator $\widehat{}$ defines an \textbf{isomorphism} between $\R^3$
-and the space $so(3)$ of the $3 \times 3$ skew-symmetric matrices.
-Its inverse is denoted by $\vee : so(3) \rightarrow \R^3$.
-
-
-\subsubsection{Rigid-body Motion}%
-\label{ssub:rigid_body_motion}
-
-A \textbf{rigid-body motion} (or rigid-body transformation)
-is a family of maps
-\[g_t : \R^3 \rightarrow \R^3;\quad \bm{X} \mapsto g_t(\bm{X}),\quad t \in [0,T]\]
-
-which preserve the norm and cross product of any two vectors:
-\begin{itemize}
-	\setlength\itemsep{-0.2em}
-	\item $\forall v \in \R^3, \quad |g_t(v)| = |v|$
-	\item $\forall u,v \in \R^3, \quad g_t(u) \times g_t(v) = g_t(u \times v)$
-\end{itemize}
-
-Since norm and scalar product are related by the \textbf{polarization identity}
-\[\inner{u}{v} = \frac{1}{4}(|u+v|^2 - |u-v|^2)\]
-
-one can also state that a rigid-body motion is a map which
-preserves inner product and cross product.
-As a consequence, rigid-body motions also preserves the \textbf{triple product}
-\[\forall u, v, w \in \R^3, \quad
-	\inner{g_t(u)}{g_t(v) \times g_t(w)} = \inner{u}{v \times w}\]
-
-which means that they are volume-preserving.
-
-
-\subsubsection{Representation of Rigid-body Motion}%
-\label{ssub:representation_of_rigid_body_motion}
-
-Let $g_t$ our rigid body motion. We are going to detail what this transformation
-is doing to the initial frame of orthonormal oriented vecors
-$e_1, e_2, e_3 \in \R^3$.
-We note the transformed vectors $r_i = g_t(e_i)$.
-Scalar and cross product of these vectors are preserved:
-	\[\tr{r_i}r_j = \tr{g_t(e_i)}g_t(e_j) = \tr{e_i}e_j = \delta_{ij}, \quad
-	r_1 \times r_2 = r_3\]
-
-The first constraint amounts to the statement that the matrix
-$R = (r_1, r_2, r_3)$ is an orthogonal matrix: $\bm{\tr{R}R=R\tr{R}=I}$,
-whereas the second property implies that $\bm{\det(R) = +1}$.
-In other words: $R$ is an element of the group
-$SO(3) = \{R \in \RR{3}{3}\ |\ \tr{R}R=I,\ \det(R) = +1\}$.\\
-
-The motion of the origin can be represented by a \textbf{translation}
-$\bm{T \in R^3}$. Thus the rigid body motion $g_t$ can be written as:
-	\[g_t(x) = Rx + T\]
-
 
 \subsubsection{Exponential Coordinates of Rotation}%
 \label{ssub:exponential_coordinates_of_rotation}
