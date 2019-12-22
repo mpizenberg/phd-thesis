@@ -462,120 +462,62 @@ The above solution is not unique since for example,
 increasing the angle by multiples of $2\pi$ will give the same rotation.
 
 
-\subsection{The Lie Group $SE(3)$}%
-\label{sub:the_lie_group_se_3_}
+\subsection{The Lie Group $SE(3)$ and Lie Algebra $\seee$}%
+\label{sub:the_lie_group_se_3}
 
 
-\subsubsection{Representation of Rigid-body Motions $SE(3)$}%
-\label{ssub:representation_of_rigid_body_motions_se_3_}
-
-We have seen that the space of rigid-body motions is given by
-the group of special Euclidean transformations:
-	\[SE(3) \equiv \{ g = (R,T)\ |\ R \in SO(3),\ T \in \R^3\}\]
-In homogeneous coordinates:
-	\[\boxed{SE(3) \equiv
-	\left\{ g = \begin{pmatrix}
-		R & T \\
-		0 & 1 \\
-	\end{pmatrix}\ \middle|\ R \in SO(3), T \in \R^3\right\}}\]
-
-In the context of rigid motions, one can see the difference
-between points in $\E^3$ (which can be rotated and translated)
-and vectors in $\R^3$ (which can only be rotated).
-
-
-\subsubsection{The Lie Algebra of Twists}%
+\subsubsection{The Lie Algebra of Twists $\seee$}%
 \label{ssub:the_lie_algebra_of_twists}
 
-Given a continuous family of rigid-body transformations:
-	\[g : \R \rightarrow SE(3);\quad g(t) = \begin{pmatrix}
-		R(t) & T(t) \\
-		0 & 1 \\
-	\end{pmatrix}\ \in \RR{4}{4}\]
+Just as with $SO(3)$ one can show that $SE(3)$
+has a tangent space, of which the elements are called twists.
+This tangent space is called the Lie algebra of twists, noted $\seee$.
+\[
+	\seee = \Set%
+	{\twist{\xi} = \begin{pmatrix}\cross{w} & \bm{v} \\0 & 0 \end{pmatrix} \in \RR{4}{4}}
+	{\cross{w} \in \sooo,\ \bm{v} \in \R^3}
+\]
 
-we consider:
-	\[\dot{g}(t)\inv{g}(t) = \begin{pmatrix}
-		\dot{R}\tr{R} & \dot{T} - \dot{R}\tr{R}T \\
-		0 & 0 \\
-	\end{pmatrix}\ \in \RR{4}{4}\]
-
-As in the case of $SO(3)$ the $\dot{R}\tr{R}$ corresponds
-to some skew-symmetric matrix $\widehat{w} \in so(3)$. Defining a vector
-$v(t) = \dot{T}(t) - \widehat{w}(t)T(t)$, we have:
-	\[\dot{g}(t)\inv{g}(t) = \begin{pmatrix}
-		\widehat{w}(t) & v(t) \\
-		0 & 0 \\
-	\end{pmatrix} \equiv \widehat{\xi}(t) \in \RR{4}{4}\]
-
-Multiplying with $g(t)$ from the right, we obtain:
-	\[\dot{g} = \dot{g}\inv{g}g = \widehat{\xi}g\]
-
-The $4 \times 4$ matrix $\widehat{\xi}$ can be viewed as a tangent vector
-along the curve $g(t)$. $\widehat{\xi}$ is called a \textbf{twist}.
-As in the case of $so(3)$, the set of all twists forms the tangent
-space which is the \textbf{Lie algebra}
-	\[\boxed{se(3) \equiv \left\{ \widehat{\xi} = \begin{pmatrix}
-		\widehat{w} & v \\
-		0 & 0 \\
-	\end{pmatrix}\ \middle|
-	\ \widehat{w} \in so(3),\ v \in \R^3 \right\}}\]
-
-	to the \textbf{Lie group $\bm{SE(3)}$}.\\
-
-As before, we can define operators $\wedge$ and $\vee$ to convert between
-a \textbf{twist $\bm{\widehat{\xi} \in se(3)}$} and its
-\textbf{twist coordinates} $\bm{ \xi \in \R^6 }$:
-	\[\widehat{\xi} \equiv \begin{pmatrix} v \\ w \end{pmatrix}^{\wedge}
-		\equiv \begin{pmatrix}
-			\widehat{w} & v \\
-			0 & 0
-		\end{pmatrix}\ \in \RR{4}{4}\]
-
-	\[\begin{pmatrix}
-		\widehat{w} & v \\
-		0 & 0
-	\end{pmatrix}^{\vee} \equiv \begin{pmatrix} v \\ w \end{pmatrix} \in \R^6\]
+As with skew-symmetric matrices,
+we can define operators ``hat'' $\wedge$ and ``vee'' $\vee$ to convert between
+a twist $\twist{\xi} \in \seee$ and its coordinates $\bm{\xi} \in \R^6$.
+The twist coordinates $\bm{\xi} = \inmatrix{\bm{v} \\ \bm{w}}$
+are formed by stacking
+the ``linear velocity'' $\bm{v} \in \R^3$ (related to translation)
+and the ``angular velocity'' $\bm{w} \in \R^3$ (related to rotation).
 
 
-\subsubsection{Exponential Coordinates for $SE(3)$}%
-\label{ssub:exponential_coordinates_for_se_3_}
+\subsubsection{Logarithm and Exponential Coordinates for $SE(3)$}%
+\label{ssub:exponential_coordinates_for_se_3}
 
-The twist coordinates $\xi = \inmatrix{v\\w}$ are formed by stacking the
-\textbf{linear velocity} $\bm{v \in \R^3}$ (related to translation) and the
-\textbf{angular velocity} $\bm{w \in \R^3}$ (related to rotation).\\
-
-The differential equation system:
-	\[\left\{ \begin{aligned}
-		\dot{g}(t) &= \widehat{\xi}g(t), \quad \widehat{\xi} = \text{const}\\
-		g(0) &= I
-	\end{aligned} \right.\]
-
-has the solution $g(t) = e^{\widehat{\xi}t} = \sum_{n=0}^{\infty}
-\frac{{(\widehat{\xi}t)}^n}{n!}$.
-For $w = 0$, we have $e^{\widehat{\xi}} = \inmatrix{I & v \\ 0 & 1}$,
-while for $w \ne 0$ one can show:
-	\[\boxed{e^{\widehat{\xi}} = \begin{pmatrix}
-		e^{\widehat{w}} & \frac{(I-e^{\widehat{w}})\widehat{w}v + w\tr{w}v}{|w|^2}\\
+Twist coordinates are also sometimes called ``exponential coordinates''.
+This is due to the fact that, similarly than with $SO(3)$,
+we can define an exponential map between $\seee$ and $SE(3)$.
+For a twist $\twist{\xi} = \inmatrix{\cross{w} & \bm{v} \\0 & 0} \in \seee$
+its associated rigid body motion is
+\[
+	e^{\twist{\xi}} =
+	\begin{pmatrix}
+		e^{\cross{w}}
+			& \frac{(I-e^{\cross{w}}) \cross{w} \bm{v}
+				+ \bm{w}\tr{\bm{w}}\bm{v}}{\|\bm{w}\|^2}
+			\\
 		0 & 1
-	\end{pmatrix}}\]
-
-The above shows that the exponential map defines a transformation from
-the Lie algebra $se(3)$ to the Lie group $SE(3)$:
-	\[ \exp:\ se(3) \rightarrow SE(3);\ \widehat{\xi} \mapsto e^{\widehat{\xi}}\]
-
-The elements $\widehat{\xi} \in se(3)$ are called the
-\textbf{exponential coordinates} for $SE(3)$.\\
-
-\underline{Conversely:} \textbf{For every $\bm{g \in SE(3)}$ there exist
-twist coordinates $\bm{\xi = (v,w) \in \R^6}$ such that $\bm{g=\exp(\widehat{\xi})}$.}\\
-
-\underline{Proof sketch:} Given $g = (R,T)$, we merely need to solve the equation
-for the velocity vector $v \in \R^3$:
-	\[\frac{(I-e^{\widehat{w}})\widehat{w}v + w\tr{w}v}{|w|^2} = T\]
-
-
-Be aware that, just as in $SO(3)$, \textbf{this representation is not unique}.
-In general, there exist many twists representing the same rigid-body motion.
+	\end{pmatrix}.
+\]
+Conversely, for every $g \in SE(3)$ there exist
+twist coordinates $\bm{\xi} \in \R^6$ such that $g=\exp(\,\twist{\xi}\,)$.
+Given $g = (R,\bm{T})$, we can compute $\bm{w}$ thanks to the association
+$R = e^{\cross{w}}$ as explained previously for $SO(3)$.
+For the linear velocity vector $\bm{v} \in \R^3$,
+we merely need to solve the equation
+\[
+	\frac{(I-e^{\cross{w}}) \cross{w} \bm{v}
+		+ \bm{w}\tr{\bm{w}}\bm{v}}{\|\bm{w}\|^2}
+	= \bm{T}.
+\]
+Beware that, just as in $SO(3)$, this representation is not unique.
+In general, there exists many twists representing the same rigid-body motion.
 
 
 \subsection{Representing the Camera Motion}%
