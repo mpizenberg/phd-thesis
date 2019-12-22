@@ -347,90 +347,34 @@ Thus the rigid-body motion $g$ can be written as
 	g(\bm{x}) = R\bm{x} + \bm{T},\quad R \in SO(3),\quad \bm{T} \in \R^3.
 \]
 
+\subsubsection{Image Formation with Camera Movement}%
+\label{ssub:projectionWithMovement}
 
-% We know that due to the \textbf{rigid motion of the camera},
-% the point $\bm{x}$ \textbf{in camera coordinates} is given as a function
-% of the point in \textbf{wold coordinates} $\bm{X}_0$ by:
-% \[\bm{X} = R \bm{X}_0 + T\]
-% or in homogeneous coordinates:
-% \[\bm{X} = g \bm{X}_0 = \begin{pmatrix}R & T \\ 0 & 1\end{pmatrix} \bm{X}_0\]
-% In total, the transformation from world coordinates to image coordinates
-% is therefore given by:
-% \[\boxed{\lambda\ \bm{x} = K_f\ \Pi_0\ g\ \bm{X}_0}\]
-
-% Therefore, as a function of world coordinates, we have:
-% \[\boxed{ \lambda\ \bm{x'} = \Pi\ \bm{X}_0
-% 	= K\ \Pi_0\ g\ \bm{X}_0}
-% \]
-% The $3 \times 4$ matrix $\Pi$ is called a \textbf{general projection matrix}.
-% If we get rid of $\lambda$ we obtain the following coordinates:
-% \[ x' = \frac{\tr{\pi_1} \bm{X}_0}{\tr{\pi_3} \bm{X}_0},\quad
-%  y' = \frac{\tr{\pi_2} \bm{X}_0}{\tr{\pi_3} \bm{X}_0},\quad
-%  z' = 1
-% \]
-% where $\tr{\pi_1}, \tr{\pi_2}, \tr{\pi_3} \in \R^4$
-% are the three rows of the projection matrix $\Pi$.
-
-\subsubsection{Exponential Coordinates of Rotation}%
-\label{ssub:exponential_coordinates_of_rotation}
-
-We will now derive a representation of an \textbf{infinitesimal rotation}.
-To this end, we consider a family of rotation matrices $R(t)$
-which continuously transform a point from its original location
-$(R(0) = I)$ to a different one.
-	\[\bm{X}_{\text{trans}}(t) = R(t)\bm{X}_{\text{orig}}, \quad
-	\text{with } R(t) \in SO(3)\]
-
-Since $\forall t,\ R(t)\tr{R(t)} = I$, we have:
-	\[\frac{d}{dt}(R\tr{R}) = \dot{R}\tr{R} + R\tr{\dot{R}}= 0
-	\implies \dot{R}\tr{R} = -\tr{( \dot{R}\tr{R} )}\]
-
-Thus, $\dot{R}\tr{R}$ is a \textbf{skew-symmetric matrix}.
-As shown in the section about the $\widehat{}$ operator, this implies that
-there exists a vector $w(t) \in \R^3$ such that:
-	\[\dot{R}(t)\tr{R}(t) = \widehat{w}(t)
-	\Leftrightarrow \bm{ \dot{R}(t) = \widehat{w}(t)R(t)}\]
-
-Since $R(0) = I$, it follows that $\dot{R}(0) = \widehat{w}(0)$.
-Therefore, the \textbf{skew-symmetric matrix $\bm{\widehat{w}(0) \in so(3)}$
-gives the first order approximation of a rotation:}
-	\[R(dt) = R(0) + dR = I + \widehat{w}(0) dt\]
+Let's consider $\bm{X_0}$ a point in the World reference frame.
+Its coordinates in the camera frame are determined by a rigid body motion
+$\bm{X} = g(\bm{X_0}) = R \bm{X_0} + \bm{T}$.
+In homogeneous coordinates, we can write
+$\bm{X} = g\bm{X_0} = \inmatrix{ R & \bm{T}\\ 0 & 1} \bm{X_0}$.
+In~\ref{sub:intrinsic_parameters}, we identified that pixels coordinates
+are linked to point coordinates in the camera frame by
+$\lambda\ \bm{x'} = K_s\ K_f\ \Pi_0\ \bm{X}$.
+In total, the transformation from World coordinates to pixels coordinates
+is given in homogeneous coordinates by
+\[\boxed{
+	\lambda\ \bm{x'} = K\ \Pi_0\ g\ \bm{X_0}
+}\]
+where $\lambda$ is the depth of the point in the camera frame,
+$K$ is the intrinsics matrix, $\Pi_0$ the standard projection matrix
+and $g$ the rigid body motion characterizing the camera,
+also sometimes called extrinsics matrix.
 
 
-\subsection{The Lie Group $SO(3)$}%
-\label{sub:the_lie_group_so_3_}
-
-
-\subsubsection{Lie Group and Lie Algebra}%
-\label{ssub:lie_group_and_lie_algebra}
-
-The above calculations showed that the effect of any infinitesimal
-rotation $R \in SO(3)$ can be approximated by an element from
-the space of skew-symmetric matrices
-	\[so(3) = \{ \widehat{w}\ |\ w \in \R^3\}\]
-
-The rotation group $SO(3)$ is called a \textbf{Lie group}.
-The space $so(3)$ is called its \textbf{Lie algebra}.\\
-
-\underline{Definition:}
-A \textbf{Lie group} (or infinitesimal group) is a smooth manifold that
-is also a group, such that the group operations multiplication
-and inversion are smooth maps.\\
-
-As shown above: \textbf{The Lie algebra $\bm{so(3)}$ is the tangent space
-at the identity of the rotation group $\bm{SO(3)}$.}\\
-
-An \textbf{algebra over a field $\bm{K}$} is a vector space $V$ over $K$
-with multiplication on the space $V$.
-Elements $\widehat{w}$ and $\widehat{v}$ of the Lie algebra
-generally do not commute.
-One can define the \textbf{Lie bracket}
-\[[\cdot,\cdot]: so(3) \times so(3) \rightarrow so(3);\quad
-[\widehat{w},\widehat{v}] \equiv \widehat{w}\widehat{v} - \widehat{v}\widehat{w}\]
+\subsection{The Lie Group $SO(3)$ and Lie Algebra $\sooo$}%
+\label{sub:the_lie_group_so_3}
 
 
 \subsubsection{Sophus Lie (1841--1899)}%
-\label{ssub:sophus_lie_1841_1899_}
+\label{ssub:sophus_lie_1841_1899}
 
 \begin{figure}[ht]
 \centering
@@ -439,95 +383,83 @@ One can define the \textbf{Lie bracket}
 \end{figure}
 
 Marius Sophus Lie was a Norwegian-born mathematician.
-He created the theory of \textbf{continuous symmetry}, and applied it to
-the study of geometry and differential equations. Among his greatest
-achievements was the discovery that continuous transformation
+He created the theory of continuous symmetry, and applied it to
+the study of geometry and differential equations.
+He discovered that continuous transformation
 groups are better understood in their linearized versions
-(``Theory of transformation groups'' 1893).
-These \textbf{infinitesimal generators} form a structure which is today
-known as a \textbf{Lie algebra}. The linearized version of the group law
-corresponds to an operation on the Lie algebra known as
-the \textbf{commutator bracket} or \textbf{Lie bracket}.
-1882 Professor in Christiania (Oslo),
-1886 Leipzig (succeeding Felix Klein),
-1898 Christiania.
+(Theory of transformation groups, 1893).
+These infinitesimal generators form a structure which is today
+known as a Lie algebra.
+
+
+\subsubsection{Lie Algebra $\sooo$}%
+\label{ssub:lie_algebra_so3}
+
+One can show that the effect of any infinitesimal
+rotation $R \in SO(3)$ can be approximated by an element from
+the space of skew-symmetric matrices
+$\sooo = \Set{\cross{w}}{\bm{w} \in \R^3}$.
+The rotation group $SO(3)$ is called a Lie group.
+The space $\sooo$ is called its Lie algebra.
 
 
 \subsubsection{The Exponential Map}%
 \label{ssub:the_exponential_map}
 
-Given the infinitesimal formulation of rotation,
-we got to the differential equation system:
-	\[\left\{ \begin{aligned}
-		\dot{R}(t) &= \widehat{w}(t)R(t) \\
-		R(0) &= I \\
-	\end{aligned}\right.\]
-
-If we assume that $\widehat{w}(t)$ is constant in time ($=\widehat{w}$),
-this known equation has the solution:
-	\[R(t) = e^{\widehat{w}t}
-		= \sum_{n=0}^{\infty} \frac{{(\widehat{w}t)}^n }{n!}
-		= I + \widehat{w}t + \frac{{(\widehat{w}t)}^2 }{2!} + \ldots \]
-
-which is a rotation around the axis $w \in \R^3$
-by an angle of t (if $\|w\| = 1$). Alternatively, one can absorb
-the scalar $t \in \R$ into the skew  symmetric matrix $\widehat{w}$
-to obtain $R(t) = e^{\widehat{v}}$ with $\widehat{v} = \widehat{w}t$.
-This \textbf{matrix exponential} therefore defines a map from
-the Lie algebra to the Lie group:
-	\[\exp : so(3) \rightarrow SO(3);\quad \widehat{w}\mapsto e^{\widehat{w}}\]
-
+Given the infinitesimal formulation of a rotation,
+obtained from a continuous set of rotations $R(t)$
+and by deriving the equation $R(t)\tr{R(t)} = I$,
+one can show that $\dot{R}\tr{R}$ is a skew-symmetric matrix
+and that we have the differential equation system
+\[\left\{
+	\begin{aligned}
+		\dot{R}(t) &= \cross{w}(t)R(t), \\
+		R(0) &= I. \\
+	\end{aligned}
+\right.\]
+If we assume that $\cross{w}(t)$ is constant in time ($=\cross{w}$),
+this known equation has the solution
+\[
+	R(t) = e^{\cross{w}t}
+		= \sum_{n=0}^{\infty} \frac{{(\cross{w}t)}^n }{n!}
+		= I + \cross{w}t + \frac{{(\cross{w}t)}^2 }{2!} + \ldots
+\]
+which is a rotation around the axis $\bm{w} \in \R^3$
+by an angle of t (if $\|\bm{w}\| = 1$).
+One can also absorb the scalar $t \in \R$ into the skew-symmetric matrix $\cross{w}$.
+This matrix exponential therefore defines a map from
+the Lie algebra to the Lie group
+\[
+	\exp : \sooo \rightarrow SO(3), \quad \cross{w}\mapsto e^{\cross{w}}.
+\]
+In analogy to the well-known Euler equation
+$e^{i\theta} = \cos(\theta) + i \sin(\theta)$,
+there is an expression called Rodrigues' formula for
+the exponential of skew symmetric matrices,
+\[
+	e^{\cross{w}} = I + \frac{\cross{w}}{\|\bm{w}\|} \sin(\|\bm{w}\|)
+		+ \frac{\cross{w}^2}{\|\bm{w}\|^2} (1 - \cos(\|\bm{w}\|)).
+\]
 
 \subsubsection{The Logarithm of $SO(3)$}%
 \label{ssub:the_logarithm_of_so_3_}
 
-There is conversely a mapping from the Lie group to the Lie algebra.
-For any rotation matrix $R \in SO(3)$, there exists a $w \in \R^3$
-such that $R = \exp(\widehat{w})$. Such an element is denoted by
-$\widehat{w} = \log(R)$. If $R \ne I$, we note $r_{ij}$ its coefficients
-and $w$ is given by:
-	\[\left\{ \begin{aligned}
-		|w| &= \inv{\cos}\left(\frac{\text{trace}(R)-1}{2}\right)\\
-		\frac{w}{|w|} &= \frac{1}{2\sin(|w|)}
-			\begin{pmatrix}
-				r_{32} - r_{23} \\
-				r_{13} - r_{31} \\
-				r_{21} - r_{12} \\
-			\end{pmatrix}
-	\end{aligned}\right.\]
-
-For $R = I$, we have $|w| = 0$, i.e.\ a rotation by an angle 0.
-The above statement says:
-\textbf{Any orthogonal transformation $\bm{\R \in SO(3)}$ can be realized
-by rotating by an angle $\bm{|w|}$ around an axis
-$\bm{\frac{w}{|w|}}$ as defined above}.\\
-
-Obviously the above representation is not unique since for example,
+There is conversely a mapping from the Lie group $SO(3)$ to the Lie algebra $\sooo$.
+For any rotation matrix $R \in SO(3)$, there exists a vector $\bm{w} \in \R^3$
+such that $R = \exp(\cross{w})$. Such an element is denoted by
+$\cross{w} = \log(R)$. If $R \ne I$, we note $r_{ij}$ its coefficients
+and $\bm{w}$ is given by
+\[\left\{ \begin{aligned}
+	\|\bm{w}\| &= \inv{\cos}\left(\frac{\text{trace}(R)-1}{2}\right),\\
+	\frac{\bm{w}}{\|\bm{w}\|} &= \frac{1}{2\sin(\|\bm{w}\|)}
+		\begin{pmatrix}
+			r_{32} - r_{23} \\
+			r_{13} - r_{31} \\
+			r_{21} - r_{12} \\
+		\end{pmatrix}.
+\end{aligned}\right.\]
+The above solution is not unique since for example,
 increasing the angle by multiples of $2\pi$ will give the same rotation.
-
-
-\subsubsection{Rodrigues' Formula}%
-\label{ssub:rodrigues_formula}
-
-In analogy to the well-known Euler equation
-	\[\forall \phi \in \R, \quad  e^{i\phi} = \cos(\phi) + i\ \sin(\phi)\]
-
-we have an expression for skew symmetric matrices $\widehat{w} \in so(3)$:
-	\[\boxed{
-	e^{\widehat{w}} = I + \frac{\widehat{w}}{|w|} \sin(|w|)
-		+ \frac{\widehat{w}^2}{|w|^2} (1 - \cos(|w|))}\]
-
-This is known as \textbf{Rodrigues' formula}.\\
-
-\underline{Proof sketch:}
-Let $t = |w|$ and $v = w/|w|$ such that $w = vt$. Then one can show that:
-	\[\widehat{v}^2 = v\tr{v} - I \quad
-	\text{and}\quad \widehat{v}^3 = -\widehat{v}\]
-Thus, by developing the exponential, we get:
-	\[e^{\widehat{v}t} = I +
-		\underbrace{\left( t - \frac{t^3}{3!} + \cdots \right)}_{\sin(t)}\widehat{v}
-	+ \underbrace{\left(\frac{t^2}{2!}-\frac{t^4}{4!}+\cdots \right)}_{1-\cos(t)}
-		\widehat{v}^2\]
 
 
 \subsection{The Lie Group $SE(3)$}%
