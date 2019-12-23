@@ -44,7 +44,7 @@ While many subsequent work have further improved state-of-the-art classification
 		ImageNet \cite{ILSVRC15} & 21k & 14M & any & Mechanical Turk \\
 		CIFAR-10 & 10 & 60k & $32 \times 32$ & recruited students \\
 		CIFAR-100 & 100 & 60k & $32 \times 32$ & recruited students \\
-		SUN397 & 397 & 130k & any & LabelMe \\
+		SUN397 \cite{xiao2010sun} & 397 & 130k & any & LabelMe \\
 		ESP Game & any & 100k & any & the ESP Game \\
 		\hline
 	\end{tabular}
@@ -101,26 +101,28 @@ Object detection datasets are fairly similar to image classification datasets, w
 
 These datasets have largely contributed to the large improvement in performance that could be observed in the literature from 2014 to 2016. These improvements are, for a large part, due to two body of works that have driven the research in object detection. The first line of work directly derives from a trend that emerged at the end of the 2010s in computer vision. A category of segmentation algorithms called superpixels became quite popular and many influential papers (\cite{felzenszwalb2004efficient, achanta2012slic, levinshtein2009turbopixels} proposed solutions for computing sursegmentations that could be used as a building block of more complex methods. In particular, some object detection algorithms used a set of object proposals \cite{uijlings2013selective} (computed from a superpixel segmentation), that would be later classified as objects or not. This approach constitutes the core idea of the Mask-RCNN paper \cite{girshick2014maskrcnn}, the classification step being performed by a standard convolutional neural network. This approach was later optimized by the same author \cite{girshick2014fastrcnn} (Fast-RCNN), until the whole process was merged into a single end-to-end neural network that jointly performs object proposals and classification \cite{ren2015faster} (Faster-RCNN). A second line of work adopts a different type of neural network architectures. It focuses on the task of predicting bounding box coordinates for all object classes, splitting an image into a grid and being able to predict a bounding box centered in each cell of the grid. This approach, called YOLO (You Only Look Once) \cite{redmon2016you}, was later optimized to be able to handle very large scale problems \cite{redmon2017yolo9000} (up to 9000 classes) and to improve performances \cite{redmon2018yolov3}. 
 
-
-
-The finer grain at which localization can be achieved is at pixel level: this is called \textbf{image segmentation}, or \textbf{image parsing}. This problem can be stated as classifying each pixel in an image.
+The finer grain at which localization can be achieved is at pixel level: this is called \textbf{image segmentation}, or \textbf{image parsing}. This problem can also be stated as classifying each pixel in an image. A variant of this problem is called \textbf{object segmentation}, or instance segmentation, in which only some objects of an image are segmented. Annotations for the segmentation are much more difficult to gather, due to the need for a pixel-wise precision and the potential complexity of objects contours. The problem of automatic image segmentation is also a very complicated one, and requires a large number of annotations to be efficiently solved. The first dataset to offer an important number of annotations is once again PASCAL, with roughly 7,000 annotated instances of the same 20 classes than for the classification and detection tasks. A parallel effort was developed in the framework of the SUN database, thanks to a popular labelling tool called LabelMe \cite{russell2008labelme}, but produced more than 300k labelled instances. LabelMe is a tool that allows drawing polygons around objects of interests. The segmentations obtained with this method are often quite coarse, but the authors of \cite{chen2015microsoft} nonetheless reported that it takes 22 hours of human annotations to segment 1000 object instances. In their dataset, which was described in an earlier paragraph, more than 2 millions instances were annotated. 
+%In 2018, MS COCO released a new dataset of panoptic segmentation
 
 \vspace{0.5cm}
 
-\begin{center}
+\begin{table}
+	\centering
+	\caption{Datasets for object segmentation and their characteristics.}
 	\begin{tabular}{|c|c|c|c|c|}
 		\hline
 		Dataset & \# classes & \# images & \# instances & annotation process \\
 		\hline
-		MS COCO \cite{chen2015microsoft} & 1.5M & 330k & Mechanical Turk \\
-		PASCAL VOC \cite{} & 166k & 15k & Mechanical Turk \\
-		SUN \cite{} & 3.3M & 3.3M & Web crawling \\
+		PASCAL VOC \cite{Everingham10} & 20 & 11k & 7k & local pool of annotators \\
+		SUN2012 \cite{xiao2010sun} & 4479 & 131k & 313k & unspecified (except for \cite{barriuso2012notes}) \\
+		MS COCO \cite{chen2015microsoft} & 91 & 328k & 2.5M & Mechanical Turk \\
 		\hline
 	\end{tabular}
-\end{center}
+	\label{tab:segmentation_ds}
+\end{table}
 \vspace{0.5cm}
 
-Important papers : FCN, SegNet, UNet, DeepLab, and ... 
+Important papers : FCN \cite{long2015fully}, SegNet \cite{badrinarayanan2017segnet}, UNet \cite{ronneberger2015u}, DeepLab \cite{chen2017deeplab}, and ... 
 
 
 All these annotations have been extended to video \\ \\
