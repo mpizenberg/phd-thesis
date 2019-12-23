@@ -122,7 +122,8 @@ The finer grain at which localization can be achieved is at pixel level: this is
 \end{table}
 \vspace{0.5cm}
 
-Important papers : FCN \cite{long2015fully}, SegNet \cite{badrinarayanan2017segnet}, UNet \cite{ronneberger2015u}, DeepLab \cite{chen2017deeplab}, and ... 
+The first paper to implement an end-to-end neural network for image segmentation was published in 2015 \cite{long2015fully}. It presents a fully convolutional architecture which combines predictions at different levels of resolution to produce a detailed segmentation map. This architecture was improved by two papers, who systematize the combination of predictions by introducing an encoder-decoder archtecture, with skip connections that allows retrieving fine-grained details. U-Net \cite{ronneberger2015u} is one of these two papers, and originated from the medical imaging community. SegNet \cite{badrinarayanan2017segnet} on the other hand specifically targetted urban scened segmentation, with autonomous driving as a direct application. These two papers share the same neural network architecture, with slight specificities in the skip connection implementation. Another very popular paper in the field of segmentation is DeepLab \cite{chen2017deeplab}. While the previous architectures use an autoencoder structure, which allowd to derive a global understanding of the image (in the bottleneck region of the network) before retrieving a more local clasification of the piexls, DeepLab uses a spatial pyramid of different filter sizes to perform a multi-scale analysis of the image and make a local prediction that takes into account a larger area.
+
 
 
 All these annotations have been extended to video \\ \\
