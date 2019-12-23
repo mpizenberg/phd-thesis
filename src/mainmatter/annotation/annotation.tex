@@ -28,33 +28,38 @@ In fact, two of the most important challenges in computer vision have highlighte
 
 ILSVRC started in 2010, motivated by the goal to solve larger scale problems. ILSVRC relies on a gigantic dataset called ImageNet, that originally intended to match a natural language dataset called WordNet. WordNet is a database of english words, grouped into sets of synonyms called synsets. The goal of ImageNet is to provide a set of images to describe each of these synsets. As of December 4th 2019, ImageNet displays 14,197,122 images that depict 21,841 different synsets.
 
-We should also mention a parallel effort funded by the Canadian Institute for Advanced Research, which led to the creation of CIFAR-10 and CIFAR-100. Those datasets contain images of size $32 \times 32$ collected over various Web images searching tools, and classified under 10 and 100 classes respectively. ImageNet and CIFAR-100 are often both used to assess the performance of the classifiers.
+We should also mention a parallel effort funded by the Canadian Institute for Advanced Research, which led to the creation of CIFAR-10 and CIFAR-100. Those datasets contain images of size $32 \times 32$ collected over various Web images searching tools, and classified under 10 and 100 classes respectively. ImageNet and CIFAR-100 are often both used to assess the performance of image classifiers.
 
 While many subsequent work have further improved state-of-the-art classification results, we could synthesize the progress in classification by citing two papers. The first one from Krizhevsky et al. in 2012, nicknamed AlexNet, was probably key in the rise of Deep Learning that followed. AlexNet won the ILSVRC 2012 challenge by a large margin, starting the trend of using deep neural networks to solve computer vision problems. The second paper from He et al in 2015 and often called ResNet, introduced residual blocks (through skip connections) to ease the training of very deep neural networks (up to 1,000 layers!). The 152 layers version of ResNet won the ILSVRC 2015 challenge by reaching an error rate so low that it could be considered below the average human performance. The general trend in subsequent work has been to reach comparable (and even higher) performance than ResNet while reducing the number of parameters and operations to a minimum.  
 
 \vspace{0.5cm}
-
-\begin{center}
+\begin{table}
+	\centering
+	\caption{Datasets for image classification and their characteristics.}
 	\begin{tabular}{|c|c|c|c|c|}
 		\hline
 		Dataset & \# classes & \# images & image size & annotation process \\
 		\hline
-		PASCAL VOC & 20 & 11k & any & Mechanical Turk \\
-		ImageNet & 21k & 14M & any & Mechanical Turk \\
+		PASCAL VOC \cite{Everingham10} & 20 & 11.5k & any & local pool of annotators \\
+		ImageNet \cite{ILSVRC15} & 21k & 14M & any & Mechanical Turk \\
 		CIFAR-10 & 10 & 60k & $32 \times 32$ & recruited students \\
 		CIFAR-100 & 100 & 60k & $32 \times 32$ & recruited students \\
 		SUN397 & 397 & 130k & any & LabelMe \\
 		ESP Game & any & 100k & any & the ESP Game \\
 		\hline
 	\end{tabular}
-\end{center}
+	\label{tab:classification_ds}
+\end{table}
 \vspace{0.5cm}
+
 
 Another important topic, that extends in a sense the image classification problem, is the one of \textbf{image captioning}. It consists in describing an image with a set of sentences. Image captioning is a much harder problem than classification, because captions require a higher level of image understanding as well as natural language capabilities to generate valid sentences. In terms of annotations, it is much longer than just assigning a class to an image as well. Another difficulty for data gathering is the quality check of the annotations, since two sentences from two different users may be completely different but still convey the same semantic meaning. 
 
 \vspace{0.5cm}
 
-\begin{center}
+\begin{table}
+	\centering
+	\caption{Datasets for image captioning and their characteristics.}
 	\begin{tabular}{|c|c|c|c|}
 		\hline
 		Dataset & \# captions & \# images & annotation process \\
@@ -65,30 +70,38 @@ Another important topic, that extends in a sense the image classification proble
 		Flickr30k \cite{flickr30k} & 150k & 30k & Mechanical Turk \\
 		\hline
 	\end{tabular}
-\end{center}
+	\label{tab:caption_ds}
+\end{table}
 \vspace{0.5cm}
 
-Important Papers : show and tell \cite{xu2015show} and Transformers-based \cite{sharma-etal-2018-conceptual}
+The datasets introduced in Table \ref{tab:caption_ds} have brought large enough sets of examples to efficiently train deep neural networks. Image captioning requires more advanced architectures, as it involves performing two difficult tasks at the same time: (i) image understanding (computer vision) and (ii) sentence generation (natural language processing). The first task has become fairly standard, provided that large datasets are available, and relies on convolutional neural networks. The latter is a well-known task as well, and can be solved using recurrent neural networks, which are useful to handle sequential data as well as generating sequences (such as sentences) of variable length. One of the first and most popular papers to build a system that brought together these two components was published by Xu et al \cite{xu2015show}. This work, named \textit{Show, Attend and Tell}, uses an attention model to focus on different regions of an image to guide the sentence generation. Attention models have been later extended to Transformers models \cite{vaswani2017attention}, and this extension has been adapted to image captioning by the authors of the Conceptual Captions dataset \cite{sharma-etal-2018-conceptual}.
 
 
-On top of naming or precisely describing the objects in an image, many applications require to locate the objects in an image. There are several levels of precision to which this probem can be achieved. The coarser grain application is often coined \textbf{object detection} and consists in drawing a bounding box around the objects.
+On top of naming or precisely describing the objects in an image, many applications require to locate the objects in an image. There are several levels of precision to which this probem can be achieved. The coarser grain application is often coined \textbf{object detection} and consists in drawing a bounding box around objects in an image. Object detection is a generalization of the object localization problem, for which there can be at the most a single instance of each object in an image. Object detection is a much more difficult problem, since there could be hundreds of instances of the same object in a scene (such as humans in a crowd picture, or cars in a parking lot for example).
 
 \vspace{0.5cm}
 
-\begin{center}
+\begin{table}
+	\centering
+	\caption{Datasets for object detection and their characteristics.}
 	\begin{tabular}{|c|c|c|c|c|}
 		\hline
 		Dataset & \# classes & \# images & \# instances & annotation process \\
 		\hline
-		MS COCO \cite{chen2015microsoft} & 1.5M & 330k & Mechanical Turk \\
-		PASCAL VOC \cite{} & 166k & 15k & Mechanical Turk \\
-		ImageNet\cite{} & 3.3M & 3.3M & Web crawling \\
+		PASCAL VOC \cite{Everingham10} & 20 & 11.5k & 27.4k & local pool of annotators \\
+		ImageNet\cite{ILSVRC15} & 200 & 450k & 500k & Mechanical Turk \\
+		MS COCO \cite{chen2015microsoft} & 91 & 328k & 2.5M & Mechanical Turk \\
 		\hline
 	\end{tabular}
-\end{center}
+	\label{tab:detection_ds}
+\end{table}
 \vspace{0.5cm}
 
-Important papers : YOLO v1, v2 and v3, Mask-RCNN, Fast-RCNN and Faster-RCNN ; SSD
+Object detection datasets are fairly similar to image classification datasets, which they are often extending. Table \ref{tab:detection_ds} sums up the main characteristics of three of the most prominent one. The PASCAL Visual Objects Challenge \cite{Everingham10} for example, has included a detection challenge ever since it first ran in 2005 but on only a few thousands image. The dataset increased in size over time and reached almost 30k annotated bounding boxes in the end in 2012. The ImageNet challenge, which originally started in 2010, later added a detection task (in 2013 and 2014) with a large dataset of more than 500k annotated bouding boxes on 200 classes (which include for the most part the 20 classes of PASCAL). Note that ImageNet also ran a localization challenge for which more than 500k images of the 1000 classes that were used in the classification challenge were annotated with one, and sometimes more, bounding boxes per image. The difference with the object detection dataet is that there is only one class of object that is annotated on the images of the localization dataset. In total, there are thus more than a million images that include one or more bounding box annotations in the ImageNet dataset. The third dataset, called Microsoft Common Objects in Context (MS COCO) was released in 2015 \cite{chen2015microsoft}. It figures annotations that are in fact object segmentations, but that are used to product bounding boxes that are valid for an object detection task. MS COCO was designed to provide a larger number of annotations per class than ImageNet and PASCAL, but on a smaller number of 91 classes. 
+
+These datasets have largely contributed to the large improvement in performance that could be observed in the literature from 2014 to 2016. These improvements are, for a large part, due to two body of works that have driven the research in object detection. The first line of work directly derives from a trend that emerged at the end of the 2010s in computer vision. A category of segmentation algorithms called superpixels became quite popular and many influential papers (\cite{felzenszwalb2004efficient, achanta2012slic, levinshtein2009turbopixels} proposed solutions for computing sursegmentations that could be used as a building block of more complex methods. In particular, some object detection algorithms used a set of object proposals \cite{uijlings2013selective} (computed from a superpixel segmentation), that would be later classified as objects or not. This approach constitutes the core idea of the Mask-RCNN paper \cite{girshick2014maskrcnn}, the classification step being performed by a standard convolutional neural network. This approach was later optimized by the same author \cite{girshick2014fastrcnn} (Fast-RCNN), until the whole process was merged into a single end-to-end neural network that jointly performs object proposals and classification \cite{ren2015faster} (Faster-RCNN). A second line of work adopts a different type of neural network architectures. It focuses on the task of predicting bounding box coordinates for all object classes, splitting an image into a grid and being able to predict a bounding box centered in each cell of the grid. This approach, called YOLO (You Only Look Once) \cite{redmon2016you}, was later optimized to be able to handle very large scale problems \cite{redmon2017yolo9000} (up to 9000 classes) and to improve performances \cite{redmon2018yolov3}. 
+
+
 
 The finer grain at which localization can be achieved is at pixel level: this is called \textbf{image segmentation}, or \textbf{image parsing}. This problem can be stated as classifying each pixel in an image.
 
