@@ -21,7 +21,8 @@ Theoretical results in machine learning postulate that problems of great complex
 In what follows, we will review the computer vision problems for which large datasets, often combined with (deep) machine learning techniques, have recently significantly improved the state-of-the-art. We will then discuss the process of gathering these annotations, focusing on some key aspects such as exper vs. non-experts annotations, quality control, etc. We will end with a presentation of possible interactions that can be used to annotate an image. 
 
 \section{Computer vision problems that require annotation}
- 
+\label{sec:cv_annot} 
+
 \subsection{Image classification} 
 Among all the computer vision problems that people have tried to solve over the years, what could be considered as the simplest one is \textbf{image classification}. Classifying an image consists in assigning it one, or several, label.s. that describe either the type of scene it depicts (interior or exterior ; beach, mountain, forest, city etc.), or the objects that are displayed, in a certain order of importance. This task requires an advances understanding of the images, and has been a well-studied topic that could now be considered solved. 
 
@@ -134,6 +135,20 @@ The finer grain at which localization can be achieved is at pixel level: this is
 The first paper to implement an end-to-end neural network for image segmentation was published in 2015 \cite{long2015fully}. It presents a fully convolutional architecture which combines predictions at different levels of resolution to produce a detailed segmentation map. This architecture was improved by two papers, who systematize the combination of predictions by introducing an encoder-decoder archtecture, with skip connections that allows retrieving fine-grained details. U-Net \cite{ronneberger2015u} is one of these two papers, and originated from the medical imaging community. SegNet \cite{badrinarayanan2017segnet} on the other hand specifically targetted urban scened segmentation, with autonomous driving as a direct application. These two papers share the same neural network architecture, with slight specificities in the skip connection implementation. Another very popular paper in the field of segmentation is DeepLab \cite{chen2017deeplab}. While the previous architectures use an autoencoder structure, which allowd to derive a global understanding of the image (in the bottleneck region of the network) before retrieving a more local clasification of the piexls, DeepLab uses a spatial pyramid of different filter sizes to perform a multi-scale analysis of the image and make a local prediction that takes into account a larger area.
 
 \section{Discussion on dataset gathering}
+
+Instead of specifically commenting on each dataset methodology for gathering annotations, we will discuss in this section particular points that are of interest when one wants to create its own dataset. 
+
+\subsection{Explicit vs. implicit annotation process}
+A first interesting point to comment regarding the tables in section \ref{sec:cv_annot} is that most of the times, the annotation process was explicit to the human annotators. By explicit, we mean that the humans involved in the task were fully conscious of the tasks they were performing, and that the goal was to create an annotated dataset. This is mostly due to the fact that image annotation takes time, and requires an incentive (that is typically money, on crowdsourcing platforms for example). There are however a few exceptions, some of which having been mentioned before. 
+
+
+First, the Conceptual Captions dataset \cite{sharma-etal-2018-conceptual} has been obtained through a mostly automated process, looking for sentences on web pages that accompany the images. One could say the original authors of the sentences implicitly annotated the images for this dataset. 
+
+
+A more interesting example is the ESP Game dataset \cite{von2005esp}. The ESP Game has been created by Luis Von Ahn in 2005 and figures two humans playing collaboratively over the same image. They score points whenever they manage to write matching words to describe the image. From an annotation point of view, whenever the two players agree on a word one can safely assume this word describes an object present on the image, or an action happening on the image. In order for the game to provide a good annotation coverage, words can be ruled out of the game (they become \textit{taboo}) which means the players can see these words and know they have to specify another one. The ESP game started a trend of Games With A Purpose (GWAP) \cite{von2008designing} including some games designed to perform image annotation (e.g. PeekaBoom \cite{von2006peekaboom}, KissKissBan \cite{ho2010kisskissban}, Click'n'Cut \cite{carlier2014click}), but ESP remains the only game that gathered enough data to create a dataset. 
+
+
+There exists another well-known mean to gather data in an implicit way: CAPTCHAs. The term has been originally coined by Luis Von Ahn (again) et al. \cite{von2003captcha} and stands for Completely Automated Public Turing Test to Tell Computer and Humans Apart. CAPTCHAs have been created to stop automated attacks on websites, to prevent for example hackers from creating millions of mail accounts for sending spam. The idea is to create a Turing test \cite{machinery1950computing}, i.e. a test that a human should be able to complete effortlessly while a machine would be unable to perform it. 
 
 \begin{itemize}
 	\item implicit/explicit annotations
