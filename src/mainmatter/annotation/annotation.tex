@@ -18,69 +18,170 @@ This dataset illustrates how image annotation could be used to produce desirable
 
 Theoretical results in machine learning postulate that problems of great complexity could be adressed with this technique, provided that (i) there exists a model of sufficient capacity to cope with the problem complexity, and (ii) a sufficiently large sample of annotated data is available. Some thresholds have been established by the community to estimate what "sufficiently large" means \cite{blabla}, but computer vision problems typically requires millions of (annotated) images to be solved with an acceptable performance. Models relying on deep neural networks are nowadays the most popular techniques in machine learning, but other models (such as deep random forests for example, used in the human body pose estimation embedded in the Kinect \cite{blabla}) may still be considered depending on the application. Note that while gathering more and more data is the current trend in computer vision, an important field of research conversely focuses on learning on few samples; this field regroups the notions of semi-supervised learning, weakly-supervised learning, one-shot and few-shots learning, etc. 
 
-In what follows, we will review the computer vision problems for which large datasets, often combined with (deep) machine learning techniques, have recently significantly improved the state-of-the-art. We will then present a list of possible annotations that can be added to an image. 
+In what follows, we will review the computer vision problems for which large datasets, often combined with (deep) machine learning techniques, have recently significantly improved the state-of-the-art. We will then discuss the process of gathering these annotations, focusing on some key aspects such as exper vs. non-experts annotations, quality control, etc. We will end with a presentation of possible interactions that can be used to annotate an image. 
 
-\subsection{Computer vision problems that require annotation}
-  
+\section{Computer vision problems that require annotation}
+\label{sec:cv_annot} 
+
+\subsection{Image classification} 
 Among all the computer vision problems that people have tried to solve over the years, what could be considered as the simplest one is \textbf{image classification}. Classifying an image consists in assigning it one, or several, label.s. that describe either the type of scene it depicts (interior or exterior ; beach, mountain, forest, city etc.), or the objects that are displayed, in a certain order of importance. This task requires an advances understanding of the images, and has been a well-studied topic that could now be considered solved. 
 
 In fact, two of the most important challenges in computer vision have highlighted this task as one of the main problem to be solved. The first one, Pattern Analysis, Statistical Modelling and Computational Learning Visual Objects Challenge, often called PASCAL VOC, has run from 2005 to 2012 and figured at its peak 11,530 images depicting 20 classes. It is interesting to note that this challenge coincides in time with the rise of machine learning popularity in the computer vision community. In a way, PASCAL VOC has been both a marker and a catalyzer of the importance of machine learning in image processing problems. PASCAL VOC stopped in 2012 sadly due to the passing of one of its most invested organizers, Mark Everingham, as well as due to the growing importance of a much larger challenge: the ImageNet Large Scale Visual Recognition Challenge (ILSVRC).
 
 ILSVRC started in 2010, motivated by the goal to solve larger scale problems. ILSVRC relies on a gigantic dataset called ImageNet, that originally intended to match a natural language dataset called WordNet. WordNet is a database of english words, grouped into sets of synonyms called synsets. The goal of ImageNet is to provide a set of images to describe each of these synsets. As of December 4th 2019, ImageNet displays 14,197,122 images that depict 21,841 different synsets.
 
-We should also mention a parallel effort funded by the Canadian Institute for Advanced Research, which led to the creation of CIFAR-10 and CIFAR-100. Those datasets contain images of size $32 \times 32$ collected over various Web images searching tools, and classified under 10 and 100 classes respectively. ImageNet and CIFAR-100 are often both used to assess the performance of the classifiers.
+We should also mention a parallel effort funded by the Canadian Institute for Advanced Research, which led to the creation of CIFAR-10 and CIFAR-100. Those datasets contain images of size $32 \times 32$ collected over various Web images searching tools, and classified under 10 and 100 classes respectively. ImageNet and CIFAR-100 are often both used to assess the performance of image classifiers.
 
 While many subsequent work have further improved state-of-the-art classification results, we could synthesize the progress in classification by citing two papers. The first one from Krizhevsky et al. in 2012, nicknamed AlexNet, was probably key in the rise of Deep Learning that followed. AlexNet won the ILSVRC 2012 challenge by a large margin, starting the trend of using deep neural networks to solve computer vision problems. The second paper from He et al in 2015 and often called ResNet, introduced residual blocks (through skip connections) to ease the training of very deep neural networks (up to 1,000 layers!). The 152 layers version of ResNet won the ILSVRC 2015 challenge by reaching an error rate so low that it could be considered below the average human performance. The general trend in subsequent work has been to reach comparable (and even higher) performance than ResNet while reducing the number of parameters and operations to a minimum.  
 
 \vspace{0.5cm}
-
-\begin{center}
-	\begin{tabular}{|c|c|c|c|c|}
+\begin{table}
+	\centering
+	\caption{Datasets for image classification and their characteristics.}
+	\begin{tabular}{|c|c|c|c|c|c|}
 		\hline
-		Dataset & \# classes & \# images & image size & annotation process \\
+		Dataset & Year & \# classes & \# images & image size & annotation process \\
 		\hline
-		PASCAL VOC & 20 & 11k & any & Mechanical Turk \\
-		ImageNet & 21k & 14M & any & Mechanical Turk \\
-		CIFAR-10 & 10 & 60k & $32 \times 32$ & recruited students \\
-		CIFAR-100 & 100 & 60k & $32 \times 32$ & recruited students \\
-		SUN397 & 397 & 130k & any & LabelMe \\
-		ESP Game & any & 100k & any & the ESP Game \\
+		PASCAL VOC \cite{Everingham10} & 2005 -- 2012 & 20 & 11.5k & any & In-house annotators \\
+		ESP Game \cite{von2005esp} & unreported & any & 100k & any & ESP Game players \\
+		CIFAR-10 \cite{krizhevsky2009learning} & 2009 & 10 & 60k & $32 \times 32$ & Recruited students \\
+		CIFAR-100 \cite{krizhevsky2009learning} & 2009 & 100 & 60k & $32 \times 32$ & Recruited students \\
+		SUN397 \cite{xiao2010sun} & 2010 & 397 & 130k & any &  \\
+		ImageNet \cite{ILSVRC15} & 2010 -- now & 21k & 14M & any & Mechanical Turk \\
+		OpenImage \cite{OpenImages, OpenImages2} & 2016 -- now & 8.5k & 9.2M & any & In-house annotators and \\
+& & & & & Crowdsource app\\
 		\hline
 	\end{tabular}
-\end{center}
+	\label{tab:classification_ds}
+\end{table}
 \vspace{0.5cm}
+
+\subsection{Image captioning}
 
 Another important topic, that extends in a sense the image classification problem, is the one of \textbf{image captioning}. It consists in describing an image with a set of sentences. Image captioning is a much harder problem than classification, because captions require a higher level of image understanding as well as natural language capabilities to generate valid sentences. In terms of annotations, it is much longer than just assigning a class to an image as well. Another difficulty for data gathering is the quality check of the annotations, since two sentences from two different users may be completely different but still convey the same semantic meaning. 
 
 \vspace{0.5cm}
 
-\begin{center}
+\begin{table}
+	\centering
+	\caption{Datasets for image captioning and their characteristics.}
 	\begin{tabular}{|c|c|c|c|c|}
 		\hline
-		Dataset & \# captions & \# images & annotation process \\
+		Dataset & Year & \# captions & \# images & annotation process \\
 		\hline
-		MS COCO \cite{chen2015microsoft} & 1.5M & 330k & Mechanical Turk \\
-		\texttt{nocaps} \cite{agrawal2019nocaps} & 166k & 15k & Mechanical Turk \\
-		Conceptual Captions \cite{sharma-etal-2018-conceptual} & 3.3M & 3.3M & Web crawling \\
-		Flickr30k \cite{flickr30k} & 150k & 30k & Mechanical Turk \\
+		MS COCO \cite{chen2015microsoft} & 2015 -- now & 1.5M & 330k & Mechanical Turk \\
+		\texttt{nocaps} \cite{agrawal2019nocaps} & &  166k & 15k & Mechanical Turk \\
+		Conceptual Captions \cite{sharma-etal-2018-conceptual} & & 3.3M & 3.3M & Web crawling \\
+		Flickr30k \cite{flickr30k} & & 150k & 30k & Mechanical Turk \\
 		\hline
 	\end{tabular}
-\end{center}
+	\label{tab:caption_ds}
+\end{table}
 \vspace{0.5cm}
 
-Different types of problem that require annotation:
-\begin{itemize}
-	\item Image captioning: describe an image with a set of sentences
-	\item Object detection and localization : object class + bounding box
-	\item Object segmentation : object pixel mask
-	\item Image Segmentation. Semantic Segmentation / Image Parsing : classify all pixels in an image
-	\item Human Pose annotation, shapes segmentation and similarity, etc.
-\end{itemize}
-All these annotations have been extended to video \\ \\
+The datasets introduced in Table \ref{tab:caption_ds} have brought large enough sets of examples to efficiently train deep neural networks. Image captioning requires more advanced architectures, as it involves performing two difficult tasks at the same time: (i) image understanding (computer vision) and (ii) sentence generation (natural language processing). The first task has become fairly standard, provided that large datasets are available, and relies on convolutional neural networks. The latter is a well-known task as well, and can be solved using recurrent neural networks, which are useful to handle sequential data as well as generating sequences (such as sentences) of variable length. One of the first and most popular papers to build a system that brought together these two components was published by Xu et al \cite{xu2015show}. This work, named \textit{Show, Attend and Tell}, uses an attention model to focus on different regions of an image to guide the sentence generation. Attention models have been later extended to Transformers models \cite{vaswani2017attention}, and this extension has been adapted to image captioning by the authors of the Conceptual Captions dataset \cite{sharma-etal-2018-conceptual}.
 
-What applications to these problems? \\ \\
+\subsection{Object detection}
 
-Different types of interactions for these annotations:
+On top of naming or precisely describing the objects in an image, many applications require to locate the objects in an image. There are several levels of precision to which this probem can be achieved. The coarser grain application is often coined \textbf{object detection} and consists in drawing a bounding box around objects in an image. Object detection is a generalization of the object localization problem, for which there can be at the most a single instance of each object in an image. Object detection is a much more difficult problem, since there could be hundreds of instances of the same object in a scene (such as humans in a crowd picture, or cars in a parking lot for example).
+
+\vspace{0.5cm}
+
+\begin{table}
+	\centering
+	\caption{Datasets for object detection and their characteristics.}
+	\begin{tabular}{|c|c|c|c|c|c|}
+		\hline
+		Dataset & Year & \# classes & \# images & \# instances & annotation process \\
+		\hline
+		PASCAL VOC \cite{Everingham10} & 2005 -- 2012 & 20 & 11.5k & 27.4k & In-house annotators \\
+		ImageNet\cite{ILSVRC15} & 2010 -- now & 200 & 450k & 500k & Mechanical Turk \\
+		MS COCO \cite{chen2015microsoft} & 2015 -- now & 91 & 328k & 2.5M & Mechanical Turk \\
+		OpenImage \cite{OpenImages, OpenImages2} & 2016 -- now & 600 & 1.9M & 15.8M & In-house annotators \\
+		\hline
+	\end{tabular}
+	\label{tab:detection_ds}
+\end{table}
+\vspace{0.5cm}
+
+Object detection datasets are fairly similar to image classification datasets, which they are often extending. Table \ref{tab:detection_ds} sums up the main characteristics of three of the most prominent one. The PASCAL Visual Objects Challenge \cite{Everingham10} for example, has included a detection challenge ever since it first ran in 2005 but on only a few thousands image. The dataset increased in size over time and reached almost 30k annotated bounding boxes in the end in 2012. The ImageNet challenge, which originally started in 2010, later added a detection task (in 2013 and 2014) with a large dataset of more than 500k annotated bouding boxes on 200 classes (which include for the most part the 20 classes of PASCAL). Note that ImageNet also ran a localization challenge for which more than 500k images of the 1000 classes that were used in the classification challenge were annotated with one, and sometimes more, bounding boxes per image. The difference with the object detection dataet is that there is only one class of object that is annotated on the images of the localization dataset. In total, there are thus more than a million images that include one or more bounding box annotations in the ImageNet dataset. The third dataset, called Microsoft Common Objects in Context (MS COCO) was released in 2015 \cite{chen2015microsoft}. It figures annotations that are in fact object segmentations, but that are used to product bounding boxes that are valid for an object detection task. MS COCO was designed to provide a larger number of annotations per class than ImageNet and PASCAL, but on a smaller number of 91 classes. 
+
+These datasets have largely contributed to the large improvement in performance that could be observed in the literature from 2014 to 2016. These improvements are, for a large part, due to two body of works that have driven the research in object detection. The first line of work directly derives from a trend that emerged at the end of the 2010s in computer vision. A category of segmentation algorithms called superpixels became quite popular and many influential papers (\cite{felzenszwalb2004efficient, achanta2012slic, levinshtein2009turbopixels} proposed solutions for computing sursegmentations that could be used as a building block of more complex methods. In particular, some object detection algorithms used a set of object proposals \cite{uijlings2013selective} (computed from a superpixel segmentation), that would be later classified as objects or not. This approach constitutes the core idea of the Mask-RCNN paper \cite{girshick2014maskrcnn}, the classification step being performed by a standard convolutional neural network. This approach was later optimized by the same author \cite{girshick2014fastrcnn} (Fast-RCNN), until the whole process was merged into a single end-to-end neural network that jointly performs object proposals and classification \cite{ren2015faster} (Faster-RCNN). A second line of work adopts a different type of neural network architectures. It focuses on the task of predicting bounding box coordinates for all object classes, splitting an image into a grid and being able to predict a bounding box centered in each cell of the grid. This approach, called YOLO (You Only Look Once) \cite{redmon2016you}, was later optimized to be able to handle very large scale problems \cite{redmon2017yolo9000} (up to 9000 classes) and to improve performances \cite{redmon2018yolov3}. 
+
+\subsection{Object segmentation}
+
+The finer grain at which localization can be achieved is at pixel level: this is called \textbf{image segmentation}, or \textbf{image parsing}. This problem can also be stated as classifying each pixel in an image. A variant of this problem is called \textbf{object segmentation}, or instance segmentation, in which only some objects of an image are segmented. Annotations for the segmentation are much more difficult to gather, due to the need for a pixel-wise precision and the potential complexity of objects contours. The problem of automatic image segmentation is also a very complicated one, and requires a large number of annotations to be efficiently solved. The first dataset to offer an important number of annotations is once again PASCAL, with roughly 7,000 annotated instances of the same 20 classes than for the classification and detection tasks. A parallel effort was developed in the framework of the SUN database, thanks to a popular labelling tool called LabelMe \cite{russell2008labelme}, but produced more than 300k labelled instances. LabelMe is a tool that allows drawing polygons around objects of interests. The segmentations obtained with this method are often quite coarse, but the authors of \cite{chen2015microsoft} nonetheless reported that it takes 22 hours of human annotations to segment 1000 object instances. In their dataset, which was described in an earlier paragraph, more than 2 millions instances were annotated. 
+%In 2018, MS COCO released a new dataset of panoptic segmentation
+
+\vspace{0.5cm}
+
+\begin{table}
+	\centering
+	\caption{Datasets for object segmentation and their characteristics.}
+	\begin{tabular}{|c|c|c|c|c|c|}
+		\hline
+		Dataset & Year & \# classes & \# images & \# instances & annotation process \\
+		\hline
+		PASCAL VOC \cite{Everingham10} & 2005 -- 2012 & 20 & 11k & 7k & In-house annotators \\
+		SUN2012 \cite{xiao2010sun} & 2012 & 4479 & 131k & 313k & LabelMe \cite{russell2008labelme,barriuso2012notes} \\
+		MS COCO \cite{chen2015microsoft} & 2015 -- now & 91 & 328k & 2.5M & Mechanical Turk \\
+		OpenImage \cite{OpenImages, OpenImages2} & 2016 -- now & 350 & 1M & 2.8M & In-house annotators \\
+		\hline
+	\end{tabular}
+	\label{tab:segmentation_ds}
+\end{table}
+\vspace{0.5cm}
+
+The first paper to implement an end-to-end neural network for image segmentation was published in 2015 \cite{long2015fully}. It presents a fully convolutional architecture which combines predictions at different levels of resolution to produce a detailed segmentation map. This architecture was improved by two papers, who systematize the combination of predictions by introducing an encoder-decoder archtecture, with skip connections that allows retrieving fine-grained details. U-Net \cite{ronneberger2015u} is one of these two papers, and originated from the medical imaging community. SegNet \cite{badrinarayanan2017segnet} on the other hand specifically targetted urban scened segmentation, with autonomous driving as a direct application. These two papers share the same neural network architecture, with slight specificities in the skip connection implementation. Another very popular paper in the field of segmentation is DeepLab \cite{chen2017deeplab}. While the previous architectures use an autoencoder structure, which allowd to derive a global understanding of the image (in the bottleneck region of the network) before retrieving a more local clasification of the pixels, DeepLab uses a spatial pyramid of different filter sizes to perform a multi-scale analysis of the image and make a local prediction that takes into account a larger area.
+
+\section{Discussion on dataset gathering}
+
+Instead of specifically commenting on each dataset methodology for gathering annotations, we will discuss in this section particular points that are of interest when one wants to create its own dataset. 
+
+\subsection{Explicit vs. implicit annotation process}
+A first interesting point to comment regarding the tables in section \ref{sec:cv_annot} is that most of the times, the annotation process was explicit to the human annotators. By explicit, we mean that the humans involved in the task were fully conscious of the tasks they were performing, and that the goal was to create an annotated dataset. This is mostly due to the fact that image annotation takes time, and requires an incentive (that is typically money, on crowdsourcing platforms for example). There are however a few exceptions, some of which having been mentioned before. 
+
+
+First, the Conceptual Captions dataset \cite{sharma-etal-2018-conceptual} has been obtained through a mostly automated process, looking for sentences on web pages that accompany the images. One could say the original authors of the sentences implicitly annotated the images for this dataset. 
+
+
+A more interesting example is the ESP Game dataset \cite{von2005esp}. The ESP Game has been created by Luis Von Ahn in 2005 and figures two humans playing collaboratively over the same image. They score points whenever they manage to write matching words to describe the image. From an annotation point of view, whenever the two players agree on a word one can safely assume this word describes an object present on the image, or an action happening on the image. In order for the game to provide a good annotation coverage, words can be ruled out of the game (they become \textit{taboo}) which means the players can see these words and know they have to specify another one. The ESP game started a trend of Games With A Purpose (GWAP) \cite{von2008designing} including some games designed to perform image annotation (e.g. PeekaBoom \cite{von2006peekaboom}, KissKissBan \cite{ho2010kisskissban}, Click'n'Cut \cite{carlier2014click}), but ESP remains the only game that gathered enough data to create a dataset. 
+
+
+There exists another well-known mean to gather data in an implicit way: CAPTCHAs. The term has been originally coined by Luis Von Ahn (again) et al. \cite{von2003captcha} and stands for Completely Automated Public Turing Test to Tell Computer and Humans Apart. CAPTCHAs have been created to stop automated attacks on websites, to prevent for example hackers from creating millions of mail accounts for sending spam. The idea is to create a Turing test \cite{machinery1950computing}, i.e. a test that a human should be able to complete effortlessly while a machine would be unable to perform it. Original versions of CAPTCHAs were displaying distorted, geometrically transformed words which would make it unrecognizable by standard optical character recognition (OCR) softwares. The task remained fairly easy to humans, and required in average 13s \cite{von2008recaptcha}. At the time, ambitious projects were ran in parallel to digitize tremendous collections of books (like Google Books, which makes available serching through millions of books). This process of digitizing books was automated using OCR softwares, but failed for 20\% of the words in older books (due to faded ink, for example). The reCAPTCHA system offers a clever way to match the two very different problems of securing websites and digitizing old books by proposing words from old books, that could not be recognized automatically, to humans who wish to use an online service and are perfectly able to recognize them. The authors report that in 2008, after one year of deployment, reCAPTCHA has helped decipher 440M words, which amounts for more 17,000 books.
+
+While there are no further publications on reCAPTCHA, one has been able to observe its evolution through the years. Driven by the need to come up with problems that still resist computers, it went from text to image recognition, from digit recognition (in pictures probably extracted from Google Street View) to object detection (in urban scenes pictures, which is very likely to target autonomous vehicles applications).
+
+
+\subsection{Expert vs. non-expert annotators}
+
+Whether it is implicit or explicit, the annotations need to be performed by human annotators. There have been several trends throughout the years as to the nature of the annotators that are required. In essence, we could split potential annotators into two sets of users: experts, from whom we can expect a high quality of annotations but who come at an expensive cost, and non-expert users who tend to make more mistakes but provide much cheaper annotations.
+
+Initial datasets, such as PASCAL or CIFAR, -> inhouse 
+SUN : details on the type of person who annotate
+
+then large datasets : ImageNet, MSCOCO : carefully designed interfaces and quality check to crowdsource at scale.
+
+OpenImage, new trend : well-assisted in-house annotators, that do few mistakes but few interactions due to a large help from the computer
+
+
+
+
+expert or non-expert annotation ? Crowdsourcing ?
+
+\subsection{Quality check of annotations}
+
+
+
+\subsection{QoE vs. precision}
+QoE of the interactions taken into account?
+parler de openimage
+
+\section{Different types of interactions for image annotation}
+
+In this section, we briefly review and analyze the interactions that have been used for image annotation. 
+
+Directly related to image classification and image captioning is the simple interaction of \textbf{free text typing}. It often consists in a single text box in which the annotator can type a word, or a set of words, or even complete sentences. This annotation can be associated to the entire image, like for image captioning 
 
 \begin{itemize}
 	\item Free text typing
@@ -88,17 +189,9 @@ Different types of interactions for these annotations:
 	\item points, lines
 	\item bounding box
 	\item polygon
-	\item crcles, ellipses ??
+	\item circles, ellipses ??
 \end{itemize}
 
-Other important points:
-
-\begin{itemize}
-	\item implicit/explicit annotations
-	\item Quality check of the annotations? Self-correcion system? Detection of bad annotations?
-	\item expert or non-expert annotation ? Crowdsourcing ?
-	\item QoE of the interaction staken into account?
-\end{itemize}
 
 THE BIG TABLE: datasets and relevant papers, to be classified
 
