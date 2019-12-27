@@ -155,22 +155,18 @@ While there are no further publications on reCAPTCHA, one has been able to obser
 
 \subsection{Expert vs. non-expert annotators}
 
-Whether it is implicit or explicit, the annotations need to be performed by human annotators. There have been several trends throughout the years as to the nature of the annotators that are required. In essence, we could split potential annotators into two sets of users: experts, from whom we can expect a high quality of annotations but who come at an expensive cost, and non-expert users who tend to make more mistakes but provide much cheaper annotations.
+Whether it is implicit or explicit, the annotations need to be performed by human annotators. There have been several trends throughout the years as to the nature of the annotators that are required. In essence, we could split potential annotators into two sets of users: experts, from whom we can expect a high quality of annotations but who come at an expensive cost, and non-expert users who tend to make more mistakes but provide much cheaper annotations. 
 
-Initial datasets, such as PASCAL or CIFAR, -> inhouse 
-SUN : details on the type of person who annotate
+Historically, the first main datasets that have been created for applying machine learning to computer vision problems were PASCAL and CIFAR. These datasets are of reasonable scale (less than 100k images) and thus did not require too many annotators. In fact, the authors of PASCAL \cite{Everingham10} reported that a "party" of users (students, probably, but no details are provided as to how many of them) annotated the images after an initial training. These users were also regularly observed during annotations to ensure the quality of their work. Finally, one of the organizers of the PASCAL challenge checked all the annotations. In a similar fashion, the CIFAR dataset \cite{krizhevsky2009learning} was labelled by a group of students who were paid a fixed sum per hour.
 
-then large datasets : ImageNet, MSCOCO : carefully designed interfaces and quality check to crowdsource at scale.
+As time went by, larger and larger datasets were created. These new datasets aimed at expanding the number of classes, as well as the number of annotated images. With this new goal in mind, the dataset authors started \textbf{crowdsourcing} the annotations. Crowdsourcing is a process in which a task that should usually be performed by an expert is outsourced to a crowd of non-expert users. The term has been first coined by Jeff Howe in 2006 \cite{howe2006rise} and it has been made easy to crowdsource tasks due to the creation of specific platforms, such as Amazon Mechanical Turk or Crowdflower. ImageNet and MSCOCO have been annotated by Turkers, i.e. humans recruited and paid through Amazon Mechanical Turk. Since it is much more difficult to clearly instruct distant users, the annotations interfaces need to be carefully designed, and the annotation quality need to be properly ensured; this will be described in section \ref{sec:annotation_quality}.  	 
 
-OpenImage, new trend : well-assisted in-house annotators, that do few mistakes but few interactions due to a large help from the computer
-
+While crowdsourcing is widely used, it may not be relevant in all setups. For example, in case the images would be sensitive, it is not possible to oursource the annotation process outside of a company. In addition, the need for redundancy to insure annotation quality limits the positive impact on cost that crowdsourcing is supposed to provide. Although being one of the largest annotated dataset, OpenImage has been for the most part annotated by in-house humans at Google. To achieve this, interactions have been specially designed to lead to good annotations in a faster way. For example, extreme clicking for bounding box annotations \cite{papadopoulos2017extreme} introduces a clever interaction that allows to draw bounding boxes more quickly, avoiding the errors that usually force users to start over. In another spirit, the authors of \cite{OpenImagesSegmentation} propose an interactive segmentation algorithm in which user clicks guide a deep neural network and refine the segmentation mask. The images can be annotated 3 times faster than using a standard polygon drawing tool (such as LabelMe \cite{russell2008labelme}), and the segmentation boundaries are much more precise. We present a similar contribution in the next chapter.
 
 
-
-expert or non-expert annotation ? Crowdsourcing ?
 
 \subsection{Quality check of annotations}
-
+\label{sec:annotation_quality}
 
 
 \subsection{QoE vs. precision}
