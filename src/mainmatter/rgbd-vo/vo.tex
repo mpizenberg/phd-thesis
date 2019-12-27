@@ -523,10 +523,90 @@ In general, there exists many twists representing the same rigid-body motion.
 \section{Visual Odometry Approaches}%
 \label{sec:visual-odometry-approaches}
 
+Projects with precise localization needs may be of very different nature,
+such as Mars rover exploration~\cite{maimone2007two},
+underwater navigation~\cite{dunbabin2005hybrid},
+autonomous vehicles~\cite{bertozzi2011viac},
+or augmented reality~\cite{schops2014semi} to cite only few.
+Depending on the context and project needs,
+the capturing device and the localization and mapping requirements vary.
+In this section, we will briefly review the different visual inputs
+that a localization and mapping algorithm may have to process,
+and the tradeoffs between local and global coherence,
+leading to visual odometry or visual SLAM.\@
+
 \subsection{Capturing Device}%
 \label{sub:capturing-device}
 
-Stereo, mono, mixed, rgb-d
+Most of the earliest visual odometry systems were based on stereo capture
+such as the binocular setup by Matthies and Shafer~\cite{matthies1987error},
+or the slider camera presented in Moravec's thesis~\cite{moravec1980obstacle}
+and used on board of Mars rovers.
+Those are systems providing or simulating the simultaneous capture
+of the environment by two or more cameras, and thus mimicking human stereo vision.
+In a calibrated stereo setup, one can easily triangulate 3D coordinates
+of points for stereo pairs, i.e.\ matching points in two or more images.
+Such triangulation can be obtained by searching a point from the left image
+onto the right image along its associated epipolar line,
+which is the right image of the line passing through the optical center
+of the left camera and the point in the left image.
+This method is often called disparity search.
+Figure~\ref{fig:epipolar} provides a visualization of this epipolar constraint.
+Points with depth information are then tracked in successive frames,
+and motion can be estimated based on those 3D point clouds.
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\linewidth]{assets/img/epipolar.pdf}
+	\caption{Epipolar constraint between two cameras.
+	The center of the left and right cameras are $C_l$ and $C_r$,
+	$X$ is the observed 3D point, projected onto $p_l$ and $p_r$
+	respectively in the left and right image.
+	The left and right epipoles are noted $e_l$ and $e_r$.}%
+	\label{fig:epipolar}
+\end{figure}
+
+Alternatively to the stereo scheme, one can use a single camera.
+It is called monocular visual odometry.
+In that case, the 3D structure is unknown.
+The relative motion between frames must then be retrieved
+from the 2D information only.
+That vector passing through the camera center and a given pixel of the image
+is usually called a bearing vector.
+In the monocular case, the motion and 3D structure computed by
+visual odometry can only be recovered up to an unknown scale
+when using the pinhole camera model.
+This is due to the fact that the projection modelization cannot
+differentiate big distances far away from small distances close to the camera.
+The first influencial work exploiting monocular camera in a realtime algorithm
+is the one of Nister et.\ al.~\cite{nister2004visual},
+also coining the term ``visual odometry''.
+It provides two important improvements over previous work.
+First is the use of reprojection error,
+which is the difference between the detected point in an image
+and its reprojection from the 3D point with a given camera transformation,
+while previous work tend to compute motion by aligning 3D point clouds.
+The second is the use of a five-point minimal solver~\cite{nister2003efficient}
+in a RANSAC scheme for robust motion estimation.
+
+Recently, depth-sensing cameras such as the Microsoft Kinect~\cite{zhang2012microsoft}
+have appeared in the consumer market under the name RGB-D cameras (``D'' for depth).
+Those cameras use an active system based on structured infrared light
+to compute a depth image.
+Due to limitations in outside environments
+the usage of these cameras is restricted
+to indoor navigation.
+One should also avoid very reflective surfaces such as glass and mirrors.
+In favorable cases, RGB-D cameras offer the advantage of providing
+realtime depth information without the need of triangulation like in the stereo case.
+
+One should note that in some situations, the camera can be paired
+with other sensing devices.
+Inertial measurement units (IMU) are present in smartphone
+and LIDAR are often provided in autonomous vehicles for example.
+Any additional information or constraint provided by a particular setup
+can be exploited to improve performances of the visual odometry system.
+There are therefore many papers exploring these areas but we will not discuss them here.
 
 \subsection{Relation to Visual SLAM}%
 \label{sub:relation-visual-slam}
