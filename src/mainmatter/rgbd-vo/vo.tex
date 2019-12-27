@@ -520,82 +520,126 @@ Beware that, just as in $SO(3)$, this representation is not unique.
 In general, there exists many twists representing the same rigid-body motion.
 
 
-\section{Visual Odometry}%
-\label{sec:visual-odometry}
+\section{Visual Odometry Approaches}%
+\label{sec:visual-odometry-approaches}
 
-\subsection{Direct VS Indirect}%
-\label{sub:direct-indirect}
+\subsection{Capturing Device}%
+\label{sub:capturing-device}
 
-\subsubsection{Feature Points}%
-\label{ssub:feature-points}
+Stereo, mono, mixed, rgb-d
 
-\subsubsection{Direct Formulation}%
-\label{ssub:direct-formulation}
+\subsection{Relation to Visual SLAM}%
+\label{sub:relation-visual-slam}
 
-\begin{figure}[ht]
-	\centering
-	\includegraphics[width=\linewidth]{assets/img/direct-image-alignment.png}
-	\caption{Direct image alignment}%
-	\label{fig:direct-image-alignment}
-\end{figure}
+\section{Motion Estimation}%
+\label{sec:motion-estimation}
 
-\begin{figure}[ht]
-	\centering
-	\includegraphics[width=\linewidth]{assets/img/energy-warp.png}
-	\caption{Energy formulation for direct image alignment}%
-	\label{fig:energy-warp}
-\end{figure}
+\subsection{Feature-Based Motion Estimation}%
+\label{sub:feature-based}
 
-\begin{figure}[ht]
-	\centering
-	\includegraphics[width=\linewidth]{assets/img/energy-gauss-newton.png}
-	\caption{Energy formulation for Gauss-Newton minimization}%
-	\label{fig:energy-gauss-newton}
-\end{figure}
+\subsection{Appearance-Based Motion Estimation}%
+\label{sub:appearance-based}
 
-\begin{figure}[ht]
-	\centering
-	\includegraphics[width=\linewidth]{assets/img/gauss-newton-step.png}
-	\caption{Gauss-Newton step}%
-	\label{fig:gauss-newton-step}
-\end{figure}
+fourier-melin transform,
+recent direct approaches.
 
-\subsection{RGB-D Visual Odometry}%
-\label{sub:rgbd-visual-odometry}
+\section{Direct Image Alignment}%
+\label{sec:direct-image-alignment}
 
-\begin{figure}[ht]
-	\centering
-	\includegraphics[width=\linewidth]{assets/img/kinect.jpg}
-	\caption{Kinect sensor}%
-	\label{fig:kinect}
-\end{figure}
+Baker
 
-\section{Visual SLAM}%
-\label{sec:v-slam}
+\section{Improvements to Visual Odometry}%
+\label{sec:vo-improvements}
 
-\begin{figure}[ht]
-	\centering
-	\includegraphics[width=\linewidth]{assets/img/lsd-slam.png}
-	\caption{LSD-SLAM}%
-	\label{fig:lsd-slam}
-\end{figure}
+\subsection{Outlier Removal}%
+\label{sub:ransac}
 
-\subsection{Pose Graph}%
+\subsection{Pose Graph Optimization}%
 \label{sub:pose-graph}
-
-\begin{figure}[ht]
-	\centering
-	\includegraphics[width=\linewidth]{assets/img/pose-graph.png}
-	\caption{Pose graph}%
-	\label{fig:pose-graph}
-\end{figure}
 
 \subsection{Loop Closure}%
 \label{sub:loop-closure}
 
-\begin{figure}[ht]
-	\centering
-	\includegraphics[width=\linewidth]{assets/img/loop-closure-lowres.png}
-	\caption{Loop closure}%
-	\label{fig:loop-closure}
-\end{figure}
+\subsection{Windowed Bundel Adjustment}%
+\label{sub:windowed-ba}
+
+
+
+% ##############################################################################
+
+% \subsection{Direct VS Indirect}%
+% \label{sub:direct-indirect}
+%
+% \subsubsection{Feature Points}%
+% \label{ssub:feature-points}
+%
+% \subsubsection{Direct Formulation}%
+% \label{ssub:direct-formulation}
+
+% \begin{figure}[ht]
+% 	\centering
+% 	\includegraphics[width=\linewidth]{assets/img/direct-image-alignment.png}
+% 	\caption{Direct image alignment}%
+% 	\label{fig:direct-image-alignment}
+% \end{figure}
+%
+% \begin{figure}[ht]
+% 	\centering
+% 	\includegraphics[width=\linewidth]{assets/img/energy-warp.png}
+% 	\caption{Energy formulation for direct image alignment}%
+% 	\label{fig:energy-warp}
+% \end{figure}
+%
+% \begin{figure}[ht]
+% 	\centering
+% 	\includegraphics[width=\linewidth]{assets/img/energy-gauss-newton.png}
+% 	\caption{Energy formulation for Gauss-Newton minimization}%
+% 	\label{fig:energy-gauss-newton}
+% \end{figure}
+%
+% \begin{figure}[ht]
+% 	\centering
+% 	\includegraphics[width=\linewidth]{assets/img/gauss-newton-step.png}
+% 	\caption{Gauss-Newton step}%
+% 	\label{fig:gauss-newton-step}
+% \end{figure}
+
+% \subsection{RGB-D Visual Odometry}%
+% \label{sub:rgbd-visual-odometry}
+
+% \begin{figure}[ht]
+% 	\centering
+% 	\includegraphics[width=\linewidth]{assets/img/kinect.jpg}
+% 	\caption{Kinect sensor}%
+% 	\label{fig:kinect}
+% \end{figure}
+
+% \section{Visual SLAM}%
+% \label{sec:v-slam}
+
+% \begin{figure}[ht]
+% 	\centering
+% 	\includegraphics[width=\linewidth]{assets/img/lsd-slam.png}
+% 	\caption{LSD-SLAM}%
+% 	\label{fig:lsd-slam}
+% \end{figure}
+
+% \subsection{Pose Graph}%
+% \label{sub:pose-graph}
+
+% \begin{figure}[ht]
+% 	\centering
+% 	\includegraphics[width=\linewidth]{assets/img/pose-graph.png}
+% 	\caption{Pose graph}%
+% 	\label{fig:pose-graph}
+% \end{figure}
+
+% \subsection{Loop Closure}%
+% \label{sub:loop-closure}
+
+% \begin{figure}[ht]
+% 	\centering
+% 	\includegraphics[width=\linewidth]{assets/img/loop-closure-lowres.png}
+% 	\caption{Loop closure}%
+% 	\label{fig:loop-closure}
+% \end{figure}
