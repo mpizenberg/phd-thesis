@@ -681,12 +681,22 @@ to reduce the degrees of freedom is important.
 As a consequence, a number of minimal model parameterizations
 have been studied such as a three-point solver proposed by Fraundorfer et.\ al.\
 when two of the camera angles are known~\cite{fraundorfer2010minimal}.
+Using a robust estimation scheme like the one provided by RANSAC
+can considerably reduce the drifts accumulated along the sequence.
 
 
 \subsubsection{Windowed Bundle Adjustment}%
 \label{ssub:windowed-ba}
 
-windowed bundle adjustment.
+Another method, complementary to outliers removal,
+is to use windowed bundle adjustment.
+The main issue of bundle adjustment, used in structure and motion
+algorithms as well as in global optimization for visual SLAM,
+is the computational complexity, growing in cube of the number of points
+and camera poses.
+Therefore, limiting bundle adjustment to a small ``window'' of frames
+offers an efficient way of optimizing camera localization and 3D structure
+with a controlled complexity.
 
 
 \section{Motion Estimation}%
