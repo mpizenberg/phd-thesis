@@ -611,6 +611,53 @@ There are therefore many papers exploring these areas but we will not discuss th
 \subsection{Relation to Visual SLAM}%
 \label{sub:relation-visual-slam}
 
+Visual simultaneous localization and mapping is the name given to the technique
+consisting in recovering the 3D structure of the environment (the map)
+and the trajectory of the camera relative to this environment.
+While visual odometry is only concerned with the local consistency of the
+map and trajectory, visual SLAM tries to obtain a globally consistent map.
+This difference is of the utmost importance for autonomous systems navigating
+for a long period, but less so for short augmented reality experiences for example.
+
+There exists three dominant strategies in visual SLAM.
+One is based on filtering methods
+such as in MonoSLAM by Davison et.\ al.~\cite{davison2007monoslam}.
+Those approaches use methods similar to the extended Kalman filter (EKF)
+to jointly estimate the camera trajectory and the 3D location
+of a small number of landmarks in a probabilistic scheme.
+The second strategy consists in keeping a small subset of the frames
+called keyframes and apply global optimization algorithms such as
+bundle adjustment on those.
+One such example is the algorithm of Klein and Murray called
+parallel tracking and mapping (PTAM)~\cite{klein2007parallel}.
+Finally there are bio-inspired strategies such as RatSLAM
+by Milfort et.\ al.~\cite{milford2004ratslam}.
+
+Today, the majority of commonly used visual SLAM methods are keyframe-based.
+The two most comprehensive solutions are ORB-SLAM~\cite{mur2015orb}
+and OpenVSLAM~\cite{sumikura2019openvslam}.
+Keyframe-based visual SLAM is usually composed of a visual odometry core,
+extended with three components providing the global consistency.
+A pose graph is built with the selected keyframes.
+Camera location are the nodes of the graph and transformations
+between keyframes are stored in the edges.
+A loop closure mechanism is added to detect when the camera
+returns in previously visited locations.
+When a loop is detected, an edge is added to the pose graph.
+Finally, a global optimization such as bundle adjustment
+is used to refine both keyframes camera locations
+and estimated 3D points.
+The choice between visual odometry and visual SLAM
+is thus mainly a tradeoff between realtime performances
+and long running time accuracy and consistency.
+
+\subsection{Reducing Drift}%
+\label{sub:reducing-drift}
+
+Ransac, minimal model,
+windowed bundle adjustment.
+
+
 \section{Motion Estimation}%
 \label{sec:motion-estimation}
 
@@ -627,22 +674,6 @@ recent direct approaches.
 \label{sec:direct-image-alignment}
 
 Baker
-
-\section{Improvements to Visual Odometry}%
-\label{sec:vo-improvements}
-
-\subsection{Outlier Removal}%
-\label{sub:ransac}
-
-\subsection{Pose Graph Optimization}%
-\label{sub:pose-graph}
-
-\subsection{Loop Closure}%
-\label{sub:loop-closure}
-
-\subsection{Windowed Bundel Adjustment}%
-\label{sub:windowed-ba}
-
 
 
 % ##############################################################################
