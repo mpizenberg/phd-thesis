@@ -659,7 +659,29 @@ visual SLAM could be tackled later as an extension.
 \subsubsection{Outlier Removal with RANSAC}%
 \label{ssub:ransac}
 
-Ransac, minimal model,
+Random sample consensus (RANSAC) is a method to estimate
+a model from a set of noisy data~\cite{fischler1981random}.
+It consists in sampling a random subset of the data,
+estimate a model from it,
+and classify the rest of the data as fitting (inliers) or not (outliers) that model.
+If we note $s$ the number of data points in the samples,
+$\epsilon$ the percentage of outliers in all the data,
+and $p$ the target probability of successfully find the correct model,
+the number $N$ of samples required is
+\[
+	N = \frac{\log(1-p)}{\log(1 - (1 - \epsilon)^s)}.
+\]
+In a situation where 50\% of the data is outliers,
+and with a target probability of success of 99\%,
+it requires 16 iterations for a sampling size of 2 data points
+and 145 iterations for a sampling size of 5,
+growing at an exponential rate.
+This is one reason why exploiting every available constraint of the system
+to reduce the degrees of freedom is important.
+As a consequence, a number of minimal model parameterizations
+have been studied such as a three-point solver proposed by Fraundorfer et.\ al.\
+when two of the camera angles are known~\cite{fraundorfer2010minimal}.
+
 
 \subsubsection{Windowed Bundle Adjustment}%
 \label{ssub:windowed-ba}
