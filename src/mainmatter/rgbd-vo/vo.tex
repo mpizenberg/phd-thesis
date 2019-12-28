@@ -639,7 +639,7 @@ and OpenVSLAM~\cite{sumikura2019openvslam}.
 Keyframe-based visual SLAM is usually composed of a visual odometry core,
 extended with three components providing the global consistency.
 A pose graph is built with the selected keyframes.
-Camera location are the nodes of the graph and transformations
+Camera locations are the nodes of the graph and transformations
 between keyframes are stored in the edges.
 A loop closure mechanism is added to detect when the camera
 returns in previously visited locations.
@@ -649,12 +649,21 @@ is used to refine both keyframes camera locations
 and estimated 3D points.
 The choice between visual odometry and visual SLAM
 is thus mainly a tradeoff between realtime performances
-and long running time accuracy and consistency.
+and accuracy and consistency over a long period of time.
+In our work presented later in this document, we focus on visual odometry since
+visual SLAM could be tackled later as an extension.
 
 \subsection{Reducing Drift}%
 \label{sub:reducing-drift}
 
+\subsubsection{Outlier Removal with RANSAC}%
+\label{ssub:ransac}
+
 Ransac, minimal model,
+
+\subsubsection{Windowed Bundle Adjustment}%
+\label{ssub:windowed-ba}
+
 windowed bundle adjustment.
 
 
