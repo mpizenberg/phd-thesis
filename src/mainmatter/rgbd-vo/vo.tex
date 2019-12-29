@@ -702,6 +702,27 @@ with a controlled complexity.
 \section{Motion Estimation}%
 \label{sec:motion-estimation}
 
+We have explained in Section~\ref{sub:3d_space_rigid_body_motion}
+that the camera motion between two frames can be represented by
+a transformation with 6 degrees of freedom (DoF) called rigid body motion
+\[
+	g(\bm{x}) = R\bm{x} + \bm{t},\quad R \in SO(3),\quad \bm{t} \in \R^3.
+\]
+In homogeneous coordinates, we can write
+$g = \inmatrix{R & \bm{t}\\ 0 & 1}$.
+The core challenge of visual odometry is to accurately estimate
+this transformation $g$ from the observations provided by the camera images.
+The two main approaches are feature-based or appearance-based.
+Recently, feature-based motion estimation is also sometimes called indirect,
+while appearance-based is called direct visual odometry.
+The distinction is due to the fact that feature-based methods
+first step is to find and match features in the images.
+Once features are paired, only their geometric information (location) is kept
+to estimate the camera motion.
+In contrast, direct (appearance-based) methods formulate the camera motion
+estimation as a problem directly depending on the image intensity observations.
+
+
 \subsection{Feature-Based Motion Estimation}%
 \label{sub:feature-based}
 
