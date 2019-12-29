@@ -341,10 +341,10 @@ $R$ is an orthogonal matrix $\tr{R}R=R\tr{R}=I$.
 The second property (preservation of cross product) implies that $\det(R) = +1$.
 In other words, $R$ is an element of the group
 $SO(3) = \Set{R \in \RR{3}{3}} {\tr{R}R=I,\ \det(R) = +1}$.
-The motion of the origin can be represented by a translation $\bm{T} \in R^3$.
+The motion of the origin can be represented by a translation $\bm{t} \in R^3$.
 Thus the rigid-body motion $g$ can be written as
 \[
-	g(\bm{x}) = R\bm{x} + \bm{T},\quad R \in SO(3),\quad \bm{T} \in \R^3.
+	g(\bm{x}) = R\bm{x} + \bm{t},\quad R \in SO(3),\quad \bm{t} \in \R^3.
 \]
 
 \subsubsection{Image Formation with Camera Movement}%
@@ -352,9 +352,9 @@ Thus the rigid-body motion $g$ can be written as
 
 Let's consider $\bm{X_0}$ a point in the World reference frame.
 Its coordinates in the camera frame are determined by a rigid body motion
-$\bm{X} = g(\bm{X_0}) = R \bm{X_0} + \bm{T}$.
+$\bm{X} = g(\bm{X_0}) = R \bm{X_0} + \bm{t}$.
 In homogeneous coordinates, we can write
-$\bm{X} = g\bm{X_0} = \inmatrix{ R & \bm{T}\\ 0 & 1} \bm{X_0}$.
+$\bm{X} = g\bm{X_0} = \inmatrix{ R & \bm{t}\\ 0 & 1} \bm{X_0}$.
 In~\ref{sub:intrinsic_parameters}, we identified that pixels coordinates
 are linked to point coordinates in the camera frame by
 $\lambda\ \bm{x'} = K_s\ K_f\ \Pi_0\ \bm{X}$.
@@ -507,14 +507,14 @@ its associated rigid body motion is
 \]
 Conversely, for every $g \in SE(3)$ there exist
 twist coordinates $\bm{\xi} \in \R^6$ such that $g=\exp(\,\twist{\xi}\,)$.
-Given $g = (R,\bm{T})$, we can compute $\bm{w}$ thanks to the association
+Given $g = (R,\bm{t})$, we can compute $\bm{w}$ thanks to the association
 $R = e^{\cross{w}}$ as explained previously for $SO(3)$.
 For the linear velocity vector $\bm{v} \in \R^3$,
 we merely need to solve the equation
 \[
 	\frac{(I-e^{\cross{w}}) \cross{w} \bm{v}
 		+ \bm{w}\tr{\bm{w}}\bm{v}}{\|\bm{w}\|^2}
-	= \bm{T}.
+	= \bm{t}.
 \]
 Beware that, just as in $SO(3)$, this representation is not unique.
 In general, there exists many twists representing the same rigid-body motion.
