@@ -728,6 +728,55 @@ estimation as a problem directly depending on the image intensity observations.
 
 There are three main feature-based approaches,
 depending on the formulation of the feature correspondences.
+
+\subsubsection{3D to 3D}%
+\label{ssub:3d_to_3d}
+When features in previous and current frames have a depth information,
+one can compare the points 3D coordinates.
+There are two main strategies to estimate the motion from those point clouds.
+The first is to consider point clouds globally and try to align them as a whole.
+Variants of the ICP ``iterative closest point'' algorithm~\cite{besl1992method},
+which is a method for registration of 3D shapes, are well suited for this task.
+This strategy is often used in the case of RGB-D cameras since it avoids
+the step of matching features in both images.
+
+When features are matched, another strategy consists in
+formulating the problem as a minimization problem
+\[
+	\arg \min_{g_k} \sum_{i} \| \bm{X}_k^i - g_k(\bm{X}_{k-1}^i) \|
+\]
+where $g_k$ is the rigid body motion between frames $k-1$ and $k$,
+$\bm{X}_k^i$ and $\bm{X}_{k-1}^i$ are the 3D coordinates of point $\bm{X}^i$
+in the camera frames $k$ and $k-1$.
+This formulation is quite sensible to outliers so a robust approach is desirable.
+
+\subsubsection{2D to 2D}%
+\label{ssub:2d_to_2d}
+
+When no depth information is provided by the sensors,
+it may be preferable to avoid the estimation of 3D coordinates all together.
+In presence of a calibrated camera, its motion can be recovered
+thanks to the essential matrix
+\[
+	E = \cross{t}R
+\]
+where $t$ is the translation up to an unknown scale factor,
+and $R$ is the rotation of the transformation.
+The essential matrix itself is computed thanks to the epipolar constraint,
+stating that for every matching pair of normalized image coordinates
+$\bm{p}$ and $\bm{p}'$,
+\[
+	\tr{\bm{p}'}E\bm{p} = 0.
+\]
+The essential matrix can be recovered with factorization techniques~\cite{longuet1981computer}.
+When robustness to outliers is desired,
+the most common solution is to use a RANSAC-like scheme,
+with a five-point algorithm such as the one presented by Nister~\cite{nister2003efficient}.
+
+\subsubsection{3D to 2D}%
+\label{ssub:3d_to_2d}
+
+
 \begin{itemize}
 	\item 3D to 3D:\@ features are associated as 3D points.
 		It requires knowing the depth of points in the image,
