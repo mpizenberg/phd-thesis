@@ -726,6 +726,20 @@ estimation as a problem directly depending on the image intensity observations.
 \subsection{Feature-Based Motion Estimation}%
 \label{sub:feature-based}
 
+There are three main feature-based approaches,
+depending on the formulation of the feature correspondences.
+\begin{itemize}
+	\item 3D to 3D:\@ features are associated as 3D points.
+		It requires knowing the depth of points in the image,
+		which is facilitated by stereo or RGB-D cameras.
+	\item 2D to 2D:\@ only the image coordinates of features are
+		used to estimate the camera motion.
+	\item 3D to 2D:\@ 3D points from previous frames
+		are matched to 2D coordinates in the current frame.
+\end{itemize}
+A detailed presentation of each scheme is provided in the first part
+of the visual odometry tutorial by Scaramuzza and Fraundorfer~\cite{scaramuzza2011visual}.
+
 \subsection{Appearance-Based Motion Estimation}%
 \label{sub:appearance-based}
 
