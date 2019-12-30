@@ -728,6 +728,8 @@ estimation as a problem directly depending on the image intensity observations.
 
 There are three main feature-based approaches,
 depending on the formulation of the feature correspondences.
+A detailed presentation of each scheme is provided in the first part
+of the visual odometry tutorial by Scaramuzza and Fraundorfer~\cite{scaramuzza2011visual}.
 
 \subsubsection{3D to 3D}%
 \label{ssub:3d_to_3d}
@@ -776,18 +778,25 @@ with a five-point algorithm such as the one presented by Nister~\cite{nister2003
 \subsubsection{3D to 2D}%
 \label{ssub:3d_to_2d}
 
-
-\begin{itemize}
-	\item 3D to 3D:\@ features are associated as 3D points.
-		It requires knowing the depth of points in the image,
-		which is facilitated by stereo or RGB-D cameras.
-	\item 2D to 2D:\@ only the image coordinates of features are
-		used to estimate the camera motion.
-	\item 3D to 2D:\@ 3D points from previous frames
-		are matched to 2D coordinates in the current frame.
-\end{itemize}
-A detailed presentation of each scheme is provided in the first part
-of the visual odometry tutorial by Scaramuzza and Fraundorfer~\cite{scaramuzza2011visual}.
+Instead of comparing 3D coordinates of triangulated points,
+it is also possible to compare the reprojection of a 3D point $\bm{X}_{k-1}^i$
+into the image $I_k$, that we will note $g_k(\bm{X}_{k-1}^i)$,
+with its actual position in the image, noted $p_k^i$.
+This error is usually called a reprojection error.
+As we will explain soon, we can compute another kind of reprojection error,
+based on appearance, so I will call this a geometric reprojection error.
+Recovering the camera motion thus consists in minimizing the geometric reprojection error
+\[
+	\arg \min_{g_k} \sum_i \| p_k^i - g_k(\bm{X}_{k-1}^i) \|^2
+\]
+This problem is called ``perspective from n points'' (PnP).
+The minimal case requires at least three points and is called
+``perspective from three points'' (P3P).
+A P3P solver may return up to four potential solutions
+that can be disambiguated with other points.
+In our interactive visual odometry Web application,
+we provide a fast P3P implementation based on
+Persson and Nordberg's solver~\cite{persson2018lambda}.
 
 \subsection{Appearance-Based Motion Estimation}%
 \label{sub:appearance-based}
