@@ -146,18 +146,34 @@ The first paper to implement an end-to-end neural network for image segmentation
 Instead of specifically commenting on each dataset methodology for gathering annotations, we will discuss in this section particular points that are of interest when one wants to create its own dataset. 
 
 \subsection{Explicit vs. implicit annotation process}
-A first interesting point to comment regarding the tables in section \ref{sec:cv_annot} is that most of the times, the annotation process was explicit to the human annotators. By explicit, we mean that the humans involved in the task were fully conscious of the tasks they were performing, and that the goal was to create an annotated dataset. This is mostly due to the fact that image annotation takes time, and requires an incentive (that is typically money, on crowdsourcing platforms for example). There are however a few exceptions, some of which having been mentioned before. 
+A first interesting point to comment regarding the tables in section \ref{sec:cv_annot} is that most of the times, the annotation process was explicit to the human annotators. By explicit, we mean that the humans involved in the task were fully conscious of the tasks they were performing, and that their goal was to create an annotated dataset. This is mostly due to the fact that image annotation takes time, and requires an incentive (that is typically money, on crowdsourcing platforms for example). There are however a few exceptions, some of which having been mentioned before. 
 
 
 First, the Conceptual Captions dataset \cite{sharma-etal-2018-conceptual} has been obtained through a mostly automated process, looking for sentences on web pages that accompany the images. One could say the original authors of the sentences implicitly annotated the images for this dataset. 
 
 
-A more interesting example is the ESP Game dataset \cite{von2005esp}. The ESP Game has been created by Luis Von Ahn in 2005 and figures two humans playing collaboratively over the same image. They score points whenever they manage to write matching words to describe the image. From an annotation point of view, whenever the two players agree on a word one can safely assume this word describes an object present on the image, or an action happening on the image. In order for the game to provide a good annotation coverage, words can be ruled out of the game (they become \textit{taboo}) which means the players can see these words and know they have to specify another one. The ESP game started a trend of Games With A Purpose (GWAP) \cite{von2008designing} including some games designed to perform image annotation (e.g. PeekaBoom \cite{von2006peekaboom}, KissKissBan \cite{ho2010kisskissban}, Click'n'Cut \cite{carlier2014click}), but ESP remains the only game that gathered enough data to create a dataset. 
+A more interesting example is the ESP Game dataset \cite{von2005esp}. The ESP Game has been created by Luis Von Ahn in 2005 and figures two humans playing collaboratively over the same image, as depicted in figure \ref{fig:esp}. They score points whenever they manage to write matching words to describe the image. From an annotation point of view, whenever the two players agree on a word one can safely assume this word describes an object present on the image, or an action happening on the image. In order for the game to provide a good annotation coverage, words can be ruled out of the game (they become \textit{taboo}) which means the players can see these words and know they have to specify another one. The ESP game started a trend of Games With A Purpose (GWAP) \cite{von2008designing} including some games designed to perform image annotation (e.g. PeekaBoom \cite{von2006peekaboom}, KissKissBan \cite{ho2010kisskissban}, Click'n'Cut \cite{carlier2014click}), but ESP remains the only game that gathered enough data to create a dataset. 
 
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.5\columnwidth]{assets/img/esp.png}
+\caption{Screenshot of the ESP game, by Luis Von Ahn \cite{von2005esp}}%
+\label{fig:esp}
+\end{figure}
 
 There exists another well-known mean to gather data in an implicit way: CAPTCHAs. The term has been originally coined by Luis Von Ahn (again) et al. \cite{von2003captcha} and stands for Completely Automated Public Turing Test to Tell Computer and Humans Apart. CAPTCHAs have been created to stop automated attacks on websites, to prevent for example hackers from creating millions of mail accounts for sending spam. The idea is to create a Turing test \cite{machinery1950computing}, i.e. a test that a human should be able to complete effortlessly while a machine would be unable to perform it. Original versions of CAPTCHAs were displaying distorted, geometrically transformed words which would make it unrecognizable by standard optical character recognition (OCR) softwares. The task remained fairly easy to humans, and required in average 13s \cite{von2008recaptcha}. At the time, ambitious projects were ran in parallel to digitize tremendous collections of books (like Google Books, which makes available serching through millions of books). This process of digitizing books was automated using OCR softwares, but failed for 20\% of the words in older books (due to faded ink, for example). The reCAPTCHA system offers a clever way to match the two very different problems of securing websites and digitizing old books by proposing words from old books, that could not be recognized automatically, to humans who wish to use an online service and are perfectly able to recognize them. The authors report that in 2008, after one year of deployment, reCAPTCHA has helped decipher 440M words, which amounts for more than 17,000 books.
 
-While there are no further publications on reCAPTCHA, one has been able to observe its evolution through the years. Driven by the need to come up with problems that still resist computers, it went from text to image recognition, from digit recognition (in pictures probably extracted from Google Street View) to object detection (in urban scenes pictures, which is very likely to target autonomous vehicles applications).
+\begin{figure}
+	\centering
+	\begin{tabular}{ccc}
+\includegraphics[width=5cm]{assets/img/recaptcha.png} & \includegraphics[width=4cm]{assets/img/recaptcha-streetview.jpg} & 
+\includegraphics[width=3cm]{assets/img/reCAPTCHA_v2.png} \\
+	\end{tabular}
+	\caption{Screenshots illustrating the evolution of reCAPTCHA \cite{von2008recaptcha} tasks over the years.}
+	\label{fig:recaptcha}
+\end{figure}
+
+While there are no further publications on reCAPTCHA, one has been able to observe its evolution through the years (see figure \ref{fig:recaptcha}). Driven by the need to come up with problems that still resist computers, it went from text to image recognition, from digit recognition (in pictures probably extracted from Google Street View) to object detection (in urban scenes pictures, which is very likely to target autonomous vehicles applications).
 
 
 \subsection{Expert vs. non-expert annotators}
