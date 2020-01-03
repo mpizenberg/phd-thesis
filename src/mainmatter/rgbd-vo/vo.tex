@@ -856,7 +856,7 @@ The minimization of the photometric reprojection error is a non-linear,
 non-convex problem due to the form of the warping function.
 It is common to solve it with a non-linear iterative algorithm such as Gauss-Newton.
 If we add the parameterization to the notation, $W(\bm{x}) = W(\bm{x}, \bm{\xi})$,
-and consider that $\bm{xi}$ is to be found iteratively,
+and consider that $\bm{\xi}$ is to be found iteratively,
 we can rewrite the expression to minimize as
 \[
 	\argmin_{W} \sum_{\bm{x}}\|I(W(\bm{x}, \bm{\xi} + \delta \bm{\xi})) - I^{*}(\bm{x})\|^2.
