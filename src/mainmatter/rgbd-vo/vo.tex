@@ -816,7 +816,7 @@ Under the photoconsistency assumption, i.e.\ the appearance of a point
 does not change between images, aligning them consists in
 finding the transformation $W$ minimizing the photometric reprojection error
 \[
-	\argmin_{W} \sum_{\bm{x}}(I(W(\bm{x})) - I^{*}(\bm{x}))^2
+	\argmin_{W} \sum_{\bm{x}}\|I(W(\bm{x})) - I^{*}(\bm{x})\|^2
 \]
 where $I^{*}, I$ are the reference and new images,
 and $\bm{x}$ is the position of a pixel in the reference image.
@@ -852,15 +852,76 @@ klose2013efficient, forster2014svo, engel2017direct}.
 \subsubsection{Minimization of the Photometric Reprojection Error}%
 \label{ssub:minimization_photometric_error}
 
-Baker and Matthews, Inverse / forward compositional, pas parler de forward additive, Gauss-Newton.
+The minimization of the photometric reprojection error is a non-linear,
+non-convex problem due to the form of the warping function.
+It is common to solve it with a non-linear iterative algorithm such as Gauss-Newton.
+If we add the parameterization to the notation, $W(\bm{x}) = W(\bm{x}, \bm{\xi})$,
+and consider that $\bm{xi}$ is to be found iteratively,
+we can rewrite the expression to minimize as
+\[
+	\argmin_{W} \sum_{\bm{x}}\|I(W(\bm{x}, \bm{\xi} + \delta \bm{\xi})) - I^{*}(\bm{x})\|^2.
+\]
+In a Gauss-Newton scheme, the minimum is found by performing a first order
+Tailor expansion of $I(W(\bm{x}, \bm{\xi} + \delta \bm{\xi}))$.
+Using the chain rule, the gradient of this expression can be written
+$J = \nabla I \nabla_{\bm{\xi}}W$ where $\nabla I$ is the image gradient
+and $\nabla_{\bm{\xi}}W$ is the Jacobian of the warping function.
+Let $H$ be the Gauss-Newton approximation of the Hessian,
+$H = \sum_{\bm{x}}\tr{J}J$,
+then the step of the parameters $\delta \bm{\xi}$ is given by
+\[
+	\delta \bm{\xi} = \inv{H} \sum_{\bm{x}} \tr{J} (I^{*}(\bm{x}) - I(W(\bm{x}, \bm{\xi})))
+\]
+and the new set of parameters is updated as $\bm{\xi} \leftarrow \bm{\xi} + \delta \bm{\xi}$.
+
+In~\cite{baker2004lucas} Baker and Matthews provide a detailed review of the direct
+alignment problem in a unifying framework showcasing the different possible formulations
+of the expression to minimize.
+Those formulations are referred to as forward additive, forward compositional,
+inverse additive and inverse compositional.
+The inverse additive approach is subtly different but the other three are
+easily summarized by Table~\ref{tab:image-alignment-method}.
+The compositional approaches model the increment as the composition
+so it is required that the set of warps forms a group.
+The inverse compositional approach exchange the roles of the reference image
+with the new image to align.
+This has a computational and accuracy advantage since the image gradients
+are computed on the reference image $I^{*}$.
+For this reason, the majority of direct visual odometry algorithms,
+including our own implementation use that inverse compositional scheme.
+
+
+\begin{table*}[ht]
+\centering
+\begin{tabular}{lll}
+Formulation
+	& Minimization
+    & Warp update\\
+    \midrule
+Forward additive
+	& $I(W(\bm{x}, \bm{\xi} + \delta \bm{\xi})) - I^{*}(\bm{x})$
+	& $W(\bm{x}, \bm{\xi}) \leftarrow W(\bm{x}, \bm{\xi} + \delta \bm{\xi})$\\
+Forward compositional
+	& $I(W(W(\bm{x}, \delta \bm{\xi}), \bm{\xi})) - I^{*}(\bm{x})$
+	& $W(\bm{x}, \bm{\xi}) \leftarrow W(\bm{x}, \bm{\xi}) \circ W(\bm{x}, \delta \bm{\xi})$\\
+Inverse compositional
+	& $I^{*}(W(\bm{x}, \delta \bm{\xi})) - I(W(\bm{x}, \bm{\xi}))$
+	& $W(\bm{x}, \bm{\xi}) \leftarrow W(\bm{x}, \bm{\xi}) \circ \inv{W(\bm{x}, \delta \bm{\xi})}$\\
+\end{tabular}
+
+\caption{Formulation of the expression to minimize and the warp update step
+	depending on the optimization scheme, as detailed in~\cite{baker2004lucas}.}%
+\label{tab:image-alignment-method}
+\end{table*}
+
 
 \subsection{Extensions and Richer Modelizations}%
 \label{sub:vo_extensions}
 
-robust
-Extensions to rolling shutter, continuous-time location, other cameras, photometric changes, etc.
-
-deep learning, event cameras, ...
+The purpose here is just mention a few existing things that we are not going to explain,
+but should not be completely ignored such as:
+robust, extensions to rolling shutter, continuous-time location, other cameras, photometric changes,
+deep learning, event cameras, etc.
 
 % ##############################################################################
 
