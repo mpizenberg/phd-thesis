@@ -713,7 +713,7 @@ $g = \inmatrix{R & \bm{t}\\ 0 & 1}$.
 The core challenge of visual odometry is to accurately estimate
 this transformation $g$ from the observations provided by the camera images.
 The two main approaches are feature-based or appearance-based.
-Recently, feature-based motion estimation is also sometimes called indirect,
+Feature-based motion estimation is also sometimes called indirect,
 while appearance-based is called direct visual odometry.
 The distinction is due to the fact that feature-based methods
 first step is to find and match features in the images.
@@ -801,14 +801,66 @@ Persson and Nordberg's solver~\cite{persson2018lambda}.
 \subsection{Appearance-Based Motion Estimation}%
 \label{sub:appearance-based}
 
-fourier-melin transform,
-recent direct approaches.
+Most appearance-based motion estimation methods are also direct,
+with some exceptions like the algorithm by Goecke et al.~\cite{goecke2007visual}
+which computes the Fourier-Mellin transform of the image.
+Our implementation belongs to the direct image alignment category
+so we will detail how this works.
 
-\section{Direct Image Alignment}%
-\label{sec:direct-image-alignment}
+\subsubsection{Direct Image Alignment}%
+\label{ssub:direct-image-alignment}
 
-Baker
+In general, the direct approach formulates the problem as an
+image registration (alignment) task.
+Under the photoconsistency assumption, i.e.\ the appearance of a point
+does not change between images, aligning them consists in
+finding the transformation $W$ minimizing the photometric reprojection error
+\[
+	\argmin_{W} \sum_{\bm{x}}(I(W(\bm{x})) - I^{*}(\bm{x}))^2
+\]
+where $I^{*}, I$ are the reference and new images,
+and $\bm{x}$ is the position of a pixel in the reference image.
+The transformation $W$ is called the warp function and can take many forms.
+Most of the time it is parametric, such as a 2D affine transformation,
+visualized in Figure~\ref{fig:direct-image-alignment} and modelled
+by the matrix $\inmatrix{
+		1 + p_1 & p_3     & p_5 \\
+		p_2     & 1 + p_4 & p_6}$
+where $p_1$ to $p_6$ are the six parameters of the transformation.
+The non parametric case is well known under the name optical flow
+which consists in recovering the vector field describing the movement of all pixels.
+To model the warp function by a rigid body motion of the camera capturing the image,
+one could represent the camera motion by a matrix of the form $\inmatrix{R & \bm{t}}$
+with $R \in SO(3)$ and $\bm{t} \in \R^3$.
+The main inconvenience of this parameterization is that $R$ is a constrained 3x3 matrix,
+so using 9 free parameters to optimize is clearly suboptimal.
+Recent direct visual odometry algorithms seem to all agree on using
+the Lie algebra $\seee$ for the parameterization of the rigid body
+motion~\cite{newcombe2011dtam, audras2011real, kerl2013robust,
+klose2013efficient, forster2014svo, engel2017direct}.
 
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.48\linewidth]{assets/img/image-alignment-1.png}
+	\hfill
+	\includegraphics[width=0.48\linewidth]{assets/img/image-alignment-2.png}
+	\caption{Direct image alignment. The 2D affine transformation between the first
+	and second image is represented with the red rectangle.}%
+	\label{fig:direct-image-alignment}
+\end{figure}
+
+\subsubsection{Minimization of the Photometric Reprojection Error}%
+\label{ssub:minimization_photometric_error}
+
+Baker and Matthews, Inverse / forward compositional, pas parler de forward additive, Gauss-Newton.
+
+\subsection{Extensions and Richer Modelizations}%
+\label{sub:vo_extensions}
+
+robust
+Extensions to rolling shutter, continuous-time location, other cameras, photometric changes, etc.
+
+deep learning, event cameras, ...
 
 % ##############################################################################
 
@@ -821,12 +873,6 @@ Baker
 % \subsubsection{Direct Formulation}%
 % \label{ssub:direct-formulation}
 
-% \begin{figure}[ht]
-% 	\centering
-% 	\includegraphics[width=\linewidth]{assets/img/direct-image-alignment.png}
-% 	\caption{Direct image alignment}%
-% 	\label{fig:direct-image-alignment}
-% \end{figure}
 %
 % \begin{figure}[ht]
 % 	\centering
