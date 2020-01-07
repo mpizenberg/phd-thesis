@@ -12,7 +12,7 @@ But first, what is image annotation?
 The most simple way to put it would be to consider it as
 the process of augmenting an image with information.
 This information can be of various nature
-(we review the different types of annotation in section \ref{sec:annotation-types})
+(we review the different types of annotation in Section~\ref{sec:annotation-types})
 and is typically provided by a human operator, also called annotator.
 
 We could consider photogrammetry as the first historical example of image annotation,
@@ -141,7 +141,7 @@ The first one from Krizhevsky et al.\ in 2012~\cite{krizhevsky2012imagenet},
 nicknamed AlexNet, was probably key in the rise of deep learning that followed.
 AlexNet won the ILSVRC 2012 challenge by a large margin,
 starting the trend of using deep neural networks to solve computer vision problems.
-The second paper from He et al. in 2016 and often called ResNet~\cite{he2016deep},
+The second paper from He et al.\ in 2016 and often called ResNet~\cite{he2016deep},
 introduced residual blocks (through skip connections)
 to ease the training of very deep neural networks (up to 1,000 layers!).
 The 152 layers version of ResNet won the ILSVRC 2015 challenge
@@ -157,13 +157,13 @@ reducing the number of parameters and operations to a minimum.
 \begin{tabular}{lllll}
 	Dataset & Year & \# classes & \# images &  annotation process \\
 	\midrule
-	PASCAL VOC \cite{Everingham10} & 2005 -- 2012 & 20 & 11.5k &  In-house \\
-	ESP Game \cite{von2005esp} & unreported & any & 100k &  ESP Game players \\
-	CIFAR-10 \cite{krizhevsky2009learning} & 2009 & 10 & 60k  & Recruited students \\
-	CIFAR-100 \cite{krizhevsky2009learning} & 2009 & 100 & 60k  & Recruited students \\
-	SUN397 \cite{xiao2010sun} & 2010 & 397 & 130k &   \\
-	ImageNet \cite{ILSVRC15} & 2010 -- now & 21k & 14M &  Mechanical Turk \\
-	OpenImage \cite{OpenImages, OpenImages2} & 2016 -- now & 8.5k & 9.2M & \makecell[l]{In-house and\\Crowdsource app} \\
+	PASCAL VOC~\cite{Everingham10} & 2005 -- 2012 & 20 & 11.5k &  In-house \\
+	ESP Game~\cite{von2005esp} & unreported & any & 100k &  ESP Game players \\
+	CIFAR-10~\cite{krizhevsky2009learning} & 2009 & 10 & 60k  & Recruited students \\
+	CIFAR-100~\cite{krizhevsky2009learning} & 2009 & 100 & 60k  & Recruited students \\
+	SUN397~\cite{xiao2010sun} & 2010 & 397 & 130k &   \\
+	ImageNet~\cite{ILSVRC15} & 2010 -- now & 21k & 14M &  Mechanical Turk \\
+	OpenImage~\cite{OpenImages, OpenImages2} & 2016 -- now & 8.5k & 9.2M & \makecell[l]{In-house and\\Crowdsource app} \\
 \end{tabular}%
 \label{tab:classification_ds}
 \end{table}
@@ -188,10 +188,10 @@ completely different but still convey the same semantic meaning.
 \begin{tabular}{lllll}
 	Dataset & Year & \# captions & \# images & annotation process \\
 	\midrule
-	Flickr30k \cite{flickr30k} & 2014 & 150k & 30k & Mechanical Turk \\
-	MS COCO \cite{chen2015microsoft} & 2015 & 1M & 164k & Mechanical Turk \\
-	Conceptual Captions \cite{sharma-etal-2018-conceptual} & 2018 & 3.3M & 3.3M & Web crawling \\
-	\texttt{nocaps} \cite{agrawal2019nocaps} & 2019 &  166k & 15k & Mechanical Turk \\
+	Flickr30k~\cite{flickr30k} & 2014 & 150k & 30k & Mechanical Turk \\
+	MS COCO~\cite{chen2015microsoft} & 2015 & 1M & 164k & Mechanical Turk \\
+	Conceptual Captions~\cite{sharma-etal-2018-conceptual} & 2018 & 3.3M & 3.3M & Web crawling \\
+	\texttt{nocaps}~\cite{agrawal2019nocaps} & 2019 &  166k & 15k & Mechanical Turk \\
 \end{tabular}%
 \label{tab:caption_ds}
 \end{table}
@@ -236,10 +236,10 @@ since there could be hundreds of instances of the same object in a scene
 \begin{tabular}{llllll}
 	Dataset & Year & \# classes & \# images & \# instances & annotation process \\
 	\midrule
-	PASCAL VOC \cite{Everingham10} & 2005 -- 2012 & 20 & 11.5k & 27.4k & In-house \\
-	ImageNet\cite{ILSVRC15} & 2010 -- now & 200 & 450k & 500k & Mechanical Turk \\
-	MS COCO \cite{lin2014microsoft} & 2015 -- now & 91 & 328k & 2.5M & Mechanical Turk \\
-	OpenImage \cite{OpenImages, OpenImages2} & 2016 -- now & 600 & 1.9M & 15.8M & In-house \\
+	PASCAL VOC~\cite{Everingham10} & 2005 -- 2012 & 20 & 11.5k & 27.4k & In-house \\
+	ImageNet~\cite{ILSVRC15} & 2010 -- now & 200 & 450k & 500k & Mechanical Turk \\
+	MS COCO~\cite{lin2014microsoft} & 2015 -- now & 91 & 328k & 2.5M & Mechanical Turk \\
+	OpenImage~\cite{OpenImages, OpenImages2} & 2016 -- now & 600 & 1.9M & 15.8M & In-house \\
 \end{tabular}%
 \label{tab:detection_ds}
 \end{table}
@@ -248,7 +248,7 @@ Object detection datasets mostly originate from the image classification dataset
 inroduced in table~\ref{tab:classification_ds}, which they are often extending.
 Table~\ref{tab:detection_ds} sums up the main characteristics
 of four of the most prominent ones.
-The PASCAL Visual Objects Challenge \cite{Everingham10} for example,
+The PASCAL Visual Objects Challenge~\cite{Everingham10} for example,
 has included a detection challenge ever
 since it first ran in 2005 but on only a few thousands image.
 The dataset increased in size over time and reached
@@ -339,10 +339,10 @@ and 2.8 million segmented instances.
 \begin{tabular}{llllll}
 	Dataset & Year & \# classes & \# images & \# instances & annotation process \\
 	\midrule
-	PASCAL VOC \cite{Everingham10} & 2005 -- 2012 & 20 & 11k & 7k & In-house \\
-	SUN2012 \cite{xiao2010sun} & 2012 & 4479 & 131k & 313k & LabelMe \cite{russell2008labelme,barriuso2012notes} \\
-	MS COCO \cite{lin2014microsoft} & 2015 -- now & 91 & 328k & 2.5M & Mechanical Turk \\
-	OpenImage \cite{OpenImages, OpenImages2} & 2016 -- now & 350 & 1M & 2.8M & In-house \\
+	PASCAL VOC~\cite{Everingham10} & 2005 -- 2012 & 20 & 11k & 7k & In-house \\
+	SUN2012~\cite{xiao2010sun} & 2012 & 4479 & 131k & 313k & LabelMe~\cite{russell2008labelme,barriuso2012notes} \\
+	MS COCO~\cite{lin2014microsoft} & 2015 -- now & 91 & 328k & 2.5M & Mechanical Turk \\
+	OpenImage~\cite{OpenImages, OpenImages2} & 2016 -- now & 350 & 1M & 2.8M & In-house \\
 \end{tabular}%
 \label{tab:segmentation_ds}
 \end{table}
@@ -427,7 +427,7 @@ Luis Von Ahn (again) et al.~\cite{von2003captcha} and stands for
 Completely Automated Public Turing Test to Tell Computer and Humans Apart.
 CAPTCHAs have been created to stop automated attacks on websites,
 to prevent for example hackers from creating millions of mail accounts for sending spam.
-The idea is to create a Turing test \cite{machinery1950computing},
+The idea is to create a Turing test~\cite{machinery1950computing},
 i.e.\ a test that a human should be able to complete effortlessly
 while a machine would be unable to perform it.
 Original versions of CAPTCHAs were displaying distorted,
@@ -453,7 +453,7 @@ reCAPTCHA has helped decipher 440M words, which amounts for more than 17,000 boo
 \includegraphics[width=5cm]{assets/img/recaptcha.png} & \includegraphics[width=4cm]{assets/img/recaptcha-streetview.jpg} &
 \includegraphics[width=3cm]{assets/img/reCAPTCHA_v2.png} \\
 	\end{tabular}
-	\caption{Screenshots illustrating the evolution of reCAPTCHA \cite{von2008recaptcha} tasks over the years.}
+	\caption{Screenshots illustrating the evolution of reCAPTCHA~\cite{von2008recaptcha} tasks over the years.}%
 	\label{fig:recaptcha}
 \end{figure}
 
@@ -464,7 +464,7 @@ it went from text to image recognition, from digit recognition
 (in pictures probably extracted from Google Street View) to object detection
 (in urban scenes pictures, which is very likely to target autonomous vehicles applications).
 
-\subsection{Expert vs. non-expert annotators}
+\subsection{Expert vs.\ non-expert annotators}
 
 Whether it is implicit or explicit,
 the annotations need to be performed by human annotators.
@@ -476,7 +476,7 @@ but who come at an expensive cost, and non-expert users
 who tend to make more mistakes but provide much cheaper annotations.
 
 Historically, the first main datasets that have been created
-for applying machine learning to computer vision problems were PASCAL and CIFAR.
+for applying machine learning to computer vision problems were PASCAL and CIFAR.\@
 These datasets are of reasonable scale (less than 100k images)
 and thus did not require too many annotators.
 In fact, the authors of PASCAL~\cite{Everingham10} reported that a ``party'' of users
@@ -504,7 +504,7 @@ i.e.\ humans recruited and paid through Amazon Mechanical Turk.
 Since it is much more difficult to clearly instruct distant users,
 the annotations interfaces need to be carefully designed,
 and the annotation quality need to be properly ensured;
-this will be described in section \ref{sec:annotation_quality}.
+this will be described in section~\ref{sec:annotation_quality}.
 
 While crowdsourcing is widely used, it may not be relevant in all setups.
 For example, in case the images would be sensitive,
@@ -547,10 +547,10 @@ The data they provide is often unusable.
 Finally, a last class of workers, called \textit{scammers},
 designates users who try to trick the system to collect the reward.
 A good quality checking process should account for these three types of possible errors.
-Oleson et al. point out the advantages of adding gold standard images
-(i.e. images for which a ground-truth annotation is known)
+Oleson et al.\ point out the advantages of adding gold standard images
+(i.e.\ images for which a ground-truth annotation is known)
 among the data to be able to estimate workers reliability.
-The authors of ImageNet \cite{ILSVRC15} also reported using this technique.
+The authors of ImageNet~\cite{ILSVRC15} also reported using this technique.
 Using gold standard is a good practice to detect scammers and incompetent workers.
 
 \begin{figure}[ht]
@@ -693,7 +693,7 @@ This annotation can be associated to the entire image, like for image captioning
 	\item points, lines
 	\item bounding box
 	\item polygon
-	\item circles, ellipses ??
+	\item circles, ellipses?
 \end{itemize}
 
-THE BIG TABLE: datasets and relevant papers, to be classified
+THE BIG TABLe: datasets and relevant papers, to be classified
