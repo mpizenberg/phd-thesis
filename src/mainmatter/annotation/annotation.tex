@@ -162,7 +162,7 @@ reducing the number of parameters and operations to a minimum.
 	CIFAR-100~\cite{krizhevsky2009learning} & 2009 & 100 & 60k  & Recruited students \\
 	SUN397~\cite{xiao2010sun} & 2010 & 397 & 130k &   \\
 	ImageNet~\cite{ILSVRC15} & 2010 -- now & 21k & 14M &  Mechanical Turk \\
-	OpenImage~\cite{OpenImages, OpenImages2} & 2016 -- now & 8.5k & 9.2M & \makecell[l]{In-house and\\Crowdsource app} \\
+	Open Images~\cite{OpenImages, OpenImages2} & 2016 -- now & 8.5k & 9.2M & \makecell[l]{In-house and\\Crowdsource app} \\
 \end{tabular}%
 \label{tab:classification_ds}
 \end{table}
@@ -238,7 +238,7 @@ since there could be hundreds of instances of the same object in a scene
 	PASCAL VOC~\cite{Everingham10} & 2005 -- 2012 & 20 & 11.5k & 27.4k & In-house \\
 	ImageNet~\cite{ILSVRC15} & 2010 -- now & 200 & 450k & 500k & Mechanical Turk \\
 	MS COCO~\cite{lin2014microsoft} & 2015 -- now & 91 & 328k & 2.5M & Mechanical Turk \\
-	OpenImage~\cite{OpenImages, OpenImages2} & 2016 -- now & 600 & 1.9M & 15.8M & In-house \\
+	Open Images~\cite{OpenImages, OpenImages2} & 2016 -- now & 600 & 1.9M & 15.8M & In-house \\
 \end{tabular}%
 \label{tab:detection_ds}
 \end{table}
@@ -272,7 +272,7 @@ but that are used to product bounding boxes that are valid for an object detecti
 MS COCO was designed to provide a larger number of annotations
 per class than ImageNet and PASCAL, but on a smaller number of 91 classes.
 Finally, the most recent and large dataset is called
-OpenImage~\cite{OpenImages, OpenImages2} and features a tremendous amount
+Open Images~\cite{OpenImages, OpenImages2} and features a tremendous amount
 of more than 15 million bounding boxes of 600 classes on almost 2 million images.
 
 These datasets have largely contributed to the large improvement in performance
@@ -328,7 +328,7 @@ but the authors of~\cite{lin2014microsoft} nonetheless reported that
 it takes 22 hours of human annotations to segment 1000 object instances.
 In their dataset, which was described in an earlier paragraph,
 more than 2 millions instances were annotated.
-The last dataset is again OpenImage, with a million images depicting 350 classes
+The last dataset is again Open Images, with a million images depicting 350 classes
 and 2.8 million segmented instances.
 % In 2018, MS COCO released a new dataset of panoptic segmentation.
 
@@ -341,7 +341,7 @@ and 2.8 million segmented instances.
 	PASCAL VOC~\cite{Everingham10} & 2005 -- 2012 & 20 & 11k & 7k & In-house \\
 	SUN2012~\cite{xiao2010sun} & 2012 & 4479 & 131k & 313k & LabelMe~\cite{russell2008labelme,barriuso2012notes} \\
 	MS COCO~\cite{lin2014microsoft} & 2015 -- now & 91 & 328k & 2.5M & Mechanical Turk \\
-	OpenImage~\cite{OpenImages, OpenImages2} & 2016 -- now & 350 & 1M & 2.8M & In-house \\
+	Open Images~\cite{OpenImages, OpenImages2} & 2016 -- now & 350 & 1M & 2.8M & In-house \\
 \end{tabular}%
 \label{tab:segmentation_ds}
 \end{table}
@@ -511,7 +511,7 @@ it is not possible to outsource the annotation process outside of a company.
 In addition, the need for redundancy to insure annotation quality
 limits the positive impact on cost that crowdsourcing is supposed to provide.
 Although being one of the largest annotated dataset,
-OpenImage has been for the most part annotated by in-house employees at Google.
+Open Images has been for the most part annotated by in-house employees at Google.
 To achieve this, interactions have been specially designed to lead
 to good annotations in a faster way.
 For example, extreme clicking for bounding box annotations~\cite{papadopoulos2017extreme}
@@ -616,7 +616,7 @@ which is the more time-consuming and is especially verified by the fourth task.
 
 A final control of the annotations quality can be done at the end of the study.
 This is an approach adopted in PASCAL~\cite{Everingham10} for example,
-but also in OpenImage~\cite{OpenImages} in which the expert annotators
+but also in Open Images~\cite{OpenImages} in which the expert annotators
 verify automatically derived labels (obtained through deep learning).
 
 
