@@ -151,27 +151,22 @@ The general trend in subsequent work has been to reach comparable
 (and even higher) performance than ResNet while
 reducing the number of parameters and operations to a minimum.
 
-\vspace{0.5cm}
 \begin{table}
-	\centering
-	\caption{Datasets for image classification and their characteristics.}
-	\begin{tabular}{|c|c|c|c|c|}
-		\hline
-		Dataset & Year & \# classes & \# images &  annotation process \\
-		\hline
-		PASCAL VOC \cite{Everingham10} & 2005 -- 2012 & 20 & 11.5k &  In-house annotators \\
-		ESP Game \cite{von2005esp} & unreported & any & 100k &  ESP Game players \\
-		CIFAR-10 \cite{krizhevsky2009learning} & 2009 & 10 & 60k  & Recruited students \\
-		CIFAR-100 \cite{krizhevsky2009learning} & 2009 & 100 & 60k  & Recruited students \\
-		SUN397 \cite{xiao2010sun} & 2010 & 397 & 130k &   \\
-		ImageNet \cite{ILSVRC15} & 2010 -- now & 21k & 14M &  Mechanical Turk \\
-		OpenImage \cite{OpenImages, OpenImages2} & 2016 -- now & 8.5k & 9.2M &  In-house annotators and \\
-& & & & Crowdsource app\\
-		\hline
-	\end{tabular}
-	\label{tab:classification_ds}
+\centering
+\caption{Datasets for image classification and their characteristics.}
+\begin{tabular}{lllll}
+	Dataset & Year & \# classes & \# images &  annotation process \\
+	\midrule
+	PASCAL VOC \cite{Everingham10} & 2005 -- 2012 & 20 & 11.5k &  In-house \\
+	ESP Game \cite{von2005esp} & unreported & any & 100k &  ESP Game players \\
+	CIFAR-10 \cite{krizhevsky2009learning} & 2009 & 10 & 60k  & Recruited students \\
+	CIFAR-100 \cite{krizhevsky2009learning} & 2009 & 100 & 60k  & Recruited students \\
+	SUN397 \cite{xiao2010sun} & 2010 & 397 & 130k &   \\
+	ImageNet \cite{ILSVRC15} & 2010 -- now & 21k & 14M &  Mechanical Turk \\
+	OpenImage \cite{OpenImages, OpenImages2} & 2016 -- now & 8.5k & 9.2M & \makecell[l]{In-house and\\Crowdsource app} \\
+\end{tabular}%
+\label{tab:classification_ds}
 \end{table}
-\vspace{0.5cm}
 
 \subsection{Image captioning}
 
@@ -187,21 +182,18 @@ Another difficulty for data gathering is the quality check of the annotations,
 since two sentences from two different users may be
 completely different but still convey the same semantic meaning.
 
-\vspace{0.5cm}
 \begin{table}
-	\centering
-	\caption{Datasets for image captioning and their characteristics.}
-	\begin{tabular}{|c|c|c|c|c|}
-		\hline
-		Dataset & Year & \# captions & \# images & annotation process \\
-		\hline
-		Flickr30k \cite{flickr30k} & 2014 & 150k & 30k & Mechanical Turk \\
-		MS COCO \cite{chen2015microsoft} & 2015 & 1M & 164k & Mechanical Turk \\
-		Conceptual Captions \cite{sharma-etal-2018-conceptual} & 2018 & 3.3M & 3.3M & Web crawling \\
-		\texttt{nocaps} \cite{agrawal2019nocaps} & 2019 &  166k & 15k & Mechanical Turk \\
-		\hline
-	\end{tabular}
-	\label{tab:caption_ds}
+\centering
+\caption{Datasets for image captioning and their characteristics.}
+\begin{tabular}{lllll}
+	Dataset & Year & \# captions & \# images & annotation process \\
+	\midrule
+	Flickr30k \cite{flickr30k} & 2014 & 150k & 30k & Mechanical Turk \\
+	MS COCO \cite{chen2015microsoft} & 2015 & 1M & 164k & Mechanical Turk \\
+	Conceptual Captions \cite{sharma-etal-2018-conceptual} & 2018 & 3.3M & 3.3M & Web crawling \\
+	\texttt{nocaps} \cite{agrawal2019nocaps} & 2019 &  166k & 15k & Mechanical Turk \\
+\end{tabular}%
+\label{tab:caption_ds}
 \end{table}
 
 The datasets introduced in Table~\ref{tab:caption_ds} have brought
@@ -238,21 +230,18 @@ Object detection is a much more difficult problem,
 since there could be hundreds of instances of the same object in a scene
 (such as humans in a crowd picture, or cars in a parking lot for example).
 
-\vspace{0.5cm}
 \begin{table}
-	\centering
-	\caption{Datasets for object detection and their characteristics.}
-	\begin{tabular}{|c|c|c|c|c|c|}
-		\hline
-		Dataset & Year & \# classes & \# images & \# instances & annotation process \\
-		\hline
-		PASCAL VOC \cite{Everingham10} & 2005 -- 2012 & 20 & 11.5k & 27.4k & In-house annotators \\
-		ImageNet\cite{ILSVRC15} & 2010 -- now & 200 & 450k & 500k & Mechanical Turk \\
-		MS COCO \cite{lin2014microsoft} & 2015 -- now & 91 & 328k & 2.5M & Mechanical Turk \\
-		OpenImage \cite{OpenImages, OpenImages2} & 2016 -- now & 600 & 1.9M & 15.8M & In-house annotators \\
-		\hline
-	\end{tabular}
-	\label{tab:detection_ds}
+\centering
+\caption{Datasets for object detection and their characteristics.}
+\begin{tabular}{llllll}
+	Dataset & Year & \# classes & \# images & \# instances & annotation process \\
+	\midrule
+	PASCAL VOC \cite{Everingham10} & 2005 -- 2012 & 20 & 11.5k & 27.4k & In-house \\
+	ImageNet\cite{ILSVRC15} & 2010 -- now & 200 & 450k & 500k & Mechanical Turk \\
+	MS COCO \cite{lin2014microsoft} & 2015 -- now & 91 & 328k & 2.5M & Mechanical Turk \\
+	OpenImage \cite{OpenImages, OpenImages2} & 2016 -- now & 600 & 1.9M & 15.8M & In-house \\
+\end{tabular}%
+\label{tab:detection_ds}
 \end{table}
 
 Object detection datasets mostly originate from the image classification datasets
@@ -344,21 +333,18 @@ The last dataset is again OpenImage, with a million images depicting 350 classes
 and 2.8 million segmented instances.
 % In 2018, MS COCO released a new dataset of panoptic segmentation.
 
-\vspace{0.5cm}
 \begin{table}
-	\centering
-	\caption{Datasets for object segmentation and their characteristics.}
-	\begin{tabular}{|c|c|c|c|c|c|}
-		\hline
-		Dataset & Year & \# classes & \# images & \# instances & annotation process \\
-		\hline
-		PASCAL VOC \cite{Everingham10} & 2005 -- 2012 & 20 & 11k & 7k & In-house annotators \\
-		SUN2012 \cite{xiao2010sun} & 2012 & 4479 & 131k & 313k & LabelMe \cite{russell2008labelme,barriuso2012notes} \\
-		MS COCO \cite{lin2014microsoft} & 2015 -- now & 91 & 328k & 2.5M & Mechanical Turk \\
-		OpenImage \cite{OpenImages, OpenImages2} & 2016 -- now & 350 & 1M & 2.8M & In-house annotators \\
-		\hline
-	\end{tabular}
-	\label{tab:segmentation_ds}
+\centering
+\caption{Datasets for object segmentation and their characteristics.}
+\begin{tabular}{llllll}
+	Dataset & Year & \# classes & \# images & \# instances & annotation process \\
+	\midrule
+	PASCAL VOC \cite{Everingham10} & 2005 -- 2012 & 20 & 11k & 7k & In-house \\
+	SUN2012 \cite{xiao2010sun} & 2012 & 4479 & 131k & 313k & LabelMe \cite{russell2008labelme,barriuso2012notes} \\
+	MS COCO \cite{lin2014microsoft} & 2015 -- now & 91 & 328k & 2.5M & Mechanical Turk \\
+	OpenImage \cite{OpenImages, OpenImages2} & 2016 -- now & 350 & 1M & 2.8M & In-house \\
+\end{tabular}%
+\label{tab:segmentation_ds}
 \end{table}
 
 
