@@ -51,13 +51,13 @@ and Escher (Figure~\ref{fig:escher_belvedere}).
 \centering
 \begin{subfigure}[b]{0.52\textwidth}
 	\includegraphics[width=\textwidth]{assets/img/hogarth_satire.jpg}
-	\caption{Satire by Hogarth 1753}%
+	\caption{Hogarth, Satire (1753)}%
 	\label{fig:hogarth_satire}
 \end{subfigure}
 \hfill
 \begin{subfigure}[b]{0.42\textwidth}
 	\includegraphics[width=\textwidth]{assets/img/escher_belvedere.jpg}
-	\caption{Escher, Belvedere 1958}%
+	\caption{Escher, Belvedere (1958)}%
 	\label{fig:escher_belvedere}
 \end{subfigure}
 \caption{Conscious circumvention of perspective projection in art.}%
@@ -70,8 +70,8 @@ and Escher (Figure~\ref{fig:escher_belvedere}).
 
 In order to formally write transformations by linear operations,
 we make extensive use of homogeneous coordinates to represent
-3D point as a 4D-vector $(X,Y,Z,1)$ with the last coordinate fixed to 1.
-This normalization is not always necessary. One can represent 3D points
+a 3D point $(X,Y,Z)$ as a 4D-vector $(X,Y,Z,1)$ with the last coordinate fixed to 1.
+However, this normalization is not always necessary as one can represent 3D points
 by a general 4D vector
 \[
 	\bm{X} = (XW, YW, ZW, W)\ \in\ \R^4.
@@ -102,8 +102,8 @@ of a real camera called the pinhole camera,
 represented in Figure~\ref{fig:pinhole_camera}.
 The main issue of such a camera,
 is that the hole has to be very small to get a sharp image,
-preventing light to enter the capture device.
-In order to augment the amount of light, today we use lenses,
+therefore limiting the amount of light entering the capture device.
+In order to augment that amount of light, it is possible to use lenses,
 but just as with a pinhole camera, the image is upside down in the image plan.
 In order to avoid dealing with minus signs in the equations,
 we pretend that the image plan is virtually on the same side than the object.
@@ -164,13 +164,13 @@ If pixels do not have unit scale, we need to introduce
 additional scaling factors $s_x$ and $s_y$.
 And if pixels are not rectangular, we also have a skew factor $s_{\theta}$.
 The transformation from coordinates in the frame of the camera
-to final pixel coordinates has thus the following steps
+to final pixel coordinates has thus the following steps:
 \[
 	\text{Camera}\ (\text{3D}, \bm{X})
 		\quad \overset{K_f\Pi_0}{\longrightarrow} \quad
 			\text{Image}\ (\text{2D}, \bm{x})
 		\quad \overset{K_s}{\longrightarrow} \quad
-			\text{Pixel}\ (\text{2D}, \bm{x'}).
+			\text{Pixel}\ (\text{2D}, \bm{x'})
 \]
 where the pixel coordinates $\bm{x'} = (x',y',1)$ are given by
 $\lambda\ \bm{x'} = K_s\ K_f\ \Pi_0\ \bm{X}$
@@ -231,7 +231,7 @@ that images are rectified as if fitting the pinhole model.
 
 Aiming to reconstruct a three-dimensional structure of the world from
 a set of two-dimensional views has a long history in computer vision.
-It is generally considered and ill-posed problem since reconstructions
+It is generally considered an ill-posed problem since reconstructions
 consistent with a given set of observations/images are typically not unique.
 Therefore, one need to impose additional assumptions.
 The study of geometric relations between a 3D scene
@@ -257,7 +257,8 @@ and factorization techniques for multiple views and orthogonal projection were
 also developed~\cite{tomasi1992shape}.
 Depending on communities and context,
 the joint estimation of camera motion and surrounding 3D environment is called
-structure and motion or visual SLAM (simultaneous location and mapping).
+structure and motion (also known as structure from motion)
+or visual SLAM (simultaneous location and mapping).
 Visual SLAM techniques slightly differ from structure and motion in the sense
 that they are specialized for timely coherent sequences of images such as videos.
 Visual odometry, that we will detail later, is the core step of Visual SLAM,
@@ -268,16 +269,16 @@ is done regarding the set of images.
 \subsection{3D Space \& Rigid Body Motion}%
 \label{sub:3d_space_rigid_body_motion}
 
-\subsubsection{Three-dimensional Euclidean Space}%
-\label{ssub:three_dimensional_euclidean_space}
-
-The three-dimensional Euclidean space $\E^3$ consists of all points
-$p \in \E^3$ characterized by coordinates
-$\bm{X} = \tr{(X_1, X_2, X_3)} \in \R^3$
-such that $\E^3$ can be identified with $\R^3$.
-By identifying $\E^3$ and $\R^3$,
-one can endow $\E^3$ with a scalar product, a norm and a metric.
-This allows to compute distances, curve lengths, areas and volumes.
+% \subsubsection{Three-dimensional Euclidean Space}%
+% \label{ssub:three_dimensional_euclidean_space}
+%
+% The three-dimensional Euclidean space $\E^3$ consists of all points
+% $p \in \E^3$ characterized by coordinates
+% $\bm{X} = \tr{(X_1, X_2, X_3)} \in \R^3$
+% such that $\E^3$ can be identified with $\R^3$.
+% By identifying $\E^3$ and $\R^3$,
+% one can endow $\E^3$ with a scalar product, a norm and a metric.
+% This allows to compute distances, curve lengths, areas and volumes.
 
 
 \subsubsection{Cross Product \& Skew-symmetric Matrices}%
@@ -297,7 +298,7 @@ also introduces an orientation.
 Fixing $\bm{u}$ induces a linear mapping $\bm{v} \mapsto \bm{u} \times \bm{v}$
 wich can be represented by the skew-symmetric matrix
 \[
-	\twist{u} = \cross{u} = \hatmat{u_1}{u_2}{u_3} \in \RR{3}{3}.
+	\twist{u} = \cross{u} = \hatmat{u_1}{u_2}{u_3} \in \RR{3}{3}
 \]
 such that $\bm{u} \times \bm{v} = \twist{u} \ \bm{v}$.
 In turn, every skew symmetric matrix $M \in \RR{3}{3}$
@@ -391,6 +392,12 @@ groups are better understood in their linearized versions
 (Theory of transformation groups, 1893).
 These infinitesimal generators form a structure which is today
 known as a Lie algebra.
+
+The reference C++ implementation to manipulate elements of
+Lie algebras useful to the computer vision community
+is a library called \verb|Sophus|~\cite{sophus} in tribute to Sophus Lie.
+In our work, we also provide a Rust implementation
+of these Lie algebras.
 
 
 \subsubsection{Lie Algebra $\sooo$}%
@@ -506,7 +513,7 @@ its associated rigid body motion is
 		0 & 1
 	\end{pmatrix}.
 \]
-Conversely, for every $g \in SE(3)$ there exist
+Conversely, for every $g \in SE(3)$ there exists
 twist coordinates $\bm{\xi} \in \R^6$ such that $g=\exp(\,\twist{\xi}\,)$.
 Given $g = (R,\bm{t})$, we can compute $\bm{w}$ thanks to the association
 $R = e^{\cross{w}}$ as explained previously for $SO(3)$.
