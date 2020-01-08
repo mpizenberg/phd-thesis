@@ -112,162 +112,63 @@ easy-to-understand and usable interaction while providing
 a high amount of supervision to obtain a good segmentation.
 
 
-The rest of the chapter is organized as follows.
-We first review the related work on interactive segmentation in Section~\ref{sec:soa}.
-We then explain our method to compute segmentation masks
-from outlining interactions in Section~\ref{sec:method}.
-Finally in Section~\ref{sec:experiment},
-we present our experiments and the results
+The rest of the chapter is organized as follows. Since we have already
+extensively described the state-of-the-art in the previous chapter, 
+we first introduce the outlining interaction along with our method 
+to compute segmentation masks in Section~\ref{sec:method}.
+We then present in Section~\ref{sec:experiment} our experiments and the results
 showing that our simple interaction lead to segmentations of good quality.
 
 
-\section{Related Work}%
-\label{sec:soa}
 
 
-\subsection{Existing interactions for user-assisted segmentation}
 
 
-Many interactions have been explored in the literature
-to provide users a way to bring semantic information
-to help a segmentation algorithm.
-We review the interactions in this paragraph
-and present briefly the algorithms that are attached to them.
+%\subsection{Interactive segmentation for non-expert users}
 
 
-The most intuitive methods are the ones that require
-the user to manually designate the contours of the object.
-The LabelMe tool~\cite{russell2008labelme}
-(Figure~\ref{fig:labelme}) is the most famous example
-of such an interface.
-The Web-based interface developed by the authors
-allows users to draw a polygon around an object.
-The segmentation obtained with this technique
-is not necessarily precise at the pixel level,
-but is sufficient in many cases and has the advantage of being
-easily understood by users.
-In a variant of this technique called
-the Intelligent Scissors~\cite{mortensen1995intelligent},
-the users click points on the contour of the object and a dynamic
-programming algorithm searches the optimal path that ties those points.
-There exists another variation of contour drawing called
-Soft Scissors~\cite{wang2007soft}.
-One has to follow the contour using a soft constrained,
-size-adaptable thick contour brush,
-requiring less precision than exact polygon contour drawing.
+%Although many work have studied how to incorporate human interactions
+%into segmentation algorithms, there are only very few authors
+%who studied interactive segmentation with a special focus
+%on the interaction matter.
+%In particular, the distinction between expert and non-expert users
+%has rarely been made when studying
+%the performance of interactive segmentation algorithms.
+%Considering the tremendous number of ground truth masks needed
+%to train deep learning algorithms to segment images,
+%the human annotations necessarily have to be provided by non-expert users.
+%Some experiments on crowdsourced
+%segmentation~\cite{carlier2016assessment} clearly show that
+%non-expert users can misunderstand a simple
+%segmentation HIT (Human Intelligence Task),
+%mistake foreground and background colors,
+%misunderstand the segmentation feedback, etc.
 
 
-\begin{figure}[ht]
-\centering
-\includegraphics[width=0.8\columnwidth]{assets/img/LabelMe.jpg}
-\caption{Visualization of an image annotated with the LabelMe tool~\cite{russell2008labelme}.}%
-\label{fig:labelme}
-\end{figure}
+%As a matter of fact, most of the crowdsourcing efforts in interactive
+%segmentation have been performed with a LabelMe type of interface.
+%In addition to the actual LabelMe project,
+%some work on medical imaging have crowdsourced segmentation masks by
+%asking users to draw a polygon around
+%hip joints~\cite{chavez2013crowdsourcing},
+%muscle and melanoma cells~\cite{gurari2015collect},
+%and nuclei~\cite{irshad2014crowdsourcing}.
 
 
-A second possibility for interactive segmentation has been proposed
-by Rother et al.~\cite{rother_grabcut:_2004}.
-The user is only required to draw a bounding box around the object
-(Figure~\ref{fig:rect_scrib}), which is used to learn
-a background model. The foreground is then obtained
-using iterative graph-cut and alpha matting.
-This method works very well for objects that distinctly emerge
-from a repetitive background.
-However in the case of complex scenes, the authors allow users
-to perform an additional refining step based on scribbles.
+%However, those work do not specifically aim at
+%the usability of their interfaces. Recent work by
+%Korinke et al.~\cite{korinke_intuitive_2015,korinke_exploring_2015}
+%give insights on the preferred user interactions
+%for interactive image segmentation on mobile devices.
+%Dividing the process into two steps, initialization and refinement,
+%seems to be the preferred input method.
+%The initial step can be either bounding box drawing or a simple outline.
 
 
-\begin{figure}[ht]
-\centering
-\includegraphics[width=0.45\columnwidth]{assets/img/gymnast_rect.jpg}
-\hfill
-\includegraphics[width=0.45\columnwidth]{assets/img/gymnast_scrib.jpg}
-\caption{Example bounding box and scribbles interactions.
-On the left image, a user drew a bounding box around the gymnast.
-On the right image, a user drew green foreground scribbles
-on the gymnast and red background scribbles outside.}%
-\label{fig:rect_scrib}
-\end{figure}
-
-
-Scribbles form another category of interactions for segmentation,
-and are undoubtedly the most widely used
-(Figure~\ref{fig:rect_scrib}).
-Users can typically draw foreground and background scribbles
-on the image, and receive a feedback on the current state
-of the resulting segmentation mask.
-Boykov and Jolly~\cite{boykov_interactive_2001} use this input to build a trimap,
-i.e.\ a partition of the image into hardly constrained foreground
-and background regions, and a softly constrained in-between region.
-They run a graph-cut algorithm to find the optimal object boundary
-on the softly constrained region.
-McGuinness and O’Connor~\cite{mcguinness2010comparative} describe
-how to use scribbles to segment an image using
-a Binary Partition Tree (BPT)~\cite{salembier2000binary}.
-The BPT is a hierarchy of image segments that can be used to propagate
-the foreground and background inputs between similar regions.
-Scribbles have also been used in the context of
-image co-segmentation~\cite{batra_icoseg:_2010},
-to provide foreground and background information across
-a set of images depicting the same object.
-As an alternative to scribbles, single foreground and background points
-have been used as input to select the best masks
-among a set of object candidates~\cite{carlier_clickncut:_2014}.
-
-
-The mouse is used in most of these work as interaction device,
-which probably explains why outlines are rarely studied in the literature.
-Outlines are indeed tedious to perform with a mouse.
-However, most of the literature algorithms can take outlines as an input;
-in our work we choose to use GrabCut to obtain
-a segmentation from the outlines.
-
-
-\subsection{Interactive segmentation for non-expert users}
-
-
-Although many work have studied how to incorporate human interactions
-into segmentation algorithms, there are only very few authors
-who studied interactive segmentation with a special focus
-on the interaction matter.
-In particular, the distinction between expert and non-expert users
-has rarely been made when studying
-the performance of interactive segmentation algorithms.
-Considering the tremendous number of ground truth masks needed
-to train deep learning algorithms to segment images,
-the human annotations necessarily have to be provided by non-expert users.
-Some experiments on crowdsourced
-segmentation~\cite{carlier2016assessment} clearly show that
-non-expert users can misunderstand a simple
-segmentation HIT (Human Intelligence Task),
-mistake foreground and background colors,
-misunderstand the segmentation feedback, etc.
-
-
-As a matter of fact, most of the crowdsourcing efforts in interactive
-segmentation have been performed with a LabelMe type of interface.
-In addition to the actual LabelMe project,
-some work on medical imaging have crowdsourced segmentation masks by
-asking users to draw a polygon around
-hip joints~\cite{chavez2013crowdsourcing},
-muscle and melanoma cells~\cite{gurari2015collect},
-and nuclei~\cite{irshad2014crowdsourcing}.
-
-
-However, those work do not specifically aim at
-the usability of their interfaces. Recent work by
-Korinke et al.~\cite{korinke_intuitive_2015,korinke_exploring_2015}
-give insights on the preferred user interactions
-for interactive image segmentation on mobile devices.
-Dividing the process into two steps, initialization and refinement,
-seems to be the preferred input method.
-The initial step can be either bounding box drawing or a simple outline.
-
-
-Our work is largely inspired by these findings;
-since we target non-expert users, we want to provide
-the most natural interaction and choose outlining
-for our interactive segmentation algorithm.
+%Our work is largely inspired by these findings;
+%since we target non-expert users, we want to provide
+%the most natural interaction and choose outlining
+%for our interactive segmentation algorithm.
 
 
 \section{Outlining objects for interactive segmentation}%

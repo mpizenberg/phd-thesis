@@ -89,7 +89,7 @@ often combined with (deep) machine learning techniques,
 have recently significantly improved the state-of-the-art.
 We will then discuss the process of gathering these annotations,
 focusing on some key aspects such as expert vs.\ non-expert annotations, quality control, etc.
-We will end with a presentation of possible interactions that can be used to annotate an image.
+Finally, we will end this chapter with a focus on image segmentation, reviewing the possible interactions that can be used to provide such type of annotation.
 
 \section{Computer vision problems that require annotation}%
 \label{sec:cv_annot}
@@ -656,7 +656,7 @@ two user studies to evaluate and compare these interactions.
 More recently, and while usability is not explicity mentioned,
 the work of Papadopoulos et al.~\cite{papadopoulos2017extreme}
 on extreme clicking is particularly interesting.
-The goal the work is two-fold: reducing the annotator cognitive load
+The goal of the work is two-fold: reducing the annotator cognitive load
 and improving the quality of the annotations.
 The authors propose replacing the traditional bounding box drawing
 by clicking four extreme points (top, down, left and right)
@@ -672,24 +672,103 @@ providing users with the ability to correct segmentations
 by scribbling~\cite{agustsson2018interactive} or clicking~\cite{OpenImagesSegmentation}.
 
 
-\section{Different types of interactions for image annotation}%
-\label{sec:annotation-types}
 
-In this section, we briefly review and analyze the interactions that have been used for image annotation.
+\section{Existing interactions for user-assisted segmentation}
 
-Directly related to image classification and image captioning
-is the simple interaction of \textit{free text typing}.
-It often consists of a single text box in which the annotator can type a word,
-a set of words, or even complete sentences.
-This annotation can be associated to the entire image, like for image captioning
+As image segmentation involves annotating images
+with a very rich amount of information,
+many interactions have been explored in the literature
+to provide users a way to bring semantic information
+to help existing segmentation algorithms.
+We review the interactions in this section
+and present briefly the algorithms that are attached to them.
 
-\begin{itemize}
-	\item Free text typing
-	\item Icon clicking
-	\item points, lines
-	\item bounding box
-	\item polygon
-	\item circles, ellipses?
-\end{itemize}
 
-THE BIG TABLe: datasets and relevant papers, to be classified
+The most intuitive methods are the ones that require
+the user to manually designate the contours of the object.
+The LabelMe tool~\cite{russell2008labelme}
+(Figure~\ref{fig:labelme}) is the most famous example
+of such an interface.
+The Web-based interface developed by the authors
+allows users to draw a polygon around an object.
+The segmentation obtained with this technique
+is not necessarily precise at the pixel level,
+but is sufficient in many cases and has the advantage of being
+easily understood by users.
+In a variant of this technique called
+the Intelligent Scissors~\cite{mortensen1995intelligent},
+the users click points on the contour of the object and a dynamic
+programming algorithm searches the optimal path that ties those points.
+There exists another variation of contour drawing called
+Soft Scissors~\cite{wang2007soft}.
+One has to follow the contour using a soft constrained,
+size-adaptable thick contour brush,
+requiring less precision than exact polygon contour drawing.
+
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.8\columnwidth]{assets/img/LabelMe.jpg}
+\caption{Visualization of an image annotated with the LabelMe tool~\cite{russell2008labelme}.}%
+\label{fig:labelme}
+\end{figure}
+
+
+A second possibility for interactive segmentation has been proposed
+by Rother et al.~\cite{rother_grabcut:_2004}.
+The user is only required to draw a bounding box around the object
+(Figure~\ref{fig:rect_scrib}), which is used to learn
+a background model. The foreground is then obtained
+using iterative graph-cut and alpha matting.
+This method works very well for objects that distinctly emerge
+from a repetitive background.
+However in the case of complex scenes, the authors allow users
+to perform an additional refining step based on scribbles.
+
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.45\columnwidth]{assets/img/gymnast_rect.jpg}
+\hfill
+\includegraphics[width=0.45\columnwidth]{assets/img/gymnast_scrib.jpg}
+\caption{Example bounding box and scribbles interactions.
+On the left image, a user drew a bounding box around the gymnast.
+On the right image, a user drew green foreground scribbles
+on the gymnast and red background scribbles outside.}%
+\label{fig:rect_scrib}
+\end{figure}
+
+
+Scribbles form another category of interactions for segmentation,
+and are undoubtedly the most widely used
+(Figure~\ref{fig:rect_scrib}).
+Users can typically draw foreground and background scribbles
+on the image, and receive a feedback on the current state
+of the resulting segmentation mask.
+Boykov and Jolly~\cite{boykov_interactive_2001} use this input to build a trimap,
+i.e.\ a partition of the image into hardly constrained foreground
+and background regions, and a softly constrained in-between region.
+They run a graph-cut algorithm to find the optimal object boundary
+on the softly constrained region.
+McGuinness and O'Connor~\cite{mcguinness2010comparative} describe
+how to use scribbles to segment an image using
+a Binary Partition Tree (BPT)~\cite{salembier2000binary}.
+The BPT is a hierarchy of image segments that can be used to propagate
+the foreground and background inputs between similar regions.
+Scribbles have also been used in the context of
+image co-segmentation~\cite{batra_icoseg:_2010},
+to provide foreground and background information across
+a set of images depicting the same object.
+As an alternative to scribbles, single foreground and background points
+have been used as input to select the best masks
+among a set of object candidates~\cite{carlier_clickncut:_2014}, or to guide
+the prediction of deep neural networks~\cite{OpenImagesSegmentation}.
+
+
+The mouse is used in most of these work as interaction device,
+which probably explains why outlines are rarely studied in the literature.
+Outlines are indeed tedious to perform with a mouse.
+However, most of the literature algorithms can take outlines as an input;
+in the work we present in the next chapter, we choose to use GrabCut to obtain
+a segmentation from the outlines.
+
