@@ -171,7 +171,7 @@ reducing the number of parameters and operations to a minimum.
 \subsection{Image captioning}
 
 Another important topic, that extends in a sense the image classification problem,
-is the one of \textbf{image captioning}.
+is the one of \textit{image captioning}.
 It consists in describing an image with a set of sentences.
 Image captioning is a much harder problem than classification,
 because captions require a higher level of image understanding as well as
@@ -222,10 +222,10 @@ the authors of the Conceptual Captions dataset~\cite{sharma-etal-2018-conceptual
 On top of naming or precisely describing the objects in an image,
 many applications also require to locate the objects.
 There are several levels of precision to which this problem can be achieved.
-The coarser grain application is often coined \textbf{object detection}
+The coarser grain application is often coined \textit{object detection}
 and consists in drawing a bounding box around objects in an image.
 Object detection is a generalization of the object localization problem,
-for which there can be at the most a single instance of each object in an image.
+for which there can be at most a single instance of each object in an image.
 Object detection is a much more difficult problem,
 since there could be hundreds of instances of the same object in a scene
 (such as humans in a crowd picture, or cars in a parking lot for example).
@@ -245,7 +245,7 @@ since there could be hundreds of instances of the same object in a scene
 \end{table}
 
 Object detection datasets mostly originate from the image classification datasets
-inroduced in table~\ref{tab:classification_ds}, which they are often extending.
+inroduced in Table~\ref{tab:classification_ds}, which they are often extending.
 Table~\ref{tab:detection_ds} sums up the main characteristics
 of four of the most prominent ones.
 The PASCAL Visual Objects Challenge~\cite{Everingham10} for example,
@@ -261,30 +261,29 @@ Note that ImageNet also ran a localization challenge for which
 more than 500k images of the 1000 classes that were used in
 the classification challenge were annotated with one,
 and sometimes more, bounding boxes per image.
-The difference with the object detection dataset is that
-there is only one class of object that is annotated
-on the images of the localization dataset.
-In total, there are thus more than a million images
-that include one or more bounding box annotations in the ImageNet dataset.
+The difference between localization and detection is that
+there is only one instance of object in an image of a localization dataset.
+In total, there are more than a million images
+including one or more bounding box annotations in the ImageNet dataset.
 The third dataset, called Microsoft Common Objects in Context (MS COCO)
 was released in 2014~\cite{lin2014microsoft}.
 It figures annotations that are in fact object segmentations,
-but that are used to product bounding boxes that are valid for an object detection task.
+but that are used to generate bounding boxes valid for an object detection task.
 MS COCO was designed to provide a larger number of annotations
 per class than ImageNet and PASCAL, but on a smaller number of 91 classes.
 Finally, the most recent and large dataset is called
 Open Images~\cite{OpenImages, OpenImages2} and features a tremendous amount
 of more than 15 million bounding boxes of 600 classes on almost 2 million images.
 
-These datasets have largely contributed to the large improvement in performance
-that could be observed in the literature from 2014 to 2016.
-These improvements are, for a large part,
-due to two body of works that have driven the research in object detection.
+These datasets have largely contributed to the performance improvements
+observed in the literature from 2014 to 2016.
+Such improvements are mainly due to two body of works
+that have driven the research in object detection forward.
 The first line of work directly derives from a trend that emerged
 at the end of the 2010s in computer vision.
 A category of segmentation algorithms called superpixels became quite popular and many
 influential papers~\cite{felzenszwalb2004efficient, achanta2012slic, levinshtein2009turbopixels}
-proposed solutions for computing sursegmentations that could be used
+proposed solutions for computing oversegmentations that could be used
 as a building block of more complex methods.
 In particular, some object detection algorithms started using
 a set of object proposals~\cite{uijlings2013selective},
@@ -302,15 +301,15 @@ splitting an image into a grid and being able
 to predict a bounding box centered in each cell of the grid.
 This approach, called YOLO (You Only Look Once)~\cite{redmon2016you},
 was later optimized to be able to handle
-very large scale problems~\cite{redmon2017yolo9000} (up to 9000 classes)
+very large scale problems~\cite{redmon2017yolo9000}, up to 9000 classes,
 and to improve performances~\cite{redmon2018yolov3}.
 
 \subsection{Object segmentation}
 
 The finer grain at which localization can be achieved is at pixel level:
-this is called \textbf{image segmentation}, or \textbf{image parsing}.
+this is called \textit{image segmentation}, or \textit{image parsing}.
 This problem can also be stated as classifying each pixel in an image.
-A variant of this problem is called \textbf{object segmentation},
+A variant of this problem is called \textit{object segmentation},
 or instance segmentation, in which only some objects of an image are segmented.
 Annotations for the segmentation are much more difficult to gather,
 due to the need for a pixel-wise precision
@@ -319,7 +318,7 @@ The problem of automatic image segmentation is also a very complicated one,
 and requires a large number of annotations to be efficiently solved.
 The first dataset to offer an important number of annotations is once again PASCAL,
 with roughly 7,000 annotated instances of the same 20 classes
-than for the classification and detection tasks.
+as the one used for the classification and detection tasks.
 A parallel effort was developed in the framework of the SUN database,
 thanks to a popular labelling tool called LabelMe~\cite{russell2008labelme},
 that produced more than 300k labelled instances.
@@ -329,7 +328,7 @@ but the authors of~\cite{lin2014microsoft} nonetheless reported that
 it takes 22 hours of human annotations to segment 1000 object instances.
 In their dataset, which was described in an earlier paragraph,
 more than 2 millions instances were annotated.
-The last dataset is again Open Images, with a million images depicting 350 classes
+The latest dataset is again Open Images, with a million images depicting 350 classes
 and 2.8 million segmented instances.
 % In 2018, MS COCO released a new dataset of panoptic segmentation.
 
@@ -350,7 +349,7 @@ and 2.8 million segmented instances.
 
 The first paper to implement an end-to-end neural network
 for image segmentation was published in 2015~\cite{long2015fully}.
-It presents a fully convolutional architecture which combines
+J.\ Long et al.\ present a fully convolutional architecture which combines
 predictions at different levels of resolution to produce a detailed segmentation map.
 This architecture was improved by two papers,
 who systematize the combination of predictions by introducing
@@ -359,7 +358,7 @@ with skip connections that allows retrieving fine-grained details.
 U-Net~\cite{ronneberger2015u} is one of these two papers,
 and originated from the medical imaging community.
 SegNet~\cite{badrinarayanan2017segnet} on the other hand
-specifically targetted urban scenes segmentation,
+specifically targets urban scenes segmentation,
 with autonomous driving as a direct application.
 These two papers share the same neural network architecture,
 with slight specificities in the skip connection implementation.
@@ -380,19 +379,19 @@ particular points that are of interest when one wants to create its own dataset.
 
 \subsection{Explicit vs.\ implicit annotation process}
 
-A first interesting point to comment regarding the tables in Section~\ref{sec:cv_annot}
-is that most of the times, the annotation process was explicit to the human annotators.
+As visible in the tables of Section~\ref{sec:cv_annot}
+the annotation process was predominantly explicit to the human annotators.
 By explicit, we mean that the humans involved in the task
 were fully conscious of the tasks they were performing,
 and that their goal was to create an annotated dataset.
 This is mostly due to the fact that image annotation takes time,
 and requires an incentive (that is typically money, on crowdsourcing platforms for example).
-There are however a few exceptions, some of which having been mentioned before.
+There are however a few exceptions, some of which have been mentioned before.
 
 
 First, the Conceptual Captions dataset~\cite{sharma-etal-2018-conceptual}
 has been obtained through a mostly automated process,
-looking for sentences on web pages that accompany the images.
+looking for sentences on Web pages that accompany the images.
 One could say the original authors of the sentences
 implicitly annotated the images for this dataset.
 
