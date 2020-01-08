@@ -15,8 +15,9 @@ We review the different types of annotations in Section~\ref{sec:annotation-type
 
 We could consider image captioning as the first historical example of image annotation,
 simply consisting in adding a caption to an image.
-Long before digital images even existed, we could also consider photogrammetry,
-which is the process of measuring distances and lengths of the real world from 2D images.
+We could also consider photogrammetry as a form of image annotation which,
+long before digital images even existed,
+is the process of measuring distances and lengths of the real world from 2D images.
 It requires annotating these distances and lengths in the image space,
 before inferring the values in the real world.
 Early techniques in the old cinema also involved
@@ -60,7 +61,7 @@ This dataset illustrates how image annotation could be used
 to produce desirable applications, and is only a small example of what
 has now become a classic pipeline to solve problems in the computer vision community.
 Since image annotation has become key in this community,
-this chapter focus on computer vision but
+this chapter focuses on computer vision but
 the machine learning pipeline we mention is also used in many other problems
 such as audio or natural language processing.
 
@@ -72,11 +73,11 @@ and (ii) a sufficiently large sample of annotated data is available.
 Some thresholds have been established by the community to estimate
 what ``sufficiently large'' means~\cite{raudys1991small, jain198239},
 but computer vision problems typically requires millions
-of (annotated) images to be solved with an acceptable performance.
+of annotated images to be solved with an acceptable performance.
 Models relying on deep neural networks are nowadays
 the most popular techniques in machine learning,
-but other models (such as deep random forests for example,
-used in the human body pose estimation embedded in the Kinect~\cite{shotton2011real})
+but other models, such as deep random forests,
+used in the human body pose estimation embedded in the Kinect~\cite{shotton2011real},
 may still be considered depending on the application.
 Note that while gathering more and more data is the current trend in computer vision,
 an important field of research conversely focuses on learning on few samples;
@@ -96,7 +97,7 @@ We will end with a presentation of possible interactions that can be used to ann
 \subsection{Image classification}
 
 Image understanding forms a category of hard problems, but among them,
-what could be considered as the simplest one is \textit{image classification}.
+what could be considered the simplest one is \textit{image classification}.
 Classifying an image consists in assigning it
 labels describing either the type of scene it depicts
 such as interior, exterior, beach, mountain, forest, city,
@@ -141,13 +142,13 @@ nicknamed AlexNet, was probably key in the rise of deep learning that followed.
 AlexNet won the ILSVRC 2012 challenge by a large margin,
 starting the trend of using deep neural networks to solve computer vision problems.
 The second paper from He et al.\ in 2016 and often called ResNet~\cite{he2016deep},
-introduced residual blocks (through skip connections)
-to ease the training of very deep neural networks (up to 1,000 layers!).
+introduced residual blocks through skip connections
+to ease the training of very deep neural networks, up to 1000 layers!
 The 152 layers version of ResNet won the ILSVRC 2015 challenge
 by reaching an error rate so low that
 it could be considered below the average human performance.
 The general trend in subsequent work has been to reach comparable
-(and even higher) performance than ResNet while
+or higher performance than ResNet while
 reducing the number of parameters and operations to a minimum.
 
 \begin{table}
