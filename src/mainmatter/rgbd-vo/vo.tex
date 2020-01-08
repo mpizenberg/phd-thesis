@@ -559,7 +559,10 @@ onto the right image along its associated epipolar line,
 which is the right image of the line passing through the optical center
 of the left camera and the point in the left image.
 This method is often called disparity search.
-Figure~\ref{fig:epipolar} provides a visualization of this epipolar constraint.
+Due to the geometric constraint visualized in Figure~\ref{fig:epipolar},
+all epipolar lines cross at the epipole, which is the image of the optical center
+of one camera into the other.
+This constraint is called the epipolar constraint.
 Points with depth information are then tracked in successive frames,
 and motion can be estimated based on those 3D point clouds.
 
@@ -574,7 +577,7 @@ and motion can be estimated based on those 3D point clouds.
 	\label{fig:epipolar}
 \end{figure}
 
-Alternatively to the stereo scheme, one can use a single camera.
+Alternatively to the stereo scheme, one can also use a single camera.
 It is called monocular visual odometry.
 In that case, the 3D structure is unknown.
 The relative motion between frames must then be retrieved
@@ -598,7 +601,7 @@ The second is the use of a five-point minimal solver~\cite{nister2003efficient}
 in a RANSAC scheme for robust motion estimation.
 
 Recently, depth-sensing cameras such as the Microsoft Kinect~\cite{zhang2012microsoft}
-have appeared in the consumer market under the name RGB-D cameras (``D'' for depth).
+have appeared in the consumer market under the name RGB-D cameras (``D'' stands for depth).
 Those cameras use an active system based on structured infrared light
 to compute a depth image.
 Due to limitations in outside environments,
@@ -614,7 +617,8 @@ Inertial measurement units (IMU) are present in smartphone
 and LIDAR are often provided in autonomous vehicles for example.
 Any additional information or constraint provided by a particular setup
 can be exploited to improve performances of the visual odometry system.
-There are therefore many papers exploring these areas but we will not discuss them here.
+There are therefore many papers exploring these areas but
+they are out of the scope of our study.
 
 \subsection{Relation to Visual SLAM}%
 \label{sub:relation-visual-slam}
@@ -645,12 +649,12 @@ Today, the majority of commonly used visual SLAM methods are keyframe-based.
 The two most comprehensive solutions are ORB-SLAM~\cite{mur2015orb}
 and OpenVSLAM~\cite{sumikura2019openvslam}.
 Keyframe-based visual SLAM is usually composed of a visual odometry core,
-extended with three components providing the global consistency.
+extended with three components providing global consistency.
 A pose graph is built with the selected keyframes.
 Camera locations are the nodes of the graph and transformations
 between keyframes are stored in the edges.
 A loop closure mechanism is added to detect when the camera
-returns in previously visited locations.
+returns to previously visited locations.
 When a loop is detected, an edge is added to the pose graph.
 Finally, a global optimization such as bundle adjustment
 is used to refine both keyframes camera locations
@@ -663,6 +667,12 @@ visual SLAM could be tackled later as an extension.
 
 \subsection{Reducing Drift}%
 \label{sub:reducing-drift}
+
+In the context of visual odometry,
+the trajectory is tracked incrementally.
+Small errors therefore accumulate
+and quickly deteriorate long term accuracy.
+Approaches reducing the errors and the drift are thus important.
 
 \subsubsection{Outlier Removal with RANSAC}%
 \label{ssub:ransac}
@@ -697,7 +707,10 @@ can considerably reduce the drifts accumulated along the sequence.
 \label{ssub:windowed-ba}
 
 Another method, complementary to outliers removal,
-is to use windowed bundle adjustment.
+is to use windowed bundle adjustment i.e.\ a local joint optimization
+of camera poses and point coordinates, over a small number of
+recent camera poses.
+It was demonstrated to considerably reduce tracking errors in~\cite{konolige2007large}.
 The main issue of bundle adjustment, used in structure and motion
 algorithms as well as in global optimization for visual SLAM,
 is the computational complexity, growing in cube of the number of points
@@ -705,7 +718,6 @@ and camera poses.
 Therefore, limiting bundle adjustment to a small ``window'' of frames
 offers an efficient way of optimizing camera localization and 3D structure
 with a controlled complexity.
-
 
 \section{Motion Estimation}%
 \label{sec:motion-estimation}
@@ -720,13 +732,15 @@ In homogeneous coordinates, we can write
 $g = \inmatrix{R & \bm{t}\\ 0 & 1}$.
 The core challenge of visual odometry is to accurately estimate
 this transformation $g$ from the observations provided by the camera images.
-The two main approaches are feature-based or appearance-based.
-Feature-based motion estimation is also sometimes called indirect,
-while appearance-based is called direct visual odometry.
+The two main approaches for this estimation are feature-based or appearance-based.
+Feature-based motion estimation is also sometimes called \textit{indirect},
+while appearance-based is called \textit{direct} visual odometry.
 The distinction is due to the fact that feature-based methods
 first step is to find and match features in the images.
-Once features are paired, only their geometric information (location) is kept
-to estimate the camera motion.
+A feature is a local image pattern differentiable from its surrounding
+and thus recognizable in multiple images.
+Once features are paired, only the geometric information (location)
+of correspondences is kept to estimate the camera motion.
 In contrast, direct (appearance-based) methods formulate the camera motion
 estimation as a problem directly depending on the image intensity observations.
 
@@ -742,7 +756,7 @@ of the visual odometry tutorial by Scaramuzza and Fraundorfer~\cite{scaramuzza20
 \subsubsection{3D to 3D}%
 \label{ssub:3d_to_3d}
 When features in previous and current frames have a depth information,
-one can compare the points 3D coordinates.
+one can compare the 3D points coordinates.
 There are two main strategies to estimate the motion from those point clouds.
 The first is to consider point clouds globally and try to align them as a whole.
 Variants of the ICP ``iterative closest point'' algorithm~\cite{besl1992method},
@@ -758,13 +772,13 @@ formulating the problem as a minimization problem
 where $g_k$ is the rigid body motion between frames $k-1$ and $k$,
 $\bm{X}_k^i$ and $\bm{X}_{k-1}^i$ are the 3D coordinates of point $\bm{X}^i$
 in the camera frames $k$ and $k-1$.
-This formulation is quite sensible to outliers so a robust approach is desirable.
+This formulation is quite sensible to outliers and requires a robust approach.
 
 \subsubsection{2D to 2D}%
 \label{ssub:2d_to_2d}
 
 When no depth information is provided by the sensors,
-it may be preferable to avoid the estimation of 3D coordinates all together.
+it may be preferable to avoid the estimation of 3D coordinates alltogether.
 In presence of a calibrated camera, its motion can be recovered
 thanks to the essential matrix
 \[
@@ -792,10 +806,10 @@ into the image $I_k$, that we will note $g_k(\bm{X}_{k-1}^i)$,
 with its actual position in the image, noted $p_k^i$.
 This error is usually called a reprojection error.
 As we will explain soon, we can compute another kind of reprojection error,
-based on appearance, so I will call this a geometric reprojection error.
+based on appearance, so we will call this a geometric reprojection error in this document.
 Recovering the camera motion thus consists in minimizing the geometric reprojection error
 \[
-	\arg \min_{g_k} \sum_i \| p_k^i - g_k(\bm{X}_{k-1}^i) \|^2
+	\arg \min_{g_k} \sum_i \| p_k^i - g_k(\bm{X}_{k-1}^i) \|^2.
 \]
 This problem is called ``perspective from n points'' (PnP).
 The minimal case requires at least three points and is called
@@ -803,6 +817,7 @@ The minimal case requires at least three points and is called
 A P3P solver may return up to four potential solutions
 that can be disambiguated with other points.
 In our interactive visual odometry Web application,
+presented in Chapter~\ref{cha:interactive_vo_on_the_web},
 we provide a fast P3P implementation based on
 Persson and Nordberg's solver~\cite{persson2018lambda}.
 
@@ -812,7 +827,8 @@ Persson and Nordberg's solver~\cite{persson2018lambda}.
 Most appearance-based motion estimation methods are also direct,
 with some exceptions like the algorithm by Goecke et al.~\cite{goecke2007visual}
 which computes the Fourier-Mellin transform of the image.
-Our implementation belongs to the direct image alignment category
+Our implementation, presented in Chapter~\ref{cha:interactive_vo_on_the_web},
+belongs to the direct image alignment category
 so we will detail how this works.
 
 \subsubsection{Direct Image Alignment}%
@@ -842,7 +858,7 @@ one could represent the camera motion by a matrix of the form $\inmatrix{R & \bm
 with $R \in SO(3)$ and $\bm{t} \in \R^3$.
 The main inconvenience of this parameterization is that $R$ is a constrained 3x3 matrix,
 so using 9 free parameters to optimize is clearly suboptimal.
-Recent direct visual odometry algorithms seem to all agree on using
+Recent direct visual odometry algorithms are all using
 the Lie algebra $\seee$ for the parameterization of the rigid body
 motion~\cite{newcombe2011dtam, audras2011real, kerl2013robust,
 klose2013efficient, forster2014svo, engel2017direct}.
@@ -870,7 +886,7 @@ we can rewrite the expression to minimize as
 	\argmin_{W} \sum_{\bm{x}}\|I(W(\bm{x}, \bm{\xi} + \delta \bm{\xi})) - I^{*}(\bm{x})\|^2.
 \]
 In a Gauss-Newton scheme, the minimum is found by performing a first order
-Tailor expansion of $I(W(\bm{x}, \bm{\xi} + \delta \bm{\xi}))$.
+Taylor expansion of $I(W(\bm{x}, \bm{\xi} + \delta \bm{\xi}))$.
 Using the chain rule, the gradient of this expression can be written
 $J = \nabla I \nabla_{\bm{\xi}}W$ where $\nabla I$ is the image gradient
 and $\nabla_{\bm{\xi}}W$ is the Jacobian of the warping function.
@@ -889,12 +905,13 @@ Those formulations are referred to as forward additive, forward compositional,
 inverse additive and inverse compositional.
 The inverse additive approach is subtly different but the other three are
 easily summarized by Table~\ref{tab:image-alignment-method}.
-The compositional approaches model the increment as the composition
+The compositional approaches model the increment as a composition
 so it is required that the set of warps forms a group.
-The inverse compositional approach exchange the roles of the reference image
+The inverse compositional approach exchanges the roles of the reference image
 with the new image to align.
-This has a computational and accuracy advantage since the image gradients
-are computed on the reference image $I^{*}$.
+Image gradients are thus precomputed once on the reference image $I^{*}$
+instead of at each iteration,
+which provides a computational and accuracy advantage.
 For this reason, the majority of direct visual odometry algorithms,
 including our own implementation use that inverse compositional scheme.
 
@@ -903,7 +920,7 @@ including our own implementation use that inverse compositional scheme.
 \centering
 \begin{tabular}{lll}
 Formulation
-	& Minimization
+	& Expression of residual
     & Warp update\\
     \midrule
 Forward additive
