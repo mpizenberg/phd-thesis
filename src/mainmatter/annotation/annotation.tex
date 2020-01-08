@@ -363,11 +363,11 @@ with autonomous driving as a direct application.
 These two papers share the same neural network architecture,
 with slight specificities in the skip connection implementation.
 Another very popular paper in the field of segmentation is DeepLab~\cite{chen2017deeplab}.
-While the previous architectures use an autoencoder structure,
+Previous architectures use an autoencoder structure,
 which allowed to derive a global understanding of the image
-(in the bottleneck region of the network) before retrieving
-a more local clasification of the pixels,
-DeepLab uses a spatial pyramid of different filter sizes
+in the bottleneck region of the network before retrieving
+a more local clasification of the pixels.
+Instead, DeepLab uses a spatial pyramid of different filter sizes
 to perform a multi-scale analysis of the image and
 make a local prediction that takes into account a larger area.
 
@@ -385,7 +385,7 @@ By explicit, we mean that the humans involved in the task
 were fully conscious of the tasks they were performing,
 and that their goal was to create an annotated dataset.
 This is mostly due to the fact that image annotation takes time,
-and requires an incentive (that is typically money, on crowdsourcing platforms for example).
+and requires an incentive, typically money on crowdsourcing platforms.
 There are however a few exceptions, some of which have been mentioned before.
 
 
@@ -405,12 +405,12 @@ From an annotation point of view, whenever the two players agree
 on a word one can safely assume this word describes an object present on the image,
 or an action happening on the image.
 In order for the game to provide a good annotation coverage,
-words can be ruled out of the game (they become \textit{taboo})
-which means the players can see these words and know they have to specify another one.
+words can be ruled out of the game, called \textit{taboo},
+which means the players can see these words and know they have to specify a different one.
 The ESP game started a trend of Games With A Purpose (GWAP)~\cite{von2008designing}
 including some games designed to perform image annotation
-(e.g. PeekaBoom~\cite{von2006peekaboom}, KissKissBan~\cite{ho2010kisskissban},
-Click'n'Cut~\cite{carlier2014click}),
+such as PeekaBoom~\cite{von2006peekaboom}, KissKissBan~\cite{ho2010kisskissban}
+and Click'n'Cut~\cite{carlier2014click},
 but ESP remains the only game that gathered enough data to create a dataset.
 
 \begin{figure}[ht]
@@ -425,20 +425,20 @@ The term has been originally coined by
 Luis Von Ahn (again) et al.~\cite{von2003captcha} and stands for
 Completely Automated Public Turing Test to Tell Computer and Humans Apart.
 CAPTCHAs have been created to stop automated attacks on websites,
-to prevent for example hackers from creating millions of mail accounts for sending spam.
+to prevent automated creation of millions of malicious email accounts.
 The idea is to create a Turing test~\cite{machinery1950computing},
 i.e.\ a test that a human should be able to complete effortlessly
 while a machine would be unable to perform it.
-Original versions of CAPTCHAs were displaying distorted,
+Original versions of CAPTCHAs displayed distorted,
 geometrically transformed words which would make it unrecognizable
 by standard optical character recognition (OCR) softwares.
 The task remained fairly easy to humans,
 and required in average 13s~\cite{von2008recaptcha}.
 At the time, ambitious projects were ran in parallel to digitize
-tremendous collections of books
-(like Google Books, which makes available serching through millions of books).
+tremendous collections of books, like \textit{Google Books},
+which makes available searching through millions of books.
 This process of digitizing books was automated using OCR softwares,
-but failed for 20\% of the words in older books (due to faded ink, for example).
+but failed for 20\% of the words in older books due to faded ink for example.
 The reCAPTCHA system offers a clever way to match the two very different
 problems of securing websites and digitizing old books by proposing words from old books,
 that could not be recognized automatically,
@@ -460,55 +460,52 @@ While there are no further publications on reCAPTCHA,
 one has been able to observe its evolution through the years (see figure~\ref{fig:recaptcha}).
 Driven by the need to come up with problems that still resist computers,
 it went from text to image recognition, from digit recognition
-(in pictures probably extracted from Google Street View) to object detection
-(in urban scenes pictures, which is very likely to target autonomous vehicles applications).
+in pictures probably extracted from \textit{Google Street View} to object detection
+in urban scenes pictures, very likely to target autonomous vehicles applications.
 
 \subsection{Expert vs.\ non-expert annotators}
 
-Whether it is implicit or explicit,
-the annotations need to be performed by human annotators.
-There have been several trends throughout the years
-as to the nature of the annotators that are required.
-In essence, we could split potential annotators into two sets of users:
-experts, from whom we can expect a high quality of annotations
-but who come at an expensive cost, and non-expert users
+Whether they are implicit or explicit,
+annotations need to be performed by human annotators and
+there have been several trends throughout the years.
+In essence, we could split annotators into two sets of users:
+experts, from whom we can expect high quality annotations
+but are rare and expensive, and non-expert users
 who tend to make more mistakes but provide much cheaper annotations.
 
-Historically, the first main datasets that have been created
-for applying machine learning to computer vision problems were PASCAL and CIFAR.\@
-These datasets are of reasonable scale (less than 100k images)
-and thus did not require too many annotators.
+Historically, the first datasets of reasonable scale which are PASCAL and CIFAR,
+did not require too many annotators.
 In fact, the authors of PASCAL~\cite{Everingham10} reported that a ``party'' of users
-(students, probably, but no details are provided as to how many of them)
 annotated the images after an initial training.
+They were probably students, but no details are provided as to how many of them.
 These users were also regularly observed during annotations
 to ensure the quality of their work.
 Finally, one of the organizers of the PASCAL challenge checked all the annotations.
-In a similar fashion, the CIFAR dataset~\cite{krizhevsky2009learning}
-was labelled by a group of students who were paid a fixed sum per hour.
+Similarly, the CIFAR dataset~\cite{krizhevsky2009learning}
+was labelled by a group of students paid for the task.
 
-As time went by, larger and larger datasets were created.
-These new datasets aimed at expanding the number of classes,
+With time, there was a demand for larger datasets.
+They aimed at expanding the number of classes,
 as well as the number of annotated images.
 With this new goal in mind,
-the dataset authors started \textbf{crowdsourcing} the annotations.
+the dataset authors started \textit{crowdsourcing} the annotations.
 Crowdsourcing is a process in which a task that should usually be performed
 by an expert is outsourced to a crowd of non-expert users.
-The term has been first coined by Jeff Howe in 2006~\cite{howe2006rise}
-and it has been made easy to crowdsource tasks
-due to the creation of specific platforms,
-such as Amazon Mechanical Turk or Crowdflower.
-ImageNet and MS COCO have been annotated by Turkers,
+The term was first coined by Jeff Howe in 2006~\cite{howe2006rise}.
+The creation of specific online platforms
+such as Amazon Mechanical Turk or Crowdflower
+considerably eased the process of crowdsourcing image annotation.
+ImageNet and MS COCO have both been annotated by Turkers,
 i.e.\ humans recruited and paid through Amazon Mechanical Turk.
-Since it is much more difficult to clearly instruct distant users,
+Since the difficulty to clearly instruct remote users is increased,
 the annotations interfaces need to be carefully designed,
 and the annotation quality need to be properly ensured;
-this will be described in section~\ref{sec:annotation_quality}.
+this will be described in Section~\ref{sec:annotation_quality}.
 
-While crowdsourcing is widely used, it may not be relevant in all setups.
-For example, in case the images would be sensitive,
+While crowdsourcing is widely used, it may not be relevant to all setups.
+In cases when images are sensitive for example,
 it is not possible to outsource the annotation process outside of a company.
-In addition, the need for redundancy to insure annotation quality
+In addition, the need for redundancy to ensure annotation quality
 limits the positive impact on cost that crowdsourcing is supposed to provide.
 Although being one of the largest annotated dataset,
 Open Images has been for the most part annotated by in-house employees at Google.
@@ -517,11 +514,11 @@ to good annotations in a faster way.
 For example, extreme clicking for bounding box annotations~\cite{papadopoulos2017extreme}
 introduces a clever interaction that allows to draw bounding boxes more quickly,
 avoiding the errors that usually force users to start over.
-In another spirit, the authors of~\cite{OpenImagesSegmentation}
+Alternatively, the authors of~\cite{OpenImagesSegmentation}
 propose an interactive segmentation algorithm in which user clicks
 guide a deep neural network and refine the segmentation mask.
-The images can be annotated 3 times faster than
-using a standard polygon drawing tool (such as LabelMe~\cite{russell2008labelme}),
+The images can be annotated 3 times faster than when
+using a standard polygon drawing tool such as with LabelMe~\cite{russell2008labelme},
 and the segmentation boundaries are much more precise.
 We present a similar contribution in the next chapter.
 
