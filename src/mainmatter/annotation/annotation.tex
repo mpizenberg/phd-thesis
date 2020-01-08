@@ -533,9 +533,9 @@ the quality of the collected data is often questionable.
 Oleson et al.~\cite{oleson2011programmatic} have classified
 three categories of errors that non-expert users are likely to commit
 when performing Human Intelligence Tasks
-(HIT, the term coined in Amazon Mechanical turk to designate the micro-jobs offered to the users).
+(HIT), the term coined in Amazon Mechanical turk to designate the micro-jobs offered to the users.
 The first source of errors, called \textit{unsufficient attention} by Oleson,
-simply occurs when the workers (the humans enrolled to perfom HITs)
+simply occurs when the humans enrolled to perfom HITs, called workers,
 make occasional mistakes, due to the task complexity or a lack of attention for example.
 Some other workers, called \textit{incompetent} by Oleson,
 may not understand the task and behave unpredictably.
@@ -544,7 +544,7 @@ Finally, a last class of workers, called \textit{scammers},
 designates users who try to trick the system to collect the reward.
 A good quality checking process should account for these three types of possible errors.
 Oleson et al.\ point out the advantages of adding gold standard images
-(i.e.\ images for which a ground-truth annotation is known)
+i.e.\ images for which a ground-truth annotation is known,
 among the data to be able to estimate workers reliability.
 The authors of ImageNet~\cite{ILSVRC15} also reported using this technique.
 Using gold standard is a good practice to detect scammers and incompetent workers.
@@ -561,9 +561,9 @@ Using gold standard is a good practice to detect scammers and incompetent worker
 \label{fig:cs-errors}
 \end{figure}
 
-The most obvious way to leverage workers mistake
+The most obvious way to detect workers mistakes
 is to introduce redundancy in the annotations.
-Multiple users are tasked to label the same images,
+Multiple workers are tasked to label the same image,
 and the annotations are validated if they are similar enough.
 This straightforward strategy has been formalized by Luis Von Ahn~\cite{von2008designing}
 under the term \textit{output agreement}:
@@ -571,16 +571,16 @@ multiple users agree on the same output annotation for a given image.
 Authors of MS COCO~\cite{lin2014microsoft}
 report asking up to 8 workers to perform the same task,
 for example to increase the recall in an instance spotting task.
-Redundancy helps reducing the impact of occasional mistakes.
+Redundancy helps reducing the impact of unsufficient attention.
 
 
-Another important technique that is important to prevent
-having too many incompetent workers is to impose users
+Another technique to prevent
+having too many incompetent workers is
 to go through a tutorial before starting the task.
 Gottlieb et al.~\cite{gottlieb2012pushing} have shown
-how the performance of users who complete a tutorial beforehand
-is significantly higher than for users who did not train.
-In~\cite{lin2014mscoco}, users are discarded or accepted
+that the performance of users who complete a tutorial beforehand
+is significantly higher than users who did not.
+In~\cite{lin2014mscoco}, users are filtered
 based on their performance in an initial training task
 and are periodically verified during the whole annotation process.
 
@@ -590,10 +590,10 @@ A Human Intelligence Task should always be an atomic operation,
 simple to explain and quick to perform.
 For example, the authors of~\cite{su2012crowdsourcing} introduce
 a Find-Fix-Verify pattern for object detection annotations.
-Since output agreement is difficult to implement for bounding boxes
-(some measures of similarity could be used, but finding an appropriate threshold is not obvious),
-the authors introduce a series of micro-tasks
-that ensure the quality of the final bounding boxes.
+Output agreement is difficult to implement for bounding boxes
+due to the the presence of thresholds to measure similarity.
+Therefore, the authors introduce a series of micro-tasks
+ensuring the quality of the final bounding boxes.
 A first group of workers is tasked to draw bounding boxes (\textit{Find}),
 and a second group of different workers is asked to validate
 each of the bounding boxes (\textit{Fix}).
@@ -614,7 +614,7 @@ which is the more time-consuming and is especially verified by the fourth task.
 A final control of the annotations quality can be done at the end of the study.
 This is an approach adopted in PASCAL~\cite{Everingham10} for example,
 but also in Open Images~\cite{OpenImages} in which the expert annotators
-verify automatically derived labels (obtained through deep learning).
+verify automatically derived labels, obtained through deep learning.
 
 
 \subsection{Annotation interaction usability}
@@ -638,14 +638,13 @@ In essence, it describes the extent to which an interface
 can be mastered and used to efficiently perform the task it has been designed for.
 Nielsen also introduces five criteria that help measuring an interface usability:
 subjective satisfaction, easiness to learn and to remember,
-efficiency (with respect to a certain task) and error robustness.
+efficiency with respect to a certain task, and error robustness.
 It is really interesting to note that all of these criteria
-are relevant to image annotation:
+are relevant to image annotation;
 we want the users to be efficient, i.e.\ to provide good annotations
 in the minimum amount of time.
 We want the users to make as few errors as possible,
-and we also want them to easily learn and remember their task
-(once again, to be cost-effective).
+and we also want them to easily learn and remember their task, once again, to be cost-effective.
 While usability is a core concept of computer human interaction,
 very few of the annotation tools that we described previously mention they want to optimize it.
 
@@ -663,8 +662,8 @@ The authors propose replacing the traditional bounding box drawing
 by clicking four extreme points (top, down, left and right)
 of the object and deriving the bounding box from these points.
 This interaction offers an interesting advantage:
-it reduces the time needed to appropriately draw a bounding box
-(users tend to start over multiple times due to the non-convexity of objects shape) by a factor of 5.
+it reduces the time needed to appropriately draw a bounding box by a factor of 5.
+Users otherwise tend to start over multiple times due to the non-convexity of objects shape.
 It also provides richer annotations as four points lying on the object boundary are provided;
 the authors take advantage of this property to generate reasonable quality segmentations
 from this very weak information of only four points.
@@ -678,9 +677,9 @@ by scribbling~\cite{agustsson2018interactive} or clicking~\cite{OpenImagesSegmen
 In this section, we briefly review and analyze the interactions that have been used for image annotation.
 
 Directly related to image classification and image captioning
-is the simple interaction of \textbf{free text typing}.
-It often consists in a single text box in which the annotator can type a word,
-or a set of words, or even complete sentences.
+is the simple interaction of \textit{free text typing}.
+It often consists of a single text box in which the annotator can type a word,
+a set of words, or even complete sentences.
 This annotation can be associated to the entire image, like for image captioning
 
 \begin{itemize}
