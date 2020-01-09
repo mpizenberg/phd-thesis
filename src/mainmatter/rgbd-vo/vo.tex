@@ -883,7 +883,7 @@ If we add the parameterization to the notation, $W(\bm{x}) = W(\bm{x}, \bm{\xi})
 and consider that $\bm{\xi}$ is to be found iteratively,
 we can rewrite the expression to minimize as
 \[
-	\argmin_{W} \sum_{\bm{x}}\|I(W(\bm{x}, \bm{\xi} + \delta \bm{\xi})) - I^{*}(\bm{x})\|^2.
+	\sum_{\bm{x}}\|I(W(\bm{x}, \bm{\xi} + \delta \bm{\xi})) - I^{*}(\bm{x})\|^2.
 \]
 In a Gauss-Newton scheme, the minimum is found by performing a first order
 Taylor expansion of $I(W(\bm{x}, \bm{\xi} + \delta \bm{\xi}))$.
