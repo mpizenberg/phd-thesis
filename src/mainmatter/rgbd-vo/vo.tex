@@ -969,7 +969,7 @@ uses RGB-D cameras and is thus in the first category.
 
 We can add that though end-to-end deep learning approaches
 are just beginning~\cite{wang2017deepvo},
-some uses deep neural networks to estimate depth information
+some authors use deep neural networks to estimate depth information
 in a monocular camera setup~\cite{yang2018deep},
 thus providing a similar framework than in the RGB-D camera case.
 
@@ -980,14 +980,14 @@ The previous developments are based on few assumptions,
 including photoconsistency.
 However in reality, those assumptions are incorrect.
 The appearance of a point in an image for example depends on the surface
-materials and orientation and the lighting conditions.
+materials and orientation, and on the lighting conditions.
 An entirely different field of computer vision called photometric stereo
 aims at retrieving 3D geometry with advanced modelization of the observed 3D surface
 and lighting conditions.
-In a work lead by Y. Quéau~\cite{queau2017microgeometry},
+In our work led by Y. Quéau~\cite{queau2017microgeometry},
 we show how a dermatoscope can be repurposed to compute precise surface reconstruction
 of the skin.
-In visual odometry some adjustments are possible to better take into account
+In visual odometry, some adjustments are possible to better take into account
 changes in lighting conditions.
 Global illumination changes, resulting from camera automatic exposure,
 can be modelled by an affine change of the pixel intensities in the image~\cite{engel2017direct}.
@@ -999,9 +999,9 @@ In practice, most camera sensors are based on a rolling shutter,
 i.e.\ the pixels of the sensor are discharged row after row.
 The time period of the accumulated light, and thus camera location is different
 for every row of the image.
-The effects of rolling shutter can be taken advantage of for artistic effects
+One can take advantage of rolling shutter for artistic effects
 such as in Figure~\ref{fig:rolling_shutter_prop}.
-When tracking high speed camera motions however the bending effect of straight
+When tracking high speed camera motions however the bending of straight
 vertical lines visible in Figure~\ref{fig:rolling_shutter_bend}
 will result in errors in the photometric reprojection.
 Some papers thus model the camera movement as
