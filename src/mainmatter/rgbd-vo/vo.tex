@@ -942,8 +942,30 @@ Inverse compositional
 \subsubsection{About the Depth Requirement}%
 \label{ssub:depth_requirement}
 
-Few words regarding the fact that the warping function needs the depth information
-for the reprojection and why we thus tackled the easier RGB-D case.
+In the previous formulation, we eluded writing the actual expression of the warp function
+but it can be decomposed as
+\[
+	\text{Pixel 1}\ (\text{2D}, \bm{x}_1)
+		\longrightarrow
+			\text{Camera 1}\ (\text{3D}, \bm{X}_1)
+		\longrightarrow
+			\text{Camera 2}\ (\text{3D}, \bm{X}_2)
+		\longrightarrow
+			\text{Pixel 2}\ (\text{2D}, \bm{x}_2).
+\]
+The first step of this transformation is to retrieve the coordinates
+of the 3D point $\bm{X}_1$ in the frame of the first camera
+from its pixel coordinates in the first image.
+However, this is only possible if the depth of the point is known
+and the camera is calibrated.
+We make the assumption that the camera is or can be calibrated.
+There are thus two approaches for direct visual odometry.
+Either use a sensor configuration easing the process of getting depth information
+such as RGB-D~\cite{kerl2013robust} and stereo cameras,
+or alternatively estimate camera motion and point depths~\cite{engel2017direct}.
+This second scheme needs special attention for the initialization.
+The work we present in Chapter~\ref{cha:interactive_vo_on_the_web}
+uses RGB-D cameras and is thus in the first category.
 
 \subsection{Extensions and Richer Modelizations}%
 \label{sub:vo_extensions}
