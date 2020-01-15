@@ -1,0 +1,390 @@
+\section{Notation}%
+\label{sec:notation}
+
+Let's define a few variables and notations for the rest of the computations.
+We note
+\[
+	K = \begin{pmatrix}
+		f_u & s & c_u \\
+		0 & f_v & c_v \\
+		0 & 0 & 1
+	\end{pmatrix}
+\]
+the matrix of camera intrinsic parameters.
+Extrinsic camera parameters are expressed as twist coordinates $\bm{\xi} \in \R^6$,
+formed by stacking the linear velocity $\bm{\nu} \in \R^3$ (related to translation),
+and the angular velocity $\bm{\omega} \in \R^3$ (related to rotation).
+Let $\theta$ be the norm of $\bm{\omega}$. We note
+\[
+	\bm{\xi} = \vecxy{\bm{\nu}}{\bm{\omega}}
+	,\quad
+	\bm{\nu} = \vecxyz{\nu_1}{\nu_2}{\nu_3}
+	,\quad
+	\bm{\omega} = \vecxyz{\omega_1}{\omega_2}{\omega_3}
+	\quad \textrm{and} \quad
+	\theta = ||\bm{\omega}||.
+\]
+We will note $\wedge$ the ``hat'' operator converting
+from the twist coordinates $\bm{\xi} \in \R^6$ to the twist
+$\twist{\xi} \in \seee$ in the Lie algebra associated with rigid body motions $SE(3)$.
+Let $\cross{\omega} \in \sooo$
+be the element of the Lie algebra associated with the rotation group $SO(3)$.
+We then have
+\[
+	\twist{\xi} = \begin{pmatrix}
+		\cross{\omega} & \bm{\nu} \\
+		0 & 0
+	\end{pmatrix}
+	\quad \textrm{and} \quad
+	\cross{\omega} = \hatmat{\omega_1}{\omega_2}{\omega_3}.
+\]
+The exponential map from the Lie algebra of twists $\seee$
+to the Lie group of rigid body motions $SE(3)$ is of the form
+\[
+	\exp(\twist{\xi})
+	= \begin{pmatrix}
+		\exp(\cross{\omega}) & V \bm{\nu} \\
+		0 & 1
+	\end{pmatrix}
+	= \begin{pmatrix}
+		R & \bm{T} \\
+		0 & 1
+	\end{pmatrix}.
+\]
+According to Rodrigues' formula we can detail the expressions of $\exp(\cross{\omega})$ and $V$
+as in equation~\ref{eq:rodrigues_omega} and equation~\ref{eq:rodrigues_v}.
+\begin{equation}
+\label{eq:rodrigues_omega}
+	\exp(\cross{\omega}) =
+		I
+		+ \frac{\sin\theta}{\theta} \cross{\omega}
+		+ \frac{1-\cos\theta}{\theta^2} \cross{\omega}^2
+\end{equation}
+\begin{equation}
+	\label{eq:rodrigues_v}
+	V =
+		I
+		+ \frac{1-\cos\theta}{\theta^2} \cross{\omega}
+		+ \frac{\theta - \sin\theta}{\theta^3} \cross{\omega}^2
+\end{equation}
+
+\section{Reprojection Using Twist Coordinates}%
+\label{sec:reprojection_using_twist_coordinates}
+
+The transformation flow of the reprojection of a pixel consists of the following steps:
+Pixel 1 (2D, $\inmatrix{u_1 \\ v_1}$)
+	$\mapsto$ Camera 1 (3D, $\bm{X}_1$)
+	$\mapsto$ Camera 2 (3D, $\bm{X}_2$)
+	$\mapsto$ Pixel 2 (2D, $\inmatrix{u_2 \\ v_2}$).
+Let $g$ be the rigid body motion from camera 1 to camera 2, defined by
+\[
+	g \colon \R^3 \to \R^3 ,\quad \bm{X} \mapsto R\bm{X} + \bm{t}.
+\]
+If we note $\lambda$ the depth associated with the reprojected pixel point and
+$\bm{x_2}$ its homogeneous coordinates, then all the following expressions are equivalent.
+\begin{subequations}
+\begin{align}
+	\bm{x_2} &= \lambda \vecxyz{u_2}{v_2}{1}, \label{eq:x2_homogeneous}\\
+	\bm{x_2} &= K \bm{X_2}, \\
+	\bm{x_2} &= K ( R\bm{X_1} + \bm{t} ), \\
+	\bm{x_2} &= K ( \exp(\cross{\omega}) \bm{X_1} + V \bm{\nu} ). \label{eq:x2_twist}
+\end{align}
+\end{subequations}
+
+\section{Jacobian Expression}%
+\label{sec:jacobian_expression}
+
+We note $J_{\bm{\xi}} (\bm{x_2})$ the Jacobian of $\bm{x_2}$ relative to the twist coordinates $\bm{\xi}$.
+Since $\bm{x_2} \in \R^2$ ($\R^3$ in homogeneous coordinates) and $\bm{\xi} \in \R^6$,
+this Jacobian is a 2x6 matrix (3x6 in homogeneous coordinates).
+We note $\nabla_{\bm{\xi}} (\bm{x_2})$ the 3x6 homogeneous version.
+From~(\ref{eq:x2_twist}) we can write
+\begin{equation}
+\label{eq:grad_x2}
+	\nabla_{\bm{\xi}} (\bm{x_2})
+		= K (\nabla_{\bm{\xi}} (\exp(\cross{\omega}) \bm{X_1} ) + \nabla_{\bm{\xi}} (V \bm{\nu})).
+\end{equation}
+Let's split $J_{\bm{\xi}} (\bm{x_2})$ into its components relative to $\bm{\nu}$ and $\bm{\omega}$,
+respectively $J_{\bm{\nu}}(\bm{x_2})$ and $J_{\bm{\omega}}(\bm{x_2})$,
+which are both 2x3 Jacobian matrices (3x3 in homogeneous coordinates).
+We note $\nabla_{\bm{\nu}}(\bm{x_2})$ and $\nabla_{\bm{\omega}}(\bm{x_2})$
+their respective homogeneous versions.
+Since $\exp(\cross{\omega})$ and $V$ only depends on $\bm{\omega}$,
+equation~\ref{eq:grad_x2} leads to
+\begin{equation}
+\label{eq:grad_x2_nu}
+	\nabla_{\bm{\nu}}(\bm{x_2}) = K V.
+\end{equation}
+For $\nabla_{\bm{\omega}}(\bm{x_2})$, we will have to develop its expression
+so for now we will settle for
+\begin{equation}
+\label{eq:grad_x2_w}
+	\nabla_{\bm{\omega}}(\bm{x_2})
+		= K (\nabla_{\bm{\omega}} (\exp(\cross{\omega}) \bm{X_1} ) + \nabla_{\bm{\omega}} (V \bm{\nu})).
+\end{equation}
+
+
+\section{Partial Derivatives Relative to Linear Velocity Terms}%
+\label{sec:partial_derivatives_relative_to_linear_velocity_terms}
+
+Let $\alpha, \beta$ and $\lambda$ be the three components of $\bm{x_2}$.
+From~(\ref{eq:x2_homogeneous}) we have $u_2 = \alpha / \lambda$ and $v_2 = \beta / \lambda$.
+Thus the partial derivatives relative to linear velocity terms are
+\begin{equation}
+\label{eq:grad_u2_nu}
+	\frac{\partial u_2}{\partial \bm{\nu}}
+		= \frac{1}{\lambda^2}
+			\left( \frac{\partial \alpha}{\partial \bm{\nu}} \lambda
+			- \alpha \frac{\partial \lambda}{\partial \bm{\nu}}
+			\right)
+\end{equation}
+and
+\begin{equation}
+\label{eq:grad_v2_nu}
+	\frac{\partial v_2}{\partial \bm{\nu}}
+		= \frac{1}{\lambda^2}
+			\left( \frac{\partial \beta}{\partial \bm{\nu}} \lambda
+			- \beta \frac{\partial \lambda}{\partial \bm{\nu}}
+			\right).
+\end{equation}
+Since we use an inverse compositional approach for the alignment problem,
+we are only interested in the gradient at $\bm{\xi}=0$, i.e. $\bm{\nu} = 0$ and $\bm{\omega} = 0$.
+Consequently all terms of $V$ are null in~(\ref{eq:rodrigues_v}) except the identity,
+and equation~\ref{eq:grad_x2_nu} leads to
+\begin{equation}
+\label{eq:grad_x2_nu_0}
+	\nabla_{\bm{\nu}}(\bm{x_2})(0) = K.
+\end{equation}
+As a consequence of equation~\ref{eq:grad_x2_nu_0}, we have
+\begin{equation}
+\label{eq:d_alpha_d_nu}
+	\frac{\partial \alpha}{\partial \bm{\nu}}(0)
+		= \hvecxyz{f_u}{s}{c_u},
+	\quad
+	\frac{\partial \beta}{\partial \bm{\nu}}(0)
+		= \hvecxyz{0}{f_v}{c_v},
+	\quad \textrm{and} \quad
+	\frac{\partial \lambda}{\partial \bm{\nu}}(0)
+		= \hvecxyz{0}{0}{1}.
+\end{equation}
+We can also note that at $\bm{\xi} = 0$, the point $\bm{x_1}$ is projected onto itself.
+Let $\lambda_1$ be the depth of the original point $\inmatrix{u_1 \\ v_1}$.
+Then we have $\bm{x_2}(0) = \bm{x_1} = \lambda_1 \tr{\inmatrix{ u_1 & v_1 & 1}}$.
+Therefore, we can write
+\begin{equation}
+\label{eq:alpha_0}
+	\alpha (0) = \lambda_1 u_1,
+	\quad
+	\beta (0) = \lambda_1 v_1,
+	\quad \textrm{and} \quad
+	\lambda (0) = \lambda_1.
+\end{equation}
+
+From equations~\ref{eq:grad_u2_nu},~\ref{eq:d_alpha_d_nu},~and~\ref{eq:alpha_0},
+it follows that
+\begin{subequations}
+\begin{align}
+	\frac{\partial u_2}{\partial \bm{\nu}}(0)
+		&= \frac{1}{\lambda_1^2} \left( \lambda_1 \hvecxyz{f_u}{s}{c_u}
+			- \lambda_1 u_1 \hvecxyz{0}{0}{1} \right),\\
+	\frac{\partial u_2}{\partial \bm{\nu}}(0)
+		&= \frac{1}{\lambda_1} \hvecxyz{f_u}{s}{c_u - u_1} \label{eq:grad_u2_nu_0}
+\end{align}
+\end{subequations}
+and
+\begin{subequations}
+\begin{align}
+	\frac{\partial v_2}{\partial \bm{\nu}}(0)
+		&= \frac{1}{\lambda_1^2} \left( \lambda_1 \hvecxyz{0}{f_v}{c_v}
+			- \lambda_1 v_1 \hvecxyz{0}{0}{1} \right),\\
+	\frac{\partial v_2}{\partial \bm{\nu}}(0)
+		&= \frac{1}{\lambda_1} \hvecxyz{0}{f_v}{c_v - v_1}. \label{eq:grad_v2_nu_0}
+\end{align}
+\end{subequations}
+Therefore, the 2x3 Jacobian relative to linear velocity terms is
+\begin{equation}
+\label{eq:jac_2x3_nu}
+	\boxed{J_{\bm{\nu}}(\bm{x_2})(0) =
+		\frac{1}{\lambda_1} \begin{pmatrix}
+			f_u & s   & c_u - u_1 \\
+			0   & f_v & c_v - v_1 \\
+		\end{pmatrix}}
+\end{equation}
+
+\section{Partial Derivatives Relative to Angular Velocity Terms}%
+\label{sec:partial_derivatives_relative_to_angular_velocity_terms}
+
+The purpose here is to obtain a computable expressions of $\nabla_{\bm{\omega}}(\bm{x_2})$.
+We will develop both terms appearing in equation~\ref{eq:grad_x2_w},
+i.e.\ $\nabla_{\bm{\omega}} (\exp(\cross{\omega}) \bm{X_1} )$
+and $\nabla_{\bm{\omega}} (V \bm{\nu})$.
+Since $\bm{\nu}$ does not depend on $\bm{\omega}$,
+\begin{equation}
+\label{eq:gradient_product_sum}
+	\nabla_{\bm{\omega}} (V \bm{\nu})
+	= \sum_i \nu_i \nabla_{\bm{\omega}}\bm{V_i},
+\end{equation}
+where $\bm{V_i}$ is the column $i$ of $V$.
+We remind that we are interested in the gradient at $\bm{\xi} = 0$.
+A first order Taylor expansion of $V$ at 0 shows that all terms are polynomial
+in $\omega_i$ so since $\bm{\nu}$ is also null, this all gradient is null.
+\begin{equation}
+\label{eq:grad_V_omega}
+	\nabla_{\bm{\omega}} (V \bm{\nu})(0) = 0.
+\end{equation}
+We are thus left with the first part
+$\nabla_{\bm{\omega}}(\bm{x_2})(0) = K \nabla_{\bm{\omega}} (\exp(\cross{\omega}) \bm{X_1} )(0)$.
+If we develop $\exp(\cross{\omega})$ as in equation~\ref{eq:rodrigues_omega},
+we have
+\[
+	\nabla_{\bm{\omega}} (\exp(\cross{\omega}) \bm{X_1} )
+	= 0
+	+ \nabla_{\bm{\omega}} \left( \frac{\sin\theta}{\theta} \cross{\omega} \bm{X_1} \right)
+	+ \nabla_{\bm{\omega}} \left( \frac{1-\cos\theta}{\theta^2} \cross{\omega}^2 \bm{X_1} \right)
+\]
+Let's analyze the last term of this expression.
+We can remark that $(1-\cos\theta)/\theta^2$ tends to $1/2$ when $\theta$ tends to 0.
+Additionally, all terms of $\cross{\omega}^2$
+are polynomials of degree 2 with no term of degree 1.
+So all partial derivatives will be polynomials of degree 1, with no degree 0.
+As a result, the evaluation at $\bm{\omega} = 0$ will lead to
+\begin{equation}
+\label{eq:second_order_null}
+	\nabla_{\bm{\omega}} \left( \frac{1-\cos\theta}{\theta^2} \cross{\omega}^2 \bm{X_1} \right)(0) = 0.
+\end{equation}
+So we are left with
+\begin{equation}
+\label{eq:grad_exp_omega}
+	\nabla_{\bm{\omega}} (\exp(\cross{\omega}) \bm{X_1} )(0)
+	= \nabla_{\bm{\omega}} \left( \frac{\sin\theta}{\theta} \cross{\omega} \bm{X_1} \right)(0).
+\end{equation}
+We can show that the derivative of the ``hat'' function has the following interesting form
+\begin{equation}
+\label{eq:gradient_cross_product}
+	\forall \bm{\omega}, \bm{y} \in \R^3,\quad \nabla_{\bm{\omega}} (\cross{\omega} \bm{y}) = - y_{\times}.
+\end{equation}
+We can derive from equations~\ref{eq:grad_exp_omega}~and~\ref{eq:gradient_cross_product} that
+\begin{equation}
+\label{eq:grad_exp_omega_0_h}
+	\nabla_{\bm{\omega}} (\exp(\cross{\omega}) \bm{X_1} )(0)
+	= -{X_1}_{\times}.
+\end{equation}
+From equations~\ref{eq:grad_x2_w} and~\ref{eq:grad_exp_omega_0_h},
+and knowing that $\bm{X_1} = \inv{K} \bm{x_1}$
+the gradient expression relative to $\bm{\omega}$ at 0 is
+\begin{equation}
+\label{eq:grad_x2_omega_0}
+	\nabla_{\bm{\omega}}(\bm{x_2})(0)
+		= -K (\inv{K}\bm{x_1})_{\times}.
+\end{equation}
+The 2x3 Jacobian can be obtained by computing derivatives of a quotient
+as we did in equations~\ref{eq:grad_u2_nu} and~\ref{eq:grad_v2_nu} for $\nu$.
+Using symbolic computations, we obtain
+\begin{equation}
+\label{eq:grad_u2_omega}
+	\frac{\partial u_2}{\partial \bm{\omega}}(0)
+	= \begin{pmatrix}
+		\frac{-ab}{f_v} - s
+			& \frac{a c}{f_u f_v} + f_u
+			& \frac{-f_u^2 b + s c}{f_u f_v}
+	\end{pmatrix},
+\end{equation}
+\begin{equation}
+\label{eq:grad_v2_omega}
+	\frac{\partial v_2}{\partial \bm{\omega}}(0)
+	= \begin{pmatrix}
+		\frac{-b^2}{f_v} - f_v
+			& \frac{b c}{f_u f_v}
+			& \frac{c}{f_u}
+	\end{pmatrix},
+\end{equation}
+where
+\[
+	a = u_1 - c_u, \quad b = v_1 - c_v
+	\quad \textrm{and} \quad c = a f_v - s b.
+\]
+The 2x3 Jacobian relative to angular velocity terms is
+\begin{equation}
+\label{eq:jac_2x3_omega}
+	\boxed{J_{\bm{\omega}}(\bm{x_2})(0) =
+		\begin{pmatrix}
+			\frac{-ab}{f_v} - s
+				& \frac{a c}{f_u f_v} + f_u
+				& \frac{-f_u^2 b + s c}{f_u f_v} \\
+			\frac{-b^2}{f_v} - f_v
+				& \frac{b c}{f_u f_v}
+				& \frac{c}{f_u} \\
+		\end{pmatrix}}
+\end{equation}
+with
+\[
+	a = u_1 - c_u, \quad b = v_1 - c_v
+	\quad \textrm{and} \quad c = a f_v - s b.
+\]
+
+\section{Partial Derivatives with Normalized Coordinates}%
+\label{sec:partial_derivatives_normalized}
+
+We can hint from the expression of $\nabla_{\bm{\nu}}(\bm{x_2})$
+in equation~\ref{eq:grad_x2_nu_0} and the expression of
+$\nabla_{\bm{\omega}}(\bm{x_2})$ in equation~\ref{eq:grad_x2_omega_0}
+that computing the Jacobian in the frame of
+the normalized coordinates
+$\lambda \tr{(\tilde{u}\ \tilde{v}\ 1)} = \lambda \inv{K} \tr{(u\ v\ 1)}$
+will result in a simpler expression since we avoid the multiplications
+by $K$ and $\inv{K}$.
+Let's thus make the change of variables
+\[
+	\begin{pmatrix} u_2 \\ v_2 \end{pmatrix}
+		= K' \begin{pmatrix} \tilde{u_2} \\ \tilde{v_2} \end{pmatrix}
+			+ \begin{pmatrix} c_u \\ c_v \end{pmatrix}
+	\quad \text{with} \quad
+	K' = \begin{pmatrix}
+		f_u & s \\
+		0 & f_v \\
+	\end{pmatrix}.
+\]
+The chain rule means that
+$J_{\bm{\xi}}(\bm{x_2}) = K' \cdot J_{\bm{\xi}}(\bm{\tilde{x_2}})$
+and we will show that $J_{\bm{\xi}}(\bm{\tilde{x_2}})$ has a way simpler expression.
+The same reasoning leading to equation~\ref{eq:grad_x2_nu_0},
+now leads to
+\begin{equation}
+\label{eq:grad_x2_nu_0_norm}
+	\nabla_{\bm{\nu}}(\bm{\tilde{x_2}})(0) = I_3
+\end{equation}
+and the one leading to equation~\ref{eq:grad_x2_omega_0} now leads to
+\begin{equation}
+\label{eq:grad_x2_omega_0_norm}
+	\nabla_{\bm{\omega}}(\bm{\tilde{x_2}})(0)
+		= -{\bm{\tilde{x_1}}}_{\times}.
+\end{equation}
+Writing the derivatives of the quotient as in
+equations~\ref{eq:grad_u2_nu} and~\ref{eq:grad_v2_nu} we thus obtain
+\begin{equation}
+\label{eq:jac_2x3_nu_norm}
+	\boxed{J_{\bm{\nu}}(\bm{\tilde{x_2}})(0) =
+		\frac{1}{\lambda_1} \begin{pmatrix}
+			1 & 0   & -\tilde{u_1} \\
+			0 & 1   & -\tilde{u_1} \\
+		\end{pmatrix}}
+\end{equation}
+and
+\begin{equation}
+\label{eq:jac_2x3_omega_norm}
+	\boxed{J_{\bm{\omega}}(\bm{\tilde{x_2}})(0) =
+		\begin{pmatrix}
+			-\tilde{u_1}\tilde{v_1} & 1 + {\tilde{u_1}}^2 & -\tilde{v_1} \\
+			-1 - {\tilde{v_1}}^2 & \tilde{u_1}\tilde{v_1} & \tilde{u_1} \\
+		\end{pmatrix}}
+\end{equation}
+Since the final objective is to compute the Jacobian of the photometric reprojection error,
+which is
+\[
+	J = \nabla I \cdot J_{\bm{\xi}}(\bm{x_2})
+	  = \nabla I \cdot K' \cdot J_{\bm{\xi}}(\bm{\tilde{x_2}}),
+\]
+note that the matrix $K'$ is often directly multiplied with
+the image gradient $\nabla I$
+and thus does not appear in the function computing the Jacobian of the warping function,
+actually computing $J_{\bm{\xi}}(\bm{\tilde{x_2}})$.
