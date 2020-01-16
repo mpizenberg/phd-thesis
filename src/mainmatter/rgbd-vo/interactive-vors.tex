@@ -4,8 +4,54 @@
 \minitoc%
 \clearpage
 
-\section{RGB-D Tracking Evaluation}%
-\label{sec:rgbd-tracking-evaluation}
+\section{RGB-D Visual Odometry Evaluation}%
+\label{sec:rgbd-vo-evaluation}
+
+\subsection{Dataset Creation / Aqcuisition}%
+\label{sub:dataset_creation}
+
+\subsubsection{Overview of Avalaible Datasets}%
+\label{ssub:datasets_overview}
+
+\subsubsection{Motion Capture for RGB-D Visual Odometry}%
+\label{ssub:motion_capture}
+
+\subsubsection{Synthetic Dataset Creation}%
+\label{ssub:synthetic_dataset}
+
+
+\subsection{Evaluation Metrics}%
+\label{sub:metrics}
+
+\subsubsection{Metrics with Ground Truth}%
+\label{ssub:metrics_gt}
+
+\paragraph{Absolute Trajectory Error (ATE)}%
+\label{par:ate}
+
+\paragraph{Relative Pose Error (RPE)}%
+\label{par:rpe}
+
+\subsubsection{Metrics without Ground Truth}%
+\label{ssub:metrics_no_gt}
+
+\paragraph{Intrinsic Error After Map Optimization}%
+\label{par:map_optim}
+
+\paragraph{Drift Over a Loop}%
+\label{par:drift_loop}
+
+
+\subsection{Setup and Algorithms Evaluation}%
+\label{sub:algorithms_eval}
+
+\subsubsection{Provided Testing Setup}%
+\label{ssub:setup}
+
+\subsubsection{Evaluation Results}%
+\label{ssub:eval_results}
+
+
 
 Un dépot pour faciliter la comparaison d’algorithmes d’odométrie visuelle RGB-D. Les tests sont basés sur le dataset TUM RGB-D, ou tout dataset compatible (comme ICL-NUIM qui est un dataset synthétique). En l’état actuel des choses, des programmes de test sont prêts pour les algos suivants :
 - OpenCV, en trois versions :
