@@ -79,42 +79,77 @@ North Campus Long-Term (NCLT) Vision and Lidar dataset.~\cite{carlevaris2016univ
 \subsubsection{Motion Capture for RGB-D Visual Odometry}%
 \label{ssub:motion_capture}
 
+Parler un peu plus en détail du systeme de capture du dataset RGB-D cremers.
+Qui est celui qui défini le standard utilisé par notre approche.
+
 \subsubsection{Synthetic Dataset Creation}%
 \label{ssub:synthetic_dataset}
 
+Parler un peu plus du dataset ICL-NUIM.
+Avantages et inconvénients.
 
 \subsection{Evaluation Metrics}%
 \label{sub:metrics}
 
+Quelles sont les types de métriques utilisables pour évaluer de l'odométrie visuelle.
+
 \subsubsection{Metrics with Ground Truth}%
 \label{ssub:metrics_gt}
+
+L'approche standard consiste à capturer une vérité terrain de l'ensemble de la trajectoire.
 
 \paragraph{Absolute Trajectory Error (ATE)}%
 \label{par:ate}
 
+La ATE ca consiste à comparer globalement en position les trajectoires
+estimée et vérité terrain.
+
 \paragraph{Relative Pose Error (RPE)}%
 \label{par:rpe}
+
+La RPE ca consiste à comparer les poses relatives sur des sous segments
+de la trajectoire globale.
+Avantages et inconvénients comparé à l'ATE.
 
 \subsubsection{Metrics without Ground Truth}%
 \label{ssub:metrics_no_gt}
 
+Et quand c'est pas possible, ou compliqué d'avoir une vérité terrain
+on fait quoi ? (Section plutot courte, juste pour mentioner).
+
 \paragraph{Intrinsic Error After Map Optimization}%
 \label{par:map_optim}
+
+Dans le cas ou on fait de la loop closure + global map optimization,
+on peut comparer la trajectoire avant et après rectification.
 
 \paragraph{Drift Over a Loop}%
 \label{par:drift_loop}
 
+Sinon on peut aussi penser le dataset de manière à avoir des propriétés particulières.
+Par exemple le dataset TUM mono de 2016, fourni 50 longues séquences qui débutent
+et finissent à la même position.
+La trajectoire estimée peut être alignée au début et à la fin.
+(attention à désactiver la loop closure et pose graph optimization des algos).
 
 \subsection{Setup and Algorithms Evaluation}%
 \label{sub:algorithms_eval}
 
+Ici on parle du code que j'ai mis en place pour tester et comparer vors.
+
 \subsubsection{Provided Testing Setup}%
 \label{ssub:setup}
+
+Le code qui fourni un docker et des programmes de tests des 6 algos.
 
 \subsubsection{Evaluation Results}%
 \label{ssub:eval_results}
 
+Analyse des résultats sur les différentes séquences.
+Préciser les caractéristiques des séquences (statiques, mouvement, ...).
 
+
+----------------------------------------
 
 Un dépot pour faciliter la comparaison d’algorithmes d’odométrie visuelle RGB-D. Les tests sont basés sur le dataset TUM RGB-D, ou tout dataset compatible (comme ICL-NUIM qui est un dataset synthétique). En l’état actuel des choses, des programmes de test sont prêts pour les algos suivants :
 - OpenCV, en trois versions :
