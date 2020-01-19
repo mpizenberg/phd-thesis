@@ -28,7 +28,7 @@ evaluation results.
 
 We saw in Chapter~\ref{cha:the_image_annotation_problem} that the principal
 difficulty of building annotation datasets is the required human annotation time.
-Visual Odometry is quite different on this point.
+Visual odometry is quite different on this point.
 Algorithms are strongly related to capture devices,
 be it stereo, mono, RGB-D cameras, or cameras paired with other sensors
 such as inertial measurement units (IMU), GPS or lidars.
@@ -37,6 +37,62 @@ For every evaluated acquisition system, there must exist another measurement sys
 more precise and reliable than the one being evaluated.
 The main difference between visual odometry and annotation is thus that
 the difficulty is technological here, while it is mostly time consumption for annotation.
+
+
+\begin{table}[ht]
+\centering
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{llll}
+Dataset
+	& Year
+    & Available data
+	& Ground truth \\
+    \midrule
+New College~\cite{smith2009new}
+	& 2009
+	& \makecell[l]{GPS, IMU, wheel odometry,\\lidar, omnidirectional, stereo}
+	& Dead-reckoned \\
+\textbf{TUM RGB-D~\cite{sturm2012benchmark}}
+	& 2012
+	& IMU, \textbf{RGB-D}
+	& Motion capture \\
+KITTI~\cite{geiger2013vision}
+	& 2013
+	& GPS, IMU, lidar, stereo
+	& High precision GPS/IMU \\
+\textbf{ICL-NUIM~\cite{handa2014benchmark}}
+	& 2014
+	& \textbf{RGB-D}, 3D surface
+	& Synthetic \\
+NCLT~\cite{carlevaris2016university}
+	& 2016
+	& \makecell[l]{GPS, IMU, wheel odometry,\\lidar, omnidirectional}
+	& RTK GPS and lidar SLAM \\
+EuRoC MAV~\cite{burri2016euroc}
+	& 2016
+	& Stereo camera
+	& Motion capture \\
+TUM Mono~\cite{engel2016photometrically}
+	& 2016
+	& Mono camera
+	& Closed loop \\
+TUM VI~\cite{schubert2018tum}
+	& 2018
+	& IMU, Mono camera
+	& Motion capture and closed loop \\
+ADVIO~\cite{cortes2018advio}
+	& 2018
+	& Smartphone IMU and video
+	& IMU with position fixes \\
+\textbf{Bonn RGB-D~\cite{palazzolo2019iros}}
+	& 2019
+	& IMU, \textbf{RGB-D}, lidar
+	& Motion capture \\
+\end{tabular}%
+} % end of resizebox
+\caption{Visual odometry datasets}%
+\label{tab:vo-datasets}
+\end{table}
 
 New College vision and laser dataset~\cite{smith2009new}.
 robot with stereo images, omnidirectional images, lidar, gps, imu.
@@ -56,12 +112,12 @@ motion capture software by MotionAnalysis~\cite{MotionAnalysis}.
 ICL-NUIM synthetic dataset~\cite{handa2014benchmark}.
 Synthetic scenes (ray traced with POVRay).
 Provide ground truth and rgbd images.
+The 3D surface is also provided for the living room scene.
 
 Bonn RGB-D Dynamic Dataset~\cite{palazzolo2019iros}.
 TUM RGB-D Dataset format.
 Ground truth recorded with Optitrack Prime 13 motion capture system.
 Ground truth 3D point cloud of static environment recorded with Leica BLK360 lidar.
-The 3D surface is also provided for the living room scene.
 
 Photometrically calibrated benchmark mono vo~\cite{engel2016photometrically}.
 Color mono camera, photometrically calibrated (sensor response, vignette, exposure time).
