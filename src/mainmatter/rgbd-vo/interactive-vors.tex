@@ -229,12 +229,66 @@ but the overall circumstances should be very favorable for our simple implementa
 \subsection{Evaluation Metrics}%
 \label{sub:metrics}
 
-Quelles sont les types de métriques utilisables pour évaluer de l'odométrie visuelle.
+There are basically two types of evaluation metrics,
+those based on a ground truth, and those that are not.
 
-\subsubsection{Metrics with Ground Truth}%
+\subsubsection{Metrics with Ground Truth, ATE and RPE}%
 \label{ssub:metrics_gt}
 
-L'approche standard consiste à capturer une vérité terrain de l'ensemble de la trajectoire.
+The most straightforward method to evaluate visual odometry trajectories,
+is to compare it with a reference trajectory, called ground truth.
+This reference trajectory needs to be acquired by the system with more precision
+than the one being evaluated for the measure to make sense.
+In our case, the TUM RGB-D dataset uses a motion capture system with sub millimeter accuracy,
+and the ICL-NUIM provides exact trajectory since it is a synthetic dataset.
+
+The first evaluation metric commonly used is the absolute trajectory error (ATE).
+Let's consider the trajectory as a discrete set of camera poses
+\[
+	G_{\Omega} = \Set{g_{\tau}}{\tau \in \Omega,\ g_{\tau} \in SE(3)}
+\]
+where $\Omega$ is the set of discrete time events when camera poses are available.
+In theory, the ATE can be computed as
+\[
+	\text{ATE} = \sum_{\Omega} d(g_{\tau}, \widehat{g}_{\tau})
+\]
+where $d(g_{\tau}, \widehat{g}_{\tau})$ can be thought of
+as a distance between the estimated transformation $g_{\tau}$
+and the ground truth transformation $\widehat{g}_{\tau}$.
+Usually, we can consider two types of errors, the translation error
+\[
+	\| \text{trans}(\inv{\widehat{g}_{\tau}} \cdot g_{\tau}) \|
+\]
+and the rotation error
+\[
+	\angle\ \text{rot}(\inv{\widehat{g}_{\tau}} \cdot g_{\tau})
+\]
+where $\angle$ is the amplitude ($\geq 0$) of the rotation angle.
+Since the rotation errors will also impact translation errors later,
+it is common to only use the translation error when computing the ATE.
+The two most widely used ATE metrics are the RMSE and the median scores
+\[
+	\text{ATE}_{\text{rmse}} =
+		\left( \mean{ \sum_{\Omega} \| \text{trans}(\inv{\widehat{g}_{\tau}} \cdot g_{\tau}) \|^2 }
+		\right)^{1/2}
+	\quad \text{and} \quad
+	\text{ATE}_{\text{median}} =
+		\text{median} \left( \| \text{trans}(\inv{\widehat{g}_{\tau}} \cdot g_{\tau}) \| \right).
+\]
+The median is a better indicator of the average algorithm precision,
+while the RMSE better reflects the presence (or absence) of outliers,
+i.e.\ the global robustness of the algorithm.
+
+In practice, we should note that the ground truth and estimated trajectory
+are not expressed in the same reference frame.
+It is thus necessary to first align the two trajectories.
+This is usally done with a principal component analysis (PCA)
+of the trajectories.
+It is also important to note that the ground truth and estimated trajectories
+are not sampled at the same timings and frequency.
+Therefore, it is also necessary to correctly associate poses of each trajectory,
+which is reasonably easy when timestamps have been synchronized by the dataset.
+
 
 \paragraph{Absolute Trajectory Error (ATE)}%
 \label{par:ate}
