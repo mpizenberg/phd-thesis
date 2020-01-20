@@ -237,7 +237,7 @@ those based on a ground truth, and those that are not.
 
 The most straightforward method to evaluate visual odometry trajectories,
 is to compare it with a reference trajectory, called ground truth.
-This reference trajectory needs to be acquired by the system with more precision
+This reference trajectory needs to be acquired with more precision
 than the one being evaluated for the measure to make sense.
 In our case, the TUM RGB-D dataset uses a motion capture system with sub millimeter accuracy,
 and the ICL-NUIM provides exact trajectory since it is a synthetic dataset.
@@ -273,9 +273,9 @@ The two most widely used ATE metrics are the RMSE and the median scores
 		\right)^{1/2}
 	\quad \text{and} \quad
 	\text{ATE}_{\text{median}} =
-		\text{median} \left( \| \text{trans}(\inv{\widehat{g}_{\tau}} \cdot g_{\tau}) \| \right).
+		\text{median}_{\Omega} \left( \| \text{trans}(\inv{\widehat{g}_{\tau}} \cdot g_{\tau}) \| \right).
 \]
-The median is a better indicator of the average algorithm precision,
+The median is a better indicator of the algorithm precision,
 while the RMSE better reflects the presence (or absence) of outliers,
 i.e.\ the global robustness of the algorithm.
 
@@ -287,7 +287,34 @@ of the trajectories.
 It is also important to note that the ground truth and estimated trajectories
 are not sampled at the same timings and frequency.
 Therefore, it is also necessary to correctly associate poses of each trajectory,
-which is reasonably easy when timestamps have been synchronized by the dataset.
+which is reasonably easy when timestamps have been synchronized in the dataset.
+
+NEED SCHEMA d'après thomas.
+
+The second commonly used evaluation metric is the relative pose error (RPE).
+One of the main issues of the ATE is that drifts have higher impact at the beginning
+of the sequence than at the end.
+Contrary to the ATE, which evaluates absolute errors on all associated pairs,
+the RPE evaluates the relative motion in a sliding window of two associated pairs.
+The size of the window is usually a fixed travelled distance or time interval.
+We will detail the computation of the RPE at 1 second for example.
+For each associated pair $(g_{\tau}, \widehat{g}_{\tau})$,
+we consider another associated pair $(g_{\tau'}, \widehat{g}_{\tau'})$,
+where $\tau' \approx \tau + 1s$.
+The relative camera motion in the estimated trajectory is
+$\Delta_{\tau \tau'} g = \inv{g_{\tau}} \cdot g_{\tau'}$
+and the relative camera motion in the ground truth trajectory is
+$\Delta_{\tau \tau'} \widehat{g} = \inv{\widehat{g}_{\tau}} \cdot \widehat{g}_{\tau'}$.
+The relative pose error is thus computed as
+\[
+	\text{RPE} = \sum_{\Omega'} d(\Delta_{\tau \tau'} g, \Delta_{\tau \tau'} \widehat{g})
+\]
+where $d(\cdot, \cdot)$ is similar than for the ATE,
+and $\Omega'$ is the set of regularly spaced pairs,
+whether it is a duration, like 1 second, or a distance like 1 meter.
+It is even possible to consider all possible pairs of a sequence,
+but the complexity grows in square of the number of frames and
+the computed measure exhibits similar issues than the ATE.
 
 
 \paragraph{Absolute Trajectory Error (ATE)}%
