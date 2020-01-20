@@ -158,10 +158,38 @@ ADVIO~\cite{cortes2018advio}
 \subsubsection{Motion Capture for RGB-D Visual Odometry}%
 \label{ssub:motion_capture}
 
-A benchmark for the evaluation of RGB-D SLAM systems~\cite{sturm2012benchmark}.
-RGB-D images (depth + color), imu.
-Ground truth with 8 Raptor-E cameras,
-motion capture software by MotionAnalysis~\cite{MotionAnalysis}.
+The TUM RGB-D dataset~\cite{sturm2012benchmark} was the first
+complete and rigorously detailed dataset for RGB-D visual odometry.
+It is composed of 80 sequences, 47 for training with ground truth,
+and 33 for validation only evaluated online, without ground truth.
+The training sequences are arranged in six groups,
+\begin{itemize}
+\setlength\itemsep{-0.5em}
+	\item testing and debugging (4 sequences), simple translation or rotation movements,
+	\item handheld movements (11 sequences),
+	\item robot movements (4 sequences),
+	\item structure and texture (8 sequences), with difficult structure or texture patterns,
+	\item dynamic objects (9 sequences),
+	\item and object reconstruction (11 sequences).
+\end{itemize}
+As we can see, the dataset provides both easy sequences and sequences with
+more difficult situations such as dynamic movements or poor textures
+in the field of view of the camera.
+It is thus a good benchmark of the robustness of visual odometry algorithms.
+These sequences have been acquired by three different Kinect devices,
+named fr1 (for ``Freiburg 1''), fr2 and fr3.
+All their intrinsic parameters are availabe in the dataset.
+The required robustness of the tested algorithms are also increased by the fact that
+the color camera of the Kinect sensor has a rolling shutter.
+Taking into account the caracteristics of our implementation,
+we do not expect our algorithm to perform very well under those circumstances.
+
+The ground truth camera poses are obtained thanks to an external motion capture system
+based on MotionAnalysis~\cite{MotionAnalysis} hardware and software.
+This setup is composed of eight 300 Hz Raptor-E high definition cameras,
+equiped with infrared lights to illuminate passive markers attached to the Kinect.
+After a detailed intrinsic and extrinsic parameters calibration of the system,
+the authors estimate the relative position errors to be lower than 1 mm and 0.5 degrees.
 
 \subsubsection{Synthetic Dataset Creation}%
 \label{ssub:synthetic_dataset}
