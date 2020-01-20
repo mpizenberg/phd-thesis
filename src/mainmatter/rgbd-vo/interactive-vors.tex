@@ -27,17 +27,77 @@ evaluation results.
 \label{ssub:datasets_overview}
 
 We saw in Chapter~\ref{cha:the_image_annotation_problem} that the principal
-difficulty of building annotation datasets is the required human annotation time.
-Visual odometry is quite different on this point.
-Algorithms are strongly related to capture devices,
+difficulty for building annotation datasets is the required human annotation time.
+For visual odometry, algorithms are strongly related to capture devices,
 be it stereo, mono, RGB-D cameras, or cameras paired with other sensors
-such as inertial measurement units (IMU), GPS or lidars.
-As a consequence, there are many datasets focused on different acquisition systems.
+such as inertial measurement units (IMU), GPS or lidar.
+As a consequence, datasets focus on different acquisition systems.
 For every evaluated acquisition system, there must exist another measurement system,
 more precise and reliable than the one being evaluated.
-The main difference between visual odometry and annotation is thus that
-the difficulty is technological here, while it is mostly time consumption for annotation.
+The main difference is thus that
+the challenge is technological for visual odometry,
+while it is mostly time consumption for image annotation.
 
+The availability of datasets for visual odometry first came from the mobile robotics community,
+mostly interested in SLAM from laser sensors (lidar).
+The data is thus collected from sensors attached to a mobile robot or car navigating.
+In the New College~\cite{smith2009new} and NCLT~\cite{carlevaris2016university} datasets,
+the robotic platform is based on a Segway, the KITTI dataset~\cite{geiger2013vision}
+recorded data from a sensors equiped car,
+while the EuRoC MAV~\cite{burri2016euroc}
+dataset is based on a MAV flying robot.
+These platforms are depicted in Figure~\ref{fig:mobile-robot-slam}.
+The ground truth was recorded with three different approaches for these datasets.
+Visual odometry ground truth was an after thought for the New College dataset,
+only available a year later on their website and not discussed in the paper.
+It seems that it has been obtained from dead-reckoning, i.e.\ from wheel and IMU odometry,
+provided by the Segway platform, and is thus not very reliable.
+In the NCLT dataset, the mobile robot trajectory ground truth is computed from
+a high precision realtime kinematic GPS (RTK GPS) and a graph slam based on lidar measurements.
+The accuracy of the trajectory ranges from a centimeter to a decimeter approximately for a total
+travelled distance of roughly 147 km.
+The ground truth trajectory of the KITTI dataset was also obtained from high precision
+GPS/IMU sensors and is thus also accurate at the decimeter scale.
+The setup for the EuRoC MAV dataset is a bit different since the mobile vehicle
+is flying in indoor environment and its trajectory is obtained from motion capture devices.
+The total travelled distance is thus way shorter, less than a kilometer,
+but the trajectories are accurate at approximately a millimeter.
+
+\begin{figure}[ht]
+	\centering
+	\includegraphics[height=0.3\linewidth]{assets/img/new-college.png}
+	\hfill
+	\includegraphics[height=0.3\linewidth]{assets/img/nclt.png}
+	\hfill
+	\includegraphics[height=0.3\linewidth]{assets/img/euroc-mav.png}
+	\caption{Mobile robots used for SLAM datasets. From left to right,
+	the Segway platform used in the New College dataset~\cite{smith2009new},
+	the Segway platform used in the NCLT dataset~\cite{carlevaris2016university},
+	the MAV used in the EuRoC MAV dataset~\cite{burri2016euroc}.}%
+	\label{fig:mobile-robot-slam}
+\end{figure}
+
+A second wave of datasets has especially being targetting RGB-D cameras,
+very popular after the launch of the Microsoft Kinect,
+represented in bold in Table~\ref{tab:vo-datasets}.
+While the TUM RGB-D~\cite{sturm2012benchmark} and Bonn RGB-D~\cite{palazzolo2019iros}
+datasets are recorded with real RGB-D sensors,
+the ICL-NUIM~\cite{handa2014benchmark} dataset was generated (ray-traced rendered)
+from synthetic 3D models of indoor scenes.
+We are going to explain in more details the specificities of the TUM RGB-D and
+ICL-NUIM datasets since these are the two we used to evaluate our direct RGB-D
+visual odometry algorithm.
+
+Finally, with the popularity of inertial sensors coupled with cameras in
+modern smartphones enabling new augmented reality functionalities,
+a regain in interest have been visible for 6 degrees of freedom visual inertial odometry (VIO).
+While the EuRoC MAV~\cite{burri2016euroc} and TUM VI~\cite{schubert2018tum} datasets
+are using high quality sensors,
+the ADVIO dataset~\cite{cortes2018advio} is actually using regular smartphones sensors,
+showing the importance of datasets with less precise data to improve algorithms robustness.
+We provide a brief summary of these datasets properties in Table~\ref{tab:vo-datasets}.
+Note that this is not an exhaustive list of available datasets but an overview
+of the main ones for visual odometry.
 
 \begin{table}[ht]
 \centering
@@ -94,55 +154,22 @@ ADVIO~\cite{cortes2018advio}
 \label{tab:vo-datasets}
 \end{table}
 
-New College vision and laser dataset~\cite{smith2009new}.
-robot with stereo images, omnidirectional images, lidar, gps, imu.
 
-Vision meets robotics: the KITTI dataset~\cite{geiger2013vision}.
-Gray stero camera, color stere camera, lidar (10 Hz), gps-IMU (100 Hz).
-
-SemanticKITTI, semantic scene understanding using lidar sequences~\cite{behley2019iccv}.
-Provide dense point cloud semantic annotation.
-http://semantic-kitti.org/
+\subsubsection{Motion Capture for RGB-D Visual Odometry}%
+\label{ssub:motion_capture}
 
 A benchmark for the evaluation of RGB-D SLAM systems~\cite{sturm2012benchmark}.
 RGB-D images (depth + color), imu.
 Ground truth with 8 Raptor-E cameras,
 motion capture software by MotionAnalysis~\cite{MotionAnalysis}.
 
+\subsubsection{Synthetic Dataset Creation}%
+\label{ssub:synthetic_dataset}
+
 ICL-NUIM synthetic dataset~\cite{handa2014benchmark}.
 Synthetic scenes (ray traced with POVRay).
 Provide ground truth and rgbd images.
 The 3D surface is also provided for the living room scene.
-
-Bonn RGB-D Dynamic Dataset~\cite{palazzolo2019iros}.
-TUM RGB-D Dataset format.
-Ground truth recorded with Optitrack Prime 13 motion capture system.
-Ground truth 3D point cloud of static environment recorded with Leica BLK360 lidar.
-
-Photometrically calibrated benchmark mono vo~\cite{engel2016photometrically}.
-Color mono camera, photometrically calibrated (sensor response, vignette, exposure time).
-Loop closed with starting and ending ground truth.
-
-TUM VI benchmark~\cite{schubert2018tum}.
-
-ADVIO dataset~\cite{cortes2018advio}.
-
-EuRoC dataset~\cite{burri2016euroc}.
-
-University of Michigan,
-North Campus Long-Term (NCLT) Vision and Lidar dataset.~\cite{carlevaris2016university}.
-
-\subsubsection{Motion Capture for RGB-D Visual Odometry}%
-\label{ssub:motion_capture}
-
-Parler un peu plus en détail du systeme de capture du dataset RGB-D cremers.
-Qui est celui qui défini le standard utilisé par notre approche.
-
-\subsubsection{Synthetic Dataset Creation}%
-\label{ssub:synthetic_dataset}
-
-Parler un peu plus du dataset ICL-NUIM.
-Avantages et inconvénients.
 
 \subsection{Evaluation Metrics}%
 \label{sub:metrics}
