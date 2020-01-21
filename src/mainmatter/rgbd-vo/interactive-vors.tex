@@ -410,9 +410,9 @@ We will detail the computation of the RPE at 1 second for example.
 For each associated pair $(g_{\tau}, \widehat{g}_{\tau})$,
 we consider another associated pair $(g_{\tau'}, \widehat{g}_{\tau'})$,
 where $\tau' \approx \tau + 1s$.
-The relative camera motion in the estimated trajectory is
+The camera motion between $\tau$ and $\tau'$ in the estimated trajectory is
 $\Delta_{\tau \tau'} g = \inv{g_{\tau}} \cdot g_{\tau'}$
-and the relative camera motion in the ground truth trajectory is
+and the camera motion in the ground truth trajectory is
 $\Delta_{\tau \tau'} \widehat{g} = \inv{\widehat{g}_{\tau}} \cdot \widehat{g}_{\tau'}$.
 The relative pose error is thus computed as
 \[
