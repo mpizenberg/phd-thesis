@@ -314,42 +314,32 @@ and $\Omega'$ is the set of regularly spaced pairs,
 whether it is a duration, like 1 second, or a distance like 1 meter.
 It is even possible to consider all possible pairs of a sequence,
 but the complexity grows in square of the number of frames and
-the computed measure exhibits similar issues than the ATE.
-
-
-\paragraph{Absolute Trajectory Error (ATE)}%
-\label{par:ate}
-
-La ATE ca consiste à comparer globalement en position les trajectoires
-estimée et vérité terrain.
-
-\paragraph{Relative Pose Error (RPE)}%
-\label{par:rpe}
-
-La RPE ca consiste à comparer les poses relatives sur des sous segments
-de la trajectoire globale.
-Avantages et inconvénients comparé à l'ATE.
+the computed measure exhibits similar issues than the ATE.\@
 
 \subsubsection{Metrics without Ground Truth}%
 \label{ssub:metrics_no_gt}
 
-Et quand c'est pas possible, ou compliqué d'avoir une vérité terrain
-on fait quoi ? (Section plutot courte, juste pour mentioner).
+In some conditions, such as long handheld outdoor trajectories,
+retrieving a ground truth might be problematic.
+Yet it is still possible to partially evaluate the precision of an algorithm,
+or rather its robustness to drifts and losses.
+Indeed, in absence of a full sequence ground truth,
+it is still possible to evaluate the tracking of loops.
+It is important to note that global loop closure detections must
+be deactivated in the algorithms for these measures to make sense.
 
-\paragraph{Intrinsic Error After Map Optimization}%
-\label{par:map_optim}
+One method consists in computing loop closure and pose graph optimization
+and then compare the trajectory before and after.
+If the drifts of the tracking are not too extreme and do not prevent the pose graph optimization,
+this error can be representative of the visual odometry performance.
 
-Dans le cas ou on fait de la loop closure + global map optimization,
-on peut comparer la trajectoire avant et après rectification.
+Another approach consists in specifically designing the dataset sequences
+to start and end at the same location, such that both ends of the trajectory
+can be precisely aligned.
+This is the approach taken in~\cite{engel2016photometrically}.
+The error computed is then the accumulated drift between the sequence when aligned
+to the start and when aligned to the end of the partial ground truth trajectory.
 
-\paragraph{Drift Over a Loop}%
-\label{par:drift_loop}
-
-Sinon on peut aussi penser le dataset de manière à avoir des propriétés particulières.
-Par exemple le dataset TUM mono de 2016, fourni 50 longues séquences qui débutent
-et finissent à la même position.
-La trajectoire estimée peut être alignée au début et à la fin.
-(attention à désactiver la loop closure et pose graph optimization des algos).
 
 \subsection{Setup and Algorithms Evaluation}%
 \label{sub:algorithms_eval}
