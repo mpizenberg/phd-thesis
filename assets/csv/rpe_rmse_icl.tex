@@ -1,0 +1,63 @@
+\begin{tikzpicture}
+    \begin{axis}
+    [
+    ytick={1,2,3,4,5}
+,    yticklabels={vors,dvo,ocv-rgbd,ocv-rgbd-icp,ocv-icp},
+    ]
+
+        \addplot+[
+        color=black,
+        style=solid,
+        boxplot prepared={
+            median=0.002240,
+            upper quartile=0.011160,
+            lower quartile=0.001571,
+            upper whisker=0.015429,
+            lower whisker=0.000991
+        },
+        ] coordinates {};
+        \addplot+[
+        color=black,
+        style=solid,
+        boxplot prepared={
+            median=0.004430,
+            upper quartile=0.005419,
+            lower quartile=0.003908,
+            upper whisker=0.007656,
+            lower whisker=0.003717
+        },
+        ] coordinates {};
+        \addplot+[
+        color=black,
+        style=solid,
+        boxplot prepared={
+            median=0.006143,
+            upper quartile=0.008625,
+            lower quartile=0.004346,
+            upper whisker=0.009195,
+            lower whisker=0.003350
+        },
+        ] coordinates {};
+        \addplot+[
+        color=black,
+        style=solid,
+        boxplot prepared={
+            median=0.000223,
+            upper quartile=0.000917,
+            lower quartile=0.000203,
+            upper whisker=0.005320,
+            lower whisker=0.000154
+        },
+        ] coordinates {};
+        \addplot+[
+        color=black,
+        style=solid,
+        boxplot prepared={
+            median=0.000817,
+            upper quartile=0.006016,
+            lower quartile=0.000191,
+            upper whisker=0.008085,
+            lower whisker=0.000113
+        },
+        ] coordinates {};    \end{axis}
+\end{tikzpicture}

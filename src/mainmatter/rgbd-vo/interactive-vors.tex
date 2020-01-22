@@ -536,10 +536,9 @@ of OCV-RGBD and OCV-ICP, inherits from the same tracking difficulties as OCV-ICP
 
 \begin{figure}[ht]
 	\centering
-	\includegraphics[width=\linewidth]{assets/img/todo.png}
-	\caption{Distribution of the relative pose error (RPE) at 1 second on all 55 sequences,
+	\input{assets/csv/rpe_median_all.tex}
+	\caption{Distribution of the median relative pose error (RPE) at 1 second on all 55 sequences,
 	composed of 47 TUM sequences and 8 ICL-NUIM sequences.
-	The RPE is computed as the median error for each sequence.
 	For reference, an additional entry called ``still'' is added.
 	It corresponds to the RPE at 1 second for a camera that never moves
 	and is thus representative of the motion in a sequence.}%
@@ -557,65 +556,63 @@ As we can see, VORS is performing extremely well in these conditions.
 Other remarkable details are exacerbated by this plot.
 Both geometric odometries (OCV-ICP and OCV-RGBD-ICP) perform extremely well
 thanks to the high precision dense depth maps provided by the dataset.
+One should note that this precision comes at the price of time.
+The first ICL sequence for example takes three times longer
+with OCV-ICP than with Fovis, VORS and DVO, all comparable in speed.
 It is also notable that Fovis is having more issues tracking those sequences.
-It can be explained by the nature of this algorithm, which is indirect
+It can be explained by the nature of this algorithm, which is indirect,
 based on FAST features, contrary to VORS, DVO and OCV-RGBD which are
 direct visual odometry algorithms.
 The synthetic nature of the images, and lack of unique textures compared
-to real images is messing with the descriptors.
+to real images is messing with the FAST descriptors of Fovis.
 
 \begin{figure}[ht]
 	\centering
-	\includegraphics[width=\linewidth]{assets/img/todo.png}
-	\caption{Distribution of the relative pose error (RPE) at 1 second
+	\input{assets/csv/rpe_median_icl.tex}
+	\caption{Distribution of the median relative pose error (RPE) at 1 second
 	on the 8 ICL-NUIM sequences.
-	The RPE is computed as the median error for each sequence.
 	For reference, an additional entry called ``still'' is added.
 	It corresponds to the RPE at 1 second for a camera that never moves
 	and is thus representative of the motion in a sequence.}%
 	\label{fig:rpe_median_icl}
 \end{figure}
 
-
-Schéma avec les temps de run !
-
-----------------------------------------
-
-Un dépot pour faciliter la comparaison d’algorithmes d’odométrie visuelle RGB-D. Les tests sont basés sur le dataset TUM RGB-D, ou tout dataset compatible (comme ICL-NUIM qui est un dataset synthétique). En l’état actuel des choses, des programmes de test sont prêts pour les algos suivants :
-- OpenCV, en trois versions :
-  - one direct approach (Rgbd) based on the paper "Real-Time Visual Odometry from Dense RGB-D Images", F. Steinbucker, J. Strum, D. Cremers, ICCV, 2011.
-  - one point cload approach (ICP) based on the paper "KinectFusion: Real-Time Dense Surface Mapping and Tracking", Richard A. Newcombe, Andrew Fitzgibbon, at al, SIGGRAPH, 2011.
-  - one mixed approach (RgbdICP) minimizing the sum of both energy functions.
-- The fovis visual odometry library, based on the paper "Visual Odometry and Mapping for Autonomous Flight Using an RGB-D Camera", Albert S. Huang, Abraham Bachrach, Peter Henry, Michael Krainin, Daniel Maturana, Dieter Fox, and Nicholas Roy. Int. Symposium on Robotics Research (ISRR), Flagstaff, Arizona, USA, Aug. 2011
-- Dense Visual Odometry (DVO), based on the paper "Robust Odometry Estimation for RGB-D Cameras", C. Kerl, J. Sturm and D. Cremers, In International Conference on Robotics and Automation (ICRA), 2013.
-- Visual Odometry in Rust (vors), currently being worked on.
-
-Pour analyser et comparer les trajectoires, j’ai fait un programme qui prends toutes les trajectoires en arguments, calcule la “rpe” (relative pose error) de translation et rotation à 1 frame d’écart, et 1 seconde d’écart, et finalement exporte tous les résultats dans un CSV contenant les champs suivants :
-
-- sequence : le nom de la sequence vidéo, par exemple "rgbd\_dataset\_freiburg1\_floor"
-- camera : l’identifiant de la caméra associée à la séquence : “fr1”
-- algo : l’algorithme utilisé, par exemple “dvo”, “ocv-rgbd”, “vors”, “vors-robust”, ...
-- t\_err\_rmse\_f : erreur de translation à 1 frame en mètre sur la séquence (rmse)
-- t\_err\_median\_f : erreur de translation à 1 frame en mètre sur la séquence (médiane)
-- r\_err\_rmse\_f : erreur de rotation à 1 frame en degrés sur la séquence (rmse)
-- r\_err\_median\_f : erreur de rotation à 1 frame en degrés sur la séquence (médiane)
-- t\_err\_rmse\_s : erreur de translation à 1 seconde en mètre sur la séquence (rmse)
-- t\_err\_median\_s : erreur de translation à 1 seconde en mètre sur la séquence (médiane)
-- r\_err\_rmse\_s : erreur de rotation à 1 seconde en degrés sur la séquence (rmse)
-- r\_err\_median\_s : erreur de rotation à 1 seconde en degrés sur la séquence (médiane)
-
-Pour explorer rapidement ces résultats, j’utilise un outil de visualisation de données nommé data-voyager [github] [online]. Les derniers résultats en date, ça donne :
+Instead of using the median RPE,
+which pictures the overall precision of the algorithms,
+Figure~\ref{fig:rpe_rmse_icl} represents the RMSE RPE,
+which better reflects the robustness to outliers.
+As visible in that figure, VORS has a long tail of highly
+erroneous motion tracking.
+High RMSE errors are better understood when looking at the
+detailed RPE of one sequence, as shown in Figure~\ref{fig:rpe_icl3}.
+In the end, even though our visual odometry implementation in Rust (VORS)
+has robustness issues to previously discussed challenges,
+we provide a precise, state of the art RGB-D visual odometry,
+easy to compile, to use and as we will develop next,
+easy to port to WebAssembly.
+VORS thus enables the exploration of efficient interactive
+visual odometry on the Web, which we finally present next.
 
 \begin{figure}[ht]
 	\centering
-	\includegraphics[width=\linewidth]{assets/img/rpe-2019-04-04.png}
-	\caption{Relative pose error (rpe)}%
-	\label{fig:rpe-eval}
+	\input{assets/csv/rpe_rmse_icl.tex}
+	\caption{Distribution of the RMSE relative pose error (RPE) at 1 second
+	on the 8 ICL-NUIM sequences.
+	For reference, an additional entry called ``still'' is added.
+	It corresponds to the RPE at 1 second for a camera that never moves
+	and is thus representative of the motion in a sequence.}%
+	\label{fig:rpe_rmse_icl}
 \end{figure}
 
-En moyenne, notre algo robuste est le meilleur. Plus d’infos sur le code d’évaluation dans le readme du dépot. Plus d’infos sur notre algo dans la section sur vors.
+\begin{figure}[ht]
+	\centering
+	\input{assets/csv/rpe_icl3.tex}
+	\caption{Relative pose error (RPE) at 1 second for the third
+	living room sequence of the ICL-NUIM dataset.}%
+	\label{fig:rpe_icl3}
+\end{figure}
 
-
+\clearpage
 \section{Interactive VORS on the Web}%
 \label{sec:interactive-vors}
 
