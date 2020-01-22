@@ -1,0 +1,44 @@
+\documentclass{article}
+\usepackage{tikz}
+\usepackage{datatool}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.8}
+\usepgfplotslibrary{statistics}
+
+\newcommand{\createfigure}[1]{\begin{figure}\input{#1}\caption{\detokenize{#1}}\end{figure}}
+
+\begin{document}
+
+\createfigure{t_err_median_all.tex}
+\createfigure{t_err_rmse_all.tex}
+\createfigure{t_err_median_icl.tex}
+\createfigure{t_err_rmse_icl.tex}
+\createfigure{t_err_median_tum.tex}
+\createfigure{t_err_rmse_tum.tex}
+\createfigure{t_err_median_icl_no_fovis.tex}
+\createfigure{t_err_rmse_icl_no_fovis.tex}
+\createfigure{t_err_median_icl_no_fovis_no_still.tex}
+\createfigure{t_err_rmse_icl_no_fovis_no_still.tex}
+
+\begin{figure}[th]
+    \centering
+    \begin{tikzpicture}
+        \begin{axis}[
+                xlabel=Frame,
+                ylabel=RPE,
+                ymax=0.05
+            ]
+            \addplot[color=blue] table [x=timestamp,y=t_err_s,col sep=comma]{rpe_1s_still.csv};
+            \addlegendentry {still}
+            \addplot[color=green] table [x=timestamp,y=t_err_s,col sep=comma]{rpe_1s_dvo.csv};
+            \addlegendentry {dvo}
+            \addplot[color=red] table [x=timestamp,y=t_err_s,col sep=comma]{rpe_1s_vors.csv};
+            \addlegendentry {vors}
+
+        \end{axis}
+    \end{tikzpicture}
+    \caption{Impact of the segment utility metric on the rendering quality with a 5Mbps bandwidth.\label{d3:utility-impact}}
+\end{figure}
+
+
+\end{document}
