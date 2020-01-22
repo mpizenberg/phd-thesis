@@ -1,0 +1,8 @@
+# Usage: track camera_id path/to/associations.txt
+# where camera_id is one of [icl|fr1|fr2|fr3]
+
+intrinsic_matrix = create_camera(camera_id)
+tracker = initialize_tracker(intrinsic_matrix)
+for (rgb_image, depth_image) in extract_images(association_file):
+	tracker.track(rgb_image, depth_image)
+	print(tracker.camera_pose)

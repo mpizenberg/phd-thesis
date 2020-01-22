@@ -1,0 +1,14 @@
+dataset/
+  rgb.txt            # List of rgb images with their timestamps
+  depth.txt          # List of depth images with their timestamps
+  groundtruth.txt    # List of ground truth camera poses
+  associations.txt   # List of associated rgb and depth images with timestamps
+  accelerometer.txt  # List of accelerometer measurements with timestamps
+  rgb/               # Directory containing all color images
+    timestamp_rgb_0.png
+    timestamp_rgb_1.png
+    ...
+  depth/             # Directory containing all depth images
+    timestamp_depth_0.png
+    timestamp_depth_1.png
+	...

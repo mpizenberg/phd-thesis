@@ -453,12 +453,69 @@ to the start and when aligned to the end of the partial ground truth trajectory.
 \subsection{Setup and Algorithms Evaluation}%
 \label{sub:algorithms_eval}
 
-Ici on parle du code que j'ai mis en place pour tester et comparer vors.
+In this section, we describe how we evaluated our VORS implementation
+and compared it to other open source C++ algorithms.
+We focused on RGB-D visual odometry, and therefore used
+both the TUM RGB-D~\cite{sturm2012benchmark} and ICL-NUIM~\cite{handa2014benchmark} datasets.
 
-\subsubsection{Provided Testing Setup}%
-\label{ssub:setup}
+\subsubsection{The TUM RGB-D Dataset Format}%
+\label{ssub:dataset-format}
 
-Le code qui fourni un docker et des programmes de tests des 6 algos.
+The TUM RGB-D dataset has a pretty good specification,
+also followed by the ICL-NUIM dataset.
+Therefore we base our evaluation setup on this same format.
+The general structure of such dataset is as follows.
+\lstinputlisting[%
+  language=bash,
+  caption={General structure of the TUM RGB-D dataset format.},
+  label={lst:dataset}
+]{assets/code/dataset.txt}
+The files \verb|rgb.txt| and \verb|depth.txt| list all images with their associated timestamps.
+The RGB-D visual odometry algorithms also need the correspondences between color
+and depth images, so if not present, the first step is usually to run
+a provided \verb|associate.py| script to generate an \verb|associations.txt| file
+from the \verb|rgb.txt| and \verb|depth.txt| files.
+Each line of that file contains a pair of RGB and depth images with their respective timestamps.
+Color images are stored as 640x480 8-bit RGB images in the PNG format.
+Depth images are stored as 640x480 16-bit monochrome images in the PNG format.
+Depth images are scaled by a factor of 5000, i.e.\ a pixel value of 5000 corresponds
+to a distance of 1 meter.
+Theoretically depth images thus have a precision of 0.2 mm for a range of
+0 to roughly 13~meters.
+The ground truth trajectory is provided in the \verb|groundtruth.txt| file as follows.
+\lstinputlisting[%
+  language=bash,
+  caption={Ground truth trajectory format.},
+  label={lst:groundtruth}
+]{assets/code/groundtruth.txt}
+The timestamp is the POSIX time of the given pose.
+The coefficients \verb|tx|, \verb|ty|, \verb|tz|, are the coordinates
+of the optical center of the color camera with respect to a given world frame.
+The coefficients \verb|qx|, \verb|qy|, \verb|qz|, \verb|qw| are the parameters of the quaternion
+describing the orientation of the color camera.
+The last coefficient \verb|qw| is the real part of the quaternion.
+
+\subsubsection{Open Source Algorithms and Provided Setup}%
+\label{ssub:algorithms_and_setup}
+
+In addition to VORS, we evaluated five other open source algorithms for RGB-D visual odometry,
+namely DVO~\cite{kerl2013robust}, Fovis~\cite{huang2017visual},
+and three variants of the OpenCV RGB-D odometry module
+based on~\cite{newcombe2011kinectfusion, steinbrucker2011real}.
+For each one of those six algorithms, we implemented a small program
+performing the following operations (pseudo code).
+\lstinputlisting[%
+  language=bash,
+  caption={Outline of the common RGB-D odometry program implemented for every tested algorithm.},
+  label={lst:track}
+]{assets/code/track.txt}
+All those algorithms except VORS are C++ programs with different complexity of build,
+due to dependency issues.
+DVO for example would not compile anymore with recent versions of
+the Sophus~\cite{sophus} library for Lie algebra
+due to missing re-orthogonalization of the rotation matrix after optimization increments.
+Therefore, we are providing clear installation instructions as well as
+a Docker container ready for compilation of all 6 programs.
 
 \subsubsection{Evaluation Results}%
 \label{ssub:eval_results}
