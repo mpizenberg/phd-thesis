@@ -370,19 +370,22 @@ Usually, we can consider two types of errors, the translation error
 \]
 and the rotation error
 \[
-	\angle\ \text{rot}(\inv{\widehat{g}_{\tau}} \cdot g_{\tau})
+	\measuredangle \, (\inv{\widehat{g}_{\tau}} \cdot g_{\tau})
 \]
-where $\angle$ is the amplitude ($\geq 0$) of the rotation angle.
+where $\measuredangle$ is the amplitude ($\geq 0$) of the rotation angle.
 Since the rotation errors will also impact translation errors later,
 it is common to only use the translation error when computing the ATE.
 The two most widely used ATE metrics are the RMSE and the median scores
 \[
 	\text{ATE}_{\text{rmse}} =
-		\left( \mean{ \sum_{\Omega} \| \text{trans}(\inv{\widehat{g}_{\tau}} \cdot g_{\tau}) \|^2 }
+		\left(
+			% \frac{1}{\text{Card}(\Omega)} \sum_{\Omega}
+			\mean
+			{\| \text{trans}(\inv{\widehat{g}_{\tau}} \cdot g_{\tau}) \|^2}
 		\right)^{1/2}
 	\quad \text{and} \quad
 	\text{ATE}_{\text{median}} =
-		\text{median}_{\Omega} \left( \| \text{trans}(\inv{\widehat{g}_{\tau}} \cdot g_{\tau}) \| \right).
+		\text{median} \left( \| \text{trans}(\inv{\widehat{g}_{\tau}} \cdot g_{\tau}) \| \right).
 \]
 The median is a better indicator of the algorithm precision,
 while the RMSE better reflects the presence (or absence) of outliers,
