@@ -123,16 +123,16 @@ comparable algorithms by introducing the available datasets,
 presenting the different evaluation metrics,
 and finally lay out the testing setup we provide with the evaluation results.
 
-\subsection{Dataset Creation / Aqcuisition}%
+\subsection{Dataset Creation / Acquisition}%
 \label{sub:dataset_creation}
 
-Comparing different algorithms is a complex task for many reasons.
-One of them being the ability to run those algorithms on the same set of data.
+Comparing different algorithms is a complex task for many reasons,
+one of them being the ability to run those algorithms on the same set of data.
 The existence of well built reference datasets is thus a crucial point,
-and understanding their caracteristics is valuable to correctly compare and interpret
+and understanding their characteristics is valuable to correctly compare and interpret
 evaluation results.
 
-\subsubsection{Overview of Avalaible Datasets}%
+\subsubsection{Overview of Avaliable Datasets}%
 \label{ssub:datasets_overview}
 
 We saw in Chapter~\ref{cha:the_image_annotation_problem} that the principal
@@ -140,7 +140,7 @@ difficulty for building annotation datasets is the required human annotation tim
 For visual odometry, algorithms are strongly related to capture devices,
 be it stereo, mono, RGB-D cameras, or cameras paired with other sensors
 such as inertial measurement units (IMU), GPS or lidar.
-As a consequence, datasets focus on different acquisition systems.
+As a consequence, different datasets focus on different acquisition systems.
 For every evaluated acquisition system, there must exist another measurement system,
 more precise and reliable than the one being evaluated.
 The main difference is thus that
@@ -149,20 +149,20 @@ while it is mostly time consumption for image annotation.
 
 The availability of datasets for visual odometry first came from the mobile robotics community,
 mostly interested in SLAM from laser sensors (lidar).
-The data is thus collected from sensors attached to a mobile robot or car navigating.
+The data is thus collected from sensors attached to a mobile robot or a car.
 In the New College~\cite{smith2009new} and NCLT~\cite{carlevaris2016university} datasets,
 the robotic platform is based on a Segway, the KITTI dataset~\cite{geiger2013vision}
-recorded data from a sensors equiped car,
+recorded data from a sensors equipped car,
 while the EuRoC MAV~\cite{burri2016euroc}
-dataset is based on a MAV flying robot.
+dataset is based on a micro aerial vehicle (MAV).
 These platforms are depicted in Figure~\ref{fig:mobile-robot-slam}.
 The ground truth was recorded with three different approaches for these datasets.
 Visual odometry ground truth was an after thought for the New College dataset,
 only available a year later on their website and not discussed in the paper.
-It seems that it has been obtained from dead-reckoning, i.e.\ from wheel and IMU odometry,
+It appears to have been obtained from dead-reckoning, i.e.\ from wheel and IMU odometry,
 provided by the Segway platform, and is thus not very reliable.
 In the NCLT dataset, the mobile robot trajectory ground truth is computed from
-a high precision realtime kinematic GPS (RTK GPS) and a graph slam based on lidar measurements.
+a high precision realtime kinematic GPS (RTK GPS) and a graph SLAM based on lidar measurements.
 The accuracy of the trajectory ranges from a centimeter to a decimeter approximately for a total
 travelled distance of roughly 147 km.
 The ground truth trajectory of the KITTI dataset was also obtained from high precision
@@ -186,9 +186,10 @@ but the trajectories are accurate at approximately a millimeter.
 	\label{fig:mobile-robot-slam}
 \end{figure}
 
-A second wave of datasets has especially being targetting RGB-D cameras,
-very popular after the launch of the Microsoft Kinect,
-represented in bold in Table~\ref{tab:vo-datasets}.
+A second wave of datasets,
+represented in bold in Table~\ref{tab:vo-datasets},
+has especially been targetting RGB-D cameras,
+becoming popular after the launch of the Microsoft Kinect.
 While the TUM RGB-D~\cite{sturm2012benchmark} and Bonn RGB-D~\cite{palazzolo2019iros}
 datasets are recorded with real RGB-D sensors,
 the ICL-NUIM~\cite{handa2014benchmark} dataset was generated (ray-traced rendered)
@@ -199,7 +200,7 @@ visual odometry algorithm.
 
 Finally, with the popularity of inertial sensors coupled with cameras in
 modern smartphones enabling new augmented reality functionalities,
-a regain in interest have been visible for 6 degrees of freedom visual inertial odometry (VIO).
+a regain in interest has been visible for 6 degrees of freedom visual inertial odometry (VIO).
 While the EuRoC MAV~\cite{burri2016euroc} and TUM VI~\cite{schubert2018tum} datasets
 are using high quality sensors,
 the ADVIO dataset~\cite{cortes2018advio} is actually using regular smartphones sensors,
@@ -287,16 +288,15 @@ in the field of view of the camera.
 It is thus a good benchmark of the robustness of visual odometry algorithms.
 These sequences have been acquired by three different Kinect devices,
 named fr1 (for ``Freiburg 1''), fr2 and fr3.
-All their intrinsic parameters are availabe in the dataset.
-The required robustness of the tested algorithms are also increased by the fact that
+All their intrinsic parameters are available in the dataset.
+The required robustness of the tested algorithms is also increased by the fact that
 the color camera of the Kinect sensor has a rolling shutter.
-Taking into account the caracteristics of our implementation,
-we do not expect our algorithm to perform very well under those circumstances.
+We do not expect our algorithm to perform very well under those circumstances.
 
 The ground truth camera poses are obtained thanks to an external motion capture system
 based on MotionAnalysis~\cite{MotionAnalysis} hardware and software.
 This setup is composed of eight 300 Hz Raptor-E high definition cameras,
-equiped with infrared lights to illuminate passive markers attached to the Kinect.
+equipped with infrared lights to illuminate passive markers attached to the Kinect.
 After a detailed intrinsic and extrinsic parameters calibration of the system,
 the authors estimate the relative position errors to be lower than 1 mm and 0.5 degrees.
 
@@ -344,15 +344,15 @@ those based on a ground truth, and those that are not.
 \subsubsection{Metrics with Ground Truth, ATE and RPE}%
 \label{ssub:metrics_gt}
 
-The most straightforward method to evaluate visual odometry trajectories,
+The most straightforward method to evaluate a visual odometry trajectory
 is to compare it with a reference trajectory, called ground truth.
 This reference trajectory needs to be acquired with more precision
 than the one being evaluated for the measure to make sense.
-In our case, the TUM RGB-D dataset uses a motion capture system with sub millimeter accuracy,
-and the ICL-NUIM provides exact trajectory since it is a synthetic dataset.
+In our case, the TUM RGB-D dataset uses a motion capture system with sub-millimeter accuracy,
+and the ICL-NUIM provides exact trajectories since it is a synthetic dataset.
 
 The first evaluation metric commonly used is the absolute trajectory error (ATE).
-Let's consider the trajectory as a discrete set of camera poses
+We can consider the trajectory as a discrete set of camera poses
 \[
 	G_{\Omega} = \Set{g_{\tau}}{\tau \in \Omega,\ g_{\tau} \in SE(3)}
 \]
@@ -400,19 +400,18 @@ It is also important to note that the ground truth and estimated trajectories
 are not sampled at the same timings and frequency.
 Therefore, it is also necessary to correctly associate poses of each trajectory,
 which is reasonably easy when timestamps have been synchronized in the dataset.
-
-NEED SCHEMA d'après thomas.
-
-The second commonly used evaluation metric is the relative pose error (RPE).
 One of the main issues of the ATE is that drifts have higher impact at the beginning
 of the sequence than at the end.
-Contrary to the ATE, which evaluates absolute errors on all associated pairs,
-the RPE evaluates the relative motion in a sliding window of two associated pairs.
+To better evaluate long sequences we thus use another metric,
+the relative pose error (RPE).
+
+Contrary to the ATE, which evaluates absolute errors on associated pairs of poses,
+the RPE compares the relative motion in a sliding window along the sequence.
 The size of the window is usually a fixed travelled distance or time interval.
-We will detail the computation of the RPE at 1 second for example.
-For each associated pair $(g_{\tau}, \widehat{g}_{\tau})$,
-we consider another associated pair $(g_{\tau'}, \widehat{g}_{\tau'})$,
-where $\tau' \approx \tau + 1s$.
+We will detail for example the computation of the RPE at 1 second.
+For each associated pair of estimated and ground truth poses $(g_{\tau}, \widehat{g}_{\tau})$,
+we consider another pair $(g_{\tau'}, \widehat{g}_{\tau'})$
+delayed by 1 second ($\tau' \approx \tau + 1s$).
 The camera motion between $\tau$ and $\tau'$ in the estimated trajectory is
 $\Delta_{\tau \tau'} g = \inv{g_{\tau}} \cdot g_{\tau'}$
 and the camera motion in the ground truth trajectory is
@@ -424,9 +423,9 @@ The relative pose error is thus computed as
 where $d(\cdot, \cdot)$ is similar than for the ATE,
 and $\Omega'$ is the set of regularly spaced pairs,
 whether it is a duration, like 1 second, or a distance like 1 meter.
-It is even possible to consider all possible pairs of a sequence,
-but the complexity grows in square of the number of frames and
-the computed measure exhibits similar issues than the ATE.\@
+
+\alert{Ajouter un schéma RPE avec les notations précédentes.}
+
 
 \subsubsection{Metrics without Ground Truth}%
 \label{ssub:metrics_no_gt}
@@ -464,9 +463,9 @@ both the TUM RGB-D~\cite{sturm2012benchmark} and ICL-NUIM~\cite{handa2014benchma
 \subsubsection{The TUM RGB-D Dataset Format}%
 \label{ssub:dataset-format}
 
-The TUM RGB-D dataset has a pretty good specification,
-also followed by the ICL-NUIM dataset.
-Therefore we base our evaluation setup on this same format.
+The TUM RGB-D dataset is well specified and as a result,
+others including ICL-NUIM follow the same format.
+We therefore also base our evaluation setup on the TUM RGB-D format.
 The general structure of such dataset is as follows.
 \lstinputlisting[%
   language=bash,
@@ -491,7 +490,8 @@ The ground truth trajectory is provided in the \verb|groundtruth.txt| file as fo
   caption={Ground truth trajectory format.},
   label={lst:groundtruth}
 ]{assets/code/groundtruth.txt}
-The timestamp is the POSIX time of the given pose.
+The timestamp is the POSIX time of the given pose,
+i.e.\ the number of seconds elapsed since 1970, January 1st.
 The coefficients \verb|tx|, \verb|ty|, \verb|tz|, are the coordinates
 of the optical center of the color camera with respect to a given world frame.
 The coefficients \verb|qx|, \verb|qy|, \verb|qz|, \verb|qw| are the parameters of the quaternion
@@ -525,38 +525,34 @@ at \url{https://github.com/mpizenberg/rgbd-tracking-evaluation}.
 \subsubsection{Evaluation Results}%
 \label{ssub:eval_results}
 
-We evaluated all six algorithms both on the ICL-NUIM dataset and on the TUM RGB-D dataset,
+We evaluated all algorithms both on the ICL-NUIM dataset and on the TUM RGB-D dataset,
 constituting a total of 55 sequences.
 As visible in Figure~\ref{fig:rpe_median_all},
 our implementation (VORS) performs similarly than DVO, Fovis and OCV-RGBD.
 It is coherent since these four algorithms use both the visual information of the color image
 and the depth map to estimate the camera motion.
-For OCV-ICP however, which is a method based only on the depth map,
-we can see that it does not perform better than a motion-less estimator (``still'').
-It is an indication that the pure geometric approach often gets lost in tracking.
-The OCV-RGBD-ICP variant, which is mixed approach minimizing both energies
+OCV-ICP however, which only uses the depth map,
+is unable to track the camera movements in the majority of sequences.
+The OCV-RGBD-ICP variant, which is a mixed approach minimizing both energies
 of OCV-RGBD and OCV-ICP, inherits from the same tracking difficulties as OCV-ICP.\@
 
 \begin{figure}[ht]
 	\centering
 	\input{assets/csv/rpe_median_all.tex}
 	\caption{Distribution of the median relative pose error (RPE) at 1 second on all 55 sequences,
-	composed of 47 TUM sequences and 8 ICL-NUIM sequences.
-	For reference, an additional entry called ``still'' is added.
-	It corresponds to the RPE at 1 second for a camera that never moves
-	and is thus representative of the motion in a sequence.}%
+	composed of 47 TUM sequences and 8 ICL-NUIM sequences.}%
 	\label{fig:rpe_median_all}
 \end{figure}
 
 Out of 55 sequences taken into account in the Figure~\ref{fig:rpe_median_all},
 the wide majority (47) comes from the TUM RGB-D dataset.
-According to our previous analysis, VORS which does not implement robust approaches,
+VORS, which does not implement robust approaches,
 should perform better for the synthetic sequences of the ICL-NUIM dataset than
 for the real sequences of the TUM dataset.
 Figure~\ref{fig:rpe_median_icl} thus presents the same plot than
 Figure~\ref{fig:rpe_median_all} but restricted to the 8 ICL-NUIM sequences.
-As we can see, VORS is performing very well in these conditions.
-Other remarkable details are exacerbated by this plot.
+As we can see, VORS is performing remarkably in these conditions.
+Other noteworthy details are exacerbated by this plot.
 Both geometric odometries (OCV-ICP and OCV-RGBD-ICP) perform extremely well
 thanks to the high precision dense depth maps provided by the dataset.
 One should note that this precision comes at the price of time.
@@ -567,16 +563,13 @@ It can be explained by the nature of this algorithm, which is indirect,
 based on FAST features, contrary to VORS, DVO and OCV-RGBD which are
 direct visual odometry algorithms.
 The synthetic nature of the images, and lack of unique textures compared
-to real images is messing with the FAST descriptors of Fovis.
+to real images is degrading the detection rate of Fovis FAST descriptors.
 
 \begin{figure}[ht]
 	\centering
 	\input{assets/csv/rpe_median_icl.tex}
 	\caption{Distribution of the median relative pose error (RPE) at 1 second
-	on the 8 ICL-NUIM sequences.
-	For reference, an additional entry called ``still'' is added.
-	It corresponds to the RPE at 1 second for a camera that never moves
-	and is thus representative of the motion in a sequence.}%
+	on the 8 ICL-NUIM sequences.}%
 	\label{fig:rpe_median_icl}
 \end{figure}
 
@@ -589,21 +582,24 @@ erroneous motion tracking.
 High RMSE errors are better understood when looking at the
 detailed RPE of one sequence, as shown in Figure~\ref{fig:rpe_icl3}.
 In the end, even though our visual odometry implementation in Rust (VORS)
-has robustness issues to previously discussed challenges,
+has robustness issues due to previously discussed challenges,
 we provide a precise, state of the art RGB-D visual odometry,
 easy to compile, to use and as we will develop next,
 easy to port to WebAssembly.
 VORS thus enables the exploration of efficient interactive
 visual odometry on the Web, which we finally present next.
 
+\alert{Parler plus de la dernière figure.
+Ajouter une discussion un peu plus fournie
+sur les perfs de VORS en bilan.
+En transition mentionner que on va pouvour corriger certains
+défauts de manière interactive.}
+
 \begin{figure}[ht]
 	\centering
 	\input{assets/csv/rpe_rmse_icl.tex}
 	\caption{Distribution of the RMSE relative pose error (RPE) at 1 second
-	on the 8 ICL-NUIM sequences.
-	For reference, an additional entry called ``still'' is added.
-	It corresponds to the RPE at 1 second for a camera that never moves
-	and is thus representative of the motion in a sequence.}%
+	on the 8 ICL-NUIM sequences.}%
 	\label{fig:rpe_rmse_icl}
 \end{figure}
 

@@ -50,9 +50,12 @@ def parse_rpe(path):
                 algos[parsed_line.algo] = []
             algos[parsed_line.algo].append(parsed_line)
 
-    return algos
+    # Filter out not used algorithms
+    algos.pop('still', None)
+    kept_algos = { key:val for (key, val) in algos.items() if not key.startswith('vors-') }
+    return kept_algos
 
-def empty_dict():
+def empty_dict_ordered():
     output = dict()
 
     output["vors"] = []
@@ -61,39 +64,29 @@ def empty_dict():
     output["ocv-rgbd"] = []
     output["ocv-rgbd-icp"] = []
     output["ocv-icp"] = []
-    output["still"] = []
 
     return output
 
 def t_err_median_all(data):
-    output = empty_dict()
+    output = empty_dict_ordered()
 
     for key, val in data.items():
-        if key.startswith('vors-'):
-            continue
-
         output[key] = BoxPlot(map(lambda x: x.t_err_median_s, val))
 
     return output
 
 def t_err_rmse_all(data):
-    output = empty_dict()
+    output = empty_dict_ordered()
 
     for key, val in data.items():
-        if key.startswith('vors-'):
-            continue
-
         output[key] = BoxPlot(map(lambda x: x.t_err_rmse_s, val))
 
     return output
 
 def t_err_median_tum(data):
-    output = empty_dict()
+    output = empty_dict_ordered()
 
     for key, val in data.items():
-        if key.startswith('vors-'):
-            continue
-
         filtered = filter(lambda x: x.camera != 'icl', val)
         mapped = map(lambda x: x.t_err_median_s, filtered)
         output[key] = BoxPlot(mapped)
@@ -101,12 +94,9 @@ def t_err_median_tum(data):
     return output
 
 def t_err_rmse_tum(data):
-    output = empty_dict()
+    output = empty_dict_ordered()
 
     for key, val in data.items():
-        if key.startswith('vors-'):
-            continue
-
         filtered = filter(lambda x: x.camera != 'icl', val)
         mapped = map(lambda x: x.t_err_rmse_s, filtered)
         output[key] = BoxPlot(mapped)
@@ -114,12 +104,9 @@ def t_err_rmse_tum(data):
     return output
 
 def t_err_median_icl(data):
-    output = empty_dict()
+    output = empty_dict_ordered()
 
     for key, val in data.items():
-        if key.startswith('vors-'):
-            continue
-
         filtered = filter(lambda x: x.camera == 'icl', val)
         mapped = map(lambda x: x.t_err_median_s, filtered)
         output[key] = BoxPlot(mapped)
@@ -127,12 +114,9 @@ def t_err_median_icl(data):
     return output
 
 def t_err_rmse_icl(data):
-    output = empty_dict()
+    output = empty_dict_ordered()
 
     for key, val in data.items():
-        if key.startswith('vors-'):
-            continue
-
         filtered = filter(lambda x: x.camera == 'icl', val)
         mapped = map(lambda x: x.t_err_rmse_s, filtered)
         output[key] = BoxPlot(mapped)
@@ -140,13 +124,10 @@ def t_err_rmse_icl(data):
     return output
 
 def t_err_median_icl_no_fovis(data):
-    output = empty_dict()
+    output = empty_dict_ordered()
     del output["fovis"]
 
     for key, val in data.items():
-        if key.startswith('vors-') or key == 'fovis':
-            continue
-
         filtered = filter(lambda x: x.camera == 'icl', val)
         mapped = map(lambda x: x.t_err_median_s, filtered)
         output[key] = BoxPlot(mapped)
@@ -154,48 +135,16 @@ def t_err_median_icl_no_fovis(data):
     return output
 
 def t_err_rmse_icl_no_fovis(data):
-    output = empty_dict()
+    output = empty_dict_ordered()
     del output["fovis"]
 
     for key, val in data.items():
-        if key.startswith('vors-') or key == 'fovis':
-            continue
-
         filtered = filter(lambda x: x.camera == 'icl', val)
         mapped = map(lambda x: x.t_err_rmse_s, filtered)
         output[key] = BoxPlot(mapped)
 
     return output
 
-def t_err_median_icl_no_fovis_no_still(data):
-    output = empty_dict()
-    del output['still']
-    del output["fovis"]
-
-    for key, val in data.items():
-        if key.startswith('vors-') or key == 'fovis' or key == 'still':
-            continue
-
-        filtered = filter(lambda x: x.camera == 'icl', val)
-        mapped = map(lambda x: x.t_err_median_s, filtered)
-        output[key] = BoxPlot(mapped)
-
-    return output
-
-def t_err_rmse_icl_no_fovis_no_still(data):
-    output = empty_dict()
-    del output['still']
-    del output["fovis"]
-
-    for key, val in data.items():
-        if key.startswith('vors-') or key == 'fovis' or key == 'still':
-            continue
-
-        filtered = filter(lambda x: x.camera == 'icl', val)
-        mapped = map(lambda x: x.t_err_rmse_s, filtered)
-        output[key] = BoxPlot(mapped)
-
-    return output
 
 def generate_figure(dictionnary, output):
     with open(output + '.tex', 'w') as f:
@@ -222,8 +171,6 @@ def main():
     generate_figure(t_err_rmse_tum(rpe_all), "t_err_rmse_tum")
     generate_figure(t_err_median_icl_no_fovis(rpe_all), "t_err_median_icl_no_fovis")
     generate_figure(t_err_rmse_icl_no_fovis(rpe_all), "t_err_rmse_icl_no_fovis")
-    generate_figure(t_err_median_icl_no_fovis_no_still(rpe_all), "t_err_median_icl_no_fovis_no_still")
-    generate_figure(t_err_rmse_icl_no_fovis_no_still(rpe_all), "t_err_rmse_icl_no_fovis_no_still")
 
 if __name__ == '__main__':
     main()
