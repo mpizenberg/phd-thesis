@@ -2,10 +2,10 @@
 \begin{axis}[
 		xlabel=Frame,
 		ylabel=RPE,
-		ymax=0.05
+		ymax=0.4
 	]
 	\addplot[color=blue] table [x=timestamp,y=t_err_s,col sep=comma]{assets/csv/rpe_1s_still.csv};
-	\addlegendentry {still}
+	\addlegendentry {motion}
 	\addplot[color=green] table [x=timestamp,y=t_err_s,col sep=comma]{assets/csv/rpe_1s_dvo.csv};
 	\addlegendentry {dvo}
 	\addplot[color=red] table [x=timestamp,y=t_err_s,col sep=comma]{assets/csv/rpe_1s_vors.csv};

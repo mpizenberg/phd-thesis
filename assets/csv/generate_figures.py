@@ -125,24 +125,24 @@ def t_err_rmse_icl(data):
 
 def t_err_median_icl_no_fovis(data):
     output = empty_dict_ordered()
-    del output["fovis"]
 
     for key, val in data.items():
         filtered = filter(lambda x: x.camera == 'icl', val)
         mapped = map(lambda x: x.t_err_median_s, filtered)
         output[key] = BoxPlot(mapped)
 
+    del output["fovis"]
     return output
 
 def t_err_rmse_icl_no_fovis(data):
     output = empty_dict_ordered()
-    del output["fovis"]
 
     for key, val in data.items():
         filtered = filter(lambda x: x.camera == 'icl', val)
         mapped = map(lambda x: x.t_err_rmse_s, filtered)
         output[key] = BoxPlot(mapped)
 
+    del output["fovis"]
     return output
 
 

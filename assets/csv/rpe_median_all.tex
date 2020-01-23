@@ -1,8 +1,8 @@
 \begin{tikzpicture}
     \begin{axis}
     [
-    ytick={1,2,3,4,5,6,7}
-    , yticklabels={vors,fovis,dvo,ocv-rgbd,ocv-rgbd-icp,ocv-icp,still},
+    ytick={1,2,3,4,5,6}
+,    yticklabels={vors,fovis,dvo,ocv-rgbd,ocv-rgbd-icp,ocv-icp},
     ]
 
         \addplot+[
@@ -11,31 +11,31 @@
         boxplot prepared={
             median=0.022110,
             upper quartile=0.049158,
-            lower quartile=0.009474,
+            lower quartile=0.010210,
             upper whisker=0.353370,
-            lower whisker=0.000536
+            lower whisker=0.002099
         },
         ] coordinates {};
         \addplot+[
         color=black,
         style=solid,
         boxplot prepared={
-            median=0.034459,
-            upper quartile=0.061213,
-            lower quartile=0.011091,
-            upper whisker=0.277995,
-            lower whisker=0.002489
+            median=0.048783,
+            upper quartile=0.095304,
+            lower quartile=0.023640,
+            upper whisker=0.485322,
+            lower whisker=0.003032
         },
         ] coordinates {};
         \addplot+[
         color=black,
         style=solid,
         boxplot prepared={
-            median=0.026247,
-            upper quartile=0.061083,
-            lower quartile=0.016640,
+            median=0.039207,
+            upper quartile=0.063166,
+            lower quartile=0.022890,
             upper whisker=0.223077,
-            lower whisker=0.001971
+            lower whisker=0.010652
         },
         ] coordinates {};
         \addplot+[
@@ -44,9 +44,9 @@
         boxplot prepared={
             median=0.030116,
             upper quartile=0.072295,
-            lower quartile=0.013935,
+            lower quartile=0.017785,
             upper whisker=0.300951,
-            lower whisker=0.001996
+            lower whisker=0.008034
         },
         ] coordinates {};
         \addplot+[
@@ -57,7 +57,7 @@
             upper quartile=0.260719,
             lower quartile=0.059544,
             upper whisker=0.439046,
-            lower whisker=0.000050
+            lower whisker=0.000308
         },
         ] coordinates {};
         \addplot+[
@@ -68,18 +68,7 @@
             upper quartile=0.260719,
             lower quartile=0.059544,
             upper whisker=0.439046,
-            lower whisker=0.000033
-        },
-        ] coordinates {};
-        \addplot+[
-        color=black,
-        style=solid,
-        boxplot prepared={
-            median=0.186514,
-            upper quartile=0.261502,
-            lower quartile=0.059499,
-            upper whisker=0.439919,
-            lower whisker=0.002305
+            lower whisker=0.000209
         },
         ] coordinates {};    \end{axis}
 \end{tikzpicture}
