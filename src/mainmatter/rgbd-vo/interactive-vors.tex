@@ -20,7 +20,7 @@ where the necessary depth information for reprojection is provided by a sensor.
 In order to reduce drift when the camera moves slowly,
 image alignment is performed from a fixed keyframe instead of the previous frame.
 Decision to change the keyframe is done heuristically;
-details are presented in Section~\ref{sub:sparse-points}.
+details are presented in Section~\ref{sub:multi-res-direct-image-alignment}.
 Finally, our algorithm uses a sparse subset of points in the image,
 which has been shown~\cite{engel2017direct} to be sufficient to track the camera motion.
 Disregarding sparsity and robustness, discussed later,
@@ -58,7 +58,7 @@ If none of the four ``level n'' blocks of a ``level (n+1)'' block elected a cand
 the ``level (n+1)'' block checks if a pixel satisfies a lower threshold.
 The factor between block thresholds at different levels is one of the parameters.
 Another mechanism aims at obtaining a target amount of candidate points.
-That amount can be approximated from blocks base size but it might defer.
+That amount can be approximated from blocks base size but it might differ.
 Depending on the difference with the target count,
 the algorithm will choose between the three following options,
 (1) keep candidates, (2) randomly select a sample of the candidates,
