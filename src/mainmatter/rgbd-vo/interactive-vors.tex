@@ -31,14 +31,86 @@ An overview of the full pipeline of VORS is represented in Figure~\ref{fig:over
 \begin{figure}[ht]
 	\centering
 	\includegraphics[width=\linewidth]{assets/img/overview-vors.pdf}
-	\caption{Overview of VORS.}%
+	\caption{Overview of VORS pipeline.}%
 	\label{fig:overview-vors}
 \end{figure}
 
 \subsection{Sparse Points Selection}%
 \label{sub:sparse-points}
 
-Explain the coarse to fine points selection mechanism.
+Engel et al.\ demonstrated in DSO~\cite{engel2017direct} that using a sparse subset
+of points for the direct image alignment problem still results in precise camera locations
+at the condition that points satisfy two conditions,
+\begin{itemize}
+\setlength\itemsep{-0.5em}
+	\item they should be well distributed in the image,
+	\item and they should be located at positions with higher gradients magnitudes.
+\end{itemize}
+Selected points are called candidate points,
+and their selection mechanism is rather complex, based on at least ten parameters.
+The core idea is to regularly divide an image in tiles.
+One subdivision produces big tiles, called regions,
+another generates small tiles, called blocks.
+One pixel is selected per block if its gradient is higher than a local threshold
+depending on the region containing the pixel.
+In practice, blocks are actually multi-scale, with three levels by default.
+If none of the four ``level n'' blocks of a ``level (n+1)'' block elected a candidate point,
+the ``level (n+1)'' block checks if a pixel satisfies a lower threshold.
+The factor between block thresholds at different levels is one of the parameters.
+Another mechanism aims at obtaining a target amount of candidate points.
+That amount can be approximated from blocks base size but it might defer.
+Depending on the difference with the target count,
+the algorithm will choose between the three following options,
+(1) keep candidates, (2) randomly select a sample of the candidates,
+or (3) change the block base size and restart from scratch.
+
+In contrast, our sparse selection approach is rather simple.
+We embraced the idea that each level of the image pyramid should exhibit
+the same property of well distributed points with higher density near higher gradients.
+Intuitively, it should help convergence of the alignment problem to a global minimum.
+We thus propose a simple coarse-to-fine selection mechanism.
+At the lowest resolution, all points are candidates.
+At each resolution step, one or two pixels of the four are elected candidates per
+parent candidate pixel in the lower resolution.
+A threshold based on pixel gradients is used to determine the selected pixels.
+This sparse selection scheme ensures that there is at least one candidate per region
+corresponding to one pixel at the lowest resolution.
+It also increases the density of candidates in higher gradients areas.
+The level of the lowest resolution is a common parameter for candidates selection
+and for the multi-resolution direct image alignement.
+A visualization of this selection algorithm
+is presented in Figure~\ref{fig:coarse-to-fine-candidates}.
+
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=0.23\linewidth]{assets/img/candidates-icl-4.png}
+	\hfill
+	\includegraphics[width=0.23\linewidth]{assets/img/candidates-icl-3.png}
+	\hfill
+	\includegraphics[width=0.23\linewidth]{assets/img/candidates-icl-2.png}
+	\hfill
+	\includegraphics[width=0.23\linewidth]{assets/img/candidates-icl-1.png}
+	\caption{Coarse-to-fine candidate selection of VORS.
+	Candidates are represented in red.
+	All points are kept at the lowest resolution.
+	Each higher resolution elects one or two candidates per parent candidate.}%
+	\label{fig:coarse-to-fine-candidates}
+\end{figure}
+
+Figure~\ref{fig:candidates-dso-vors} presents a zoomed in view of the same image region
+for both DSO and VORS candidates selection mechanisms.
+As visible in that figure, DSO candidate points are regularly spaced,
+except in homogenous areas.
+VORS candidate points however tend to form contiguous lines.
+
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=0.49\linewidth]{assets/img/candidates-icl-dso-cropped.png}
+	\hfill
+	\includegraphics[width=0.49\linewidth]{assets/img/candidates-icl-vors-cropped.png}
+	\caption{DSO (left) and VORS (right) candidate points (in red).}%
+	\label{fig:candidates-dso-vors}
+\end{figure}
 
 \subsection{Multi-Resolution Direct Image Alignment}%
 \label{sub:multi-res-direct-image-alignment}
