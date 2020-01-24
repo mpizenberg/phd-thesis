@@ -10,10 +10,30 @@
 \subsection{Overview of VORS}%
 \label{sub:vors-overview}
 
-Draw parallel from Chapter 5.
-Basically it's a sparse, keyframe-based, RGB-D direct visual odometry.
-Sparse is inspired by DSO.
-Keyframe and RGB-D inspired by DVO.
+VORS is a sparse, keyframe-based, RGB-D, direct visual odometry.
+As presented in Section~\ref{sub:appearance-based},
+VORS belongs to the family of direct visual odometry,
+based on the image alignment optimization problem.
+Contrary to monocular visual odometry, which requires an estimation
+of points depths, we focus on the RGB-D case,
+where the necessary depth information for reprojection is provided by a sensor.
+In order to reduce drift when the camera moves slowly,
+image alignment is performed from a fixed keyframe instead of the previous frame.
+Decision to change the keyframe is done heuristically;
+details are presented in Section~\ref{sub:sparse-points}.
+Finally, our algorithm uses a sparse subset of points in the image,
+which has been shown~\cite{engel2017direct} to be sufficient to track the camera motion.
+Disregarding sparsity and robustness, discussed later,
+our algorithm is very similar to DVO~\cite{kerl2013robust},
+and its predecessor~\cite{steinbrucker2011real}.
+An overview of the full pipeline of VORS is represented in Figure~\ref{fig:overview-vors}.
+
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=\linewidth]{assets/img/overview-vors.pdf}
+	\caption{Overview of VORS.}%
+	\label{fig:overview-vors}
+\end{figure}
 
 \subsection{Sparse Points Selection}%
 \label{sub:sparse-points}
