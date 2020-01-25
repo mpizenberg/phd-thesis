@@ -115,10 +115,134 @@ VORS candidate points however tend to form contiguous lines.
 \subsection{Multi-Resolution Direct Image Alignment}%
 \label{sub:multi-res-direct-image-alignment}
 
-Reference to direct image alignment in Chapter 5.
-Reference to gradients computation in appendix.
-Extremely brief word on Levenberg-Marquardt compared to Gauss-Newton.
-Explanation of the resolution step (how to step from a coarse to finer resolution).
+\subsubsection{Convergence of the Optimization Problem}%
+\label{ssub:convergence-optimization}
+
+As presented in Section~\ref{sub:appearance-based},
+under the photoconsistency assumption, direct image alignment consists
+in finding the warp function $W$ minimizing
+\[
+	\sum_{\bm{x}}\|I(W(\bm{x})) - I^{*}(\bm{x})\|^2
+\]
+where $I^{*}, I$ are the reference and new images,
+and $\bm{x}$ is the position of a pixel in the reference image.
+As explained in Baker and Matthews~\cite{baker2004lucas},
+this can be minimized with an iterative optimization.
+If we note $\bm{\xi}$ the parameters of the warp function,
+and $\delta\bm{\xi}$ the iterative increments,
+the expression of the residual in an inverse compositional formulation is
+\[
+	I^{*}(W(\bm{x}, \delta \bm{\xi})) - I(W(\bm{x}, \bm{\xi})).
+\]
+In a Gauss-Newton scheme, the iterative increment $\delta\bm{\xi}$ is computed as
+\[
+	\delta \bm{\xi} = \inv{H} \sum_{\bm{x}} \tr{J} (I^{*}(\bm{x}) - I(W(\bm{x}, \bm{\xi})))
+\]
+where $J = \nabla I \cdot J_{\bm{\xi}}W$, $\nabla I$ is the image gradient
+and $J_{\bm{\xi}}W$ is the Jacobian of the warp function.
+The Hessian is computed as the Gauss-Newton approximation
+$H = \sum_{\bm{x}}\tr{J}J$.
+We parameterize $W$ in the Lie algebra of twists $\seee$.
+The expression of the Jacobian of the warp function
+is detailed in Appendix~\ref{sec:notation}.
+
+In theory however, this iterative algorithm is only correct under the assumption
+that the initialization is already near the solution.
+Convergence to the correct minimum is thus a hard problem
+and under some circumstances, the optimization may drift to another local minimum.
+One way to help convergence is to use the Levenberg-Marquardt approximation
+of the Hessian.
+It consists in multiplying the diagonal elements of
+the Gauss-Newton approximation of the Hessian by $(1 + \lambda_{lm})$.
+The Levenberg-Marquardt coefficient $\lambda_{lm}$ is dynamically
+updated toward 0 when converging or toward $+\infty$ when diverging.
+
+Another method to improve convergence consists in solving the optimization
+with a coarse-to-fine multi-resolution approach.
+Indeed, the image gradient used for the Jacobian contains information
+of larger areas of the original image when computed at lower resolutions.
+As a consequence, the vicinity of the global optimum is artificially increased.
+For the direct image alignment, we thus use a pyramid of images,
+where each level has half the resolution of the previous one.
+As explained previously the number of levels also impacts candidate points selection.
+Indeed, at the lowest resolution, all pixels serve as candidates for the optimization.
+The number of levels is thus chosen as a compromise between the minimum amount
+of candidate points and the convergence rate desired.
+Starting from 640x480 images in the ICL-NUIM and TUM RGB-D datasets,
+we found that 6 levels is a good compromise.
+The lowest resolution has 20x15 images, which implies a minimum of 300 candidate points.
+
+\subsubsection{Multi-Resolution Intrinsics}%
+\label{ssub:multires-intrinsics}
+
+Since we use a coarse-to-fine optimization,
+we must be able to initialize one level from the result of the previous one.
+In Section~\ref{sub:intrinsic_parameters}, we presented the image formation as
+the succession of two transformations, first the projection from the camera frame
+to the image frame, and then the projection onto the pixels frame.
+When halving the image resolution, it is that second transformation $K_s$ that changes.
+\[
+	K_s = \begin{pmatrix}
+		s_x & s_{\theta} & o_x \\
+		0 & s_y & o_y \\
+		0 & 0 & 1 \\
+	\end{pmatrix}.
+\]
+We note $K_s'$ the new pixels projection with a resolution multiplied by $\alpha$.
+In our case $\alpha$ is of the form $2^{-n}$.
+The scaling parameters are all multiplied by $\alpha$ i.e.\
+$s_x' = \alpha s_x$,
+$s_y' = \alpha s_y$ and
+$s_{\theta}' = \alpha s_{\theta}$.
+For the principal point however, it depends on the coordinate system.
+In most modelizations, the value of pixel $(x,y)$ is interpreted as the integration
+of the light hitting the sensor on the surface located between $(x-0.5, y-0.5)$
+and $(x+0.5, y+0.5)$.
+The coordinates of the top left corner of the image is thus $(-0.5, -0.5)$
+instead of $(0,0)$.
+Figure~\ref{fig:multiscale-intrinsics} illustrates how
+the principal point is transformed in such coordinate system.
+As a result, the location of the principal point is updated as
+$o_x' = \alpha(o_x + 0.5) - 0.5$ and
+$o_y' = \alpha(o_y + 0.5) - 0.5$.
+In the end, the updated intrinsic pixel transformation is
+\[
+	K_s' = K_{\alpha}K_s \quad \text{with} \quad
+	K_{\alpha} = \begin{pmatrix}
+		\alpha & 0 & 0.5(\alpha - 1) \\
+		0 & \alpha & 0.5(\alpha - 1) \\
+		0 & 0 & 1 \\
+	\end{pmatrix}.
+\]
+
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=\linewidth]{assets/img/multiscale-intrinsics.pdf}
+	\caption{Effect of a centered coordinate system on
+	the coordinates of the principal point at multiple resolutions.}%
+	\label{fig:multiscale-intrinsics}
+\end{figure}
+
+The presented approach is the one used by the TUM RGB-D coordinate system
+for the principal point given in the intrinsics matrix.
+It is thus also the one we use when initializing the multi-resolution intrinsic
+parameters in step 2 of Figure~\ref{fig:overview-vors}.
+The camera motion estimated at one resolution can thus be reused as-is
+for the initialization of the next resolution.
+It is the projection that changes, due to a different intrinsic matrix.
+
+\subsubsection{Keyframe Update}%
+\label{ssub:keyframe-update}
+
+We mentioned in VORS overview that the decision to change the keyframe is done heuristically.
+Simalarly than ORB-SLAM~\cite{mur2015orb} and DSO~\cite{engel2017direct},
+we use the optical flow of tracked points, which is
+the distance in pixels between their locations in the reference in tracked images,
+to take that decision.
+For convergence reasons, we established that the reference and the tracked frames
+should not be too different from each other.
+We therefore use a mean threshold distance of one pixel at the lowest image resolution.
+
 
 \subsection{Limits of the Implementation}%
 \label{sub:limits-implementation}
