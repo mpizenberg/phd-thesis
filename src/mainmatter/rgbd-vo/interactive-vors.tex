@@ -247,9 +247,40 @@ We therefore use a mean threshold distance of one pixel at the lowest image reso
 \subsection{Limits of the Implementation}%
 \label{sub:limits-implementation}
 
-No photometric calibration and estimation of exposure time.
-No robustness to light effects such as bright spots and reflections.
-No robustness to dynamic (moving) objects in the field of view.
+To our knowledge,
+VORS is the first Rust-only complete direct visual odometry stack.
+We thus value simplicity for this important milestone.
+Incidentally, our algorithm lacks a few significant features,
+left as later improvements.
+
+One notable missing component is robustness to outliers.
+It is common that the photoconsistency assumption does not held with real-world images.
+Among the many possible reasons, two of them are the presence of dynamic moving objects,
+and the appearence of bright spots due to light reflections.
+One possible solution is to use a robust M-estimator instead of a least square estimation.
+The energy to minimize then takes the form
+\[
+	\sum_{\bm{x}}\rho(I(W(\bm{x})) - I^{*}(\bm{x}))
+\]
+where $\rho$ has a few intresting properties.
+In part 2 of their series on direct image alignment~\cite{baker2003lucas},
+Baker et al. explain in details how a robust M-estimator can be used
+within an inverse compositional iteratively reweighted least squares (IRLS) algorithm.
+Possible estimators include Huber, Geman-McClure, Tukey or even t-distribution estimators.
+Klose et al.~\cite{klose2013efficient} use Huber and Tukey M-estimators,
+while for example, Kerl et al~\cite{kerl2013robust}
+and Gutierrez et al.~\cite{gutierrez2015inverse} prefer the t-distribution.
+
+Another commonly appearing problem with cameras is automatic exposure variations.
+With changes in lighting conditions,
+exposure parameters of cameras are often automatically adjusted,
+resulting in global photoconsistency errors.
+Different affine exposure parameterizations have successfully been integrated
+in the expression to minimize, such as in~\cite{klose2013efficient} and~\cite{engel2017direct}.
+We did not add such additional parameters in our modelization
+and thus expect VORS to have difficulties tracking the camera motion
+in scenes with brightness changes.
+
 
 \subsection{Port of VORS to WebAssembly}%
 \label{sub:vors-port-wasm}
