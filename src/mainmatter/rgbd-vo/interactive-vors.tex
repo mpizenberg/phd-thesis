@@ -10,12 +10,12 @@
 \subsection{Overview of VORS}%
 \label{sub:vors-overview}
 
-VORS is a sparse, keyframe-based, RGB-D, direct visual odometry.
+VORS is a sparse, keyframe-based, RGB-D, direct visual odometry \Axel{algorithm?}.
 As presented in Section~\ref{sub:appearance-based},
 VORS belongs to the family of direct visual odometry,
 based on the image alignment optimization problem.
 Contrary to monocular visual odometry, which requires an estimation
-of points depths, we focus on the RGB-D case,
+of points depth, we focus on the RGB-D case,
 where the necessary depth information for reprojection is provided by a sensor.
 In order to reduce drift when the camera moves slowly,
 image alignment is performed from a fixed keyframe instead of the previous frame.
@@ -26,7 +26,7 @@ which has been shown~\cite{engel2017direct} to be sufficient to track the camera
 Disregarding sparsity and robustness, discussed later,
 our algorithm is very similar to DVO~\cite{kerl2013robust},
 and its predecessor~\cite{steinbrucker2011real}.
-An overview of the full pipeline of VORS is represented in Figure~\ref{fig:overview-vors}.
+An overview of the full pipeline of VORS is represented in Figure~\ref{fig:overview-vors}.
 
 \begin{figure}[ht]
 	\centering
@@ -50,12 +50,12 @@ Selected points are called candidate points,
 and their selection mechanism is rather complex, based on at least ten parameters.
 The core idea is to regularly divide an image in tiles.
 One subdivision produces big tiles, called regions,
-another generates small tiles, called blocks.
+and another generates small tiles, called blocks.
 One pixel is selected per block if its gradient is higher than a local threshold
 depending on the region containing the pixel.
-In practice, blocks are actually multi-scale, with three levels by default.
-If none of the four ``level n'' blocks of a ``level (n+1)'' block elected a candidate point,
-the ``level (n+1)'' block checks if a pixel satisfies a lower threshold.
+In practice, blocks are actually multi-scale, with three default levels.
+If none of the four ``level $n$'' blocks of a ``level $(n+1)$'' block elected a candidate point,
+the ``level $(n+1)$'' block checks whether a pixel satisfies a lower threshold.
 The factor between block thresholds at different levels is one of the parameters.
 Another mechanism aims at obtaining a target amount of candidate points.
 That amount can be approximated from blocks base size but it might differ.
@@ -71,8 +71,8 @@ Intuitively, it should help convergence of the alignment problem to a global min
 We thus propose a simple coarse-to-fine selection mechanism.
 At the lowest resolution, all points are candidates.
 At each resolution step, one or two pixels of the four are elected candidates per
-parent candidate pixel in the lower resolution.
-A threshold based on pixel gradients is used to determine the selected pixels.
+parent candidate pixel \Axel{pas tres clair} in the lower resolution.
+A threshold based on pixel gradients is used to determine the which pixels should be selected.
 This sparse selection scheme ensures that there is at least one candidate per region
 corresponding to one pixel at the lowest resolution.
 It also increases the density of candidates in higher gradients areas.
@@ -97,11 +97,14 @@ is presented in Figure~\ref{fig:coarse-to-fine-candidates}.
 	\label{fig:coarse-to-fine-candidates}
 \end{figure}
 
-Figure~\ref{fig:candidates-dso-vors} presents a zoomed in view of the same image region
+Figure~\ref{fig:candidates-dso-vors} presents a zoomed-in view of the same image region
 for both DSO and VORS candidates selection mechanisms.
-As visible in that figure, DSO candidate points are regularly spaced,
+As visible on the left figure, DSO candidate points are regularly spaced,
 except in homogenous areas.
 VORS candidate points however tend to form contiguous lines.
+
+\Axel{Peut-etre qu'un petit commentaire supplementaire sur ce dernier point pourrait etre
+interessant ? Est-ce que former des lignes continues est une bonne propriete ?}
 
 \begin{figure}[ht]
 	\centering
@@ -167,7 +170,7 @@ where each level has half the resolution of the previous one.
 As explained previously the number of levels also impacts candidate points selection.
 Indeed, at the lowest resolution, all pixels serve as candidates for the optimization.
 The number of levels is thus chosen as a compromise between the minimum amount
-of candidate points and the convergence rate desired.
+of candidate points and the desired convergence rate.
 Starting from 640x480 images in the ICL-NUIM and TUM RGB-D datasets,
 we found that 6 levels is a good compromise.
 The lowest resolution has 20x15 images, which implies a minimum of 300 candidate points.
@@ -180,7 +183,7 @@ we must be able to initialize one level from the result of the previous one.
 In Section~\ref{sub:intrinsic_parameters}, we presented the image formation as
 the succession of two transformations, first the projection from the camera frame
 to the image frame, and then the projection onto the pixels frame.
-When halving the image resolution, it is that second transformation $K_s$ that changes.
+When halving the image resolution, the second transformation $K_s$ changes.
 \[
 	K_s = \begin{pmatrix}
 		s_x & s_{\theta} & o_x \\
@@ -194,7 +197,7 @@ The scaling parameters are all multiplied by $\alpha$ i.e.\
 $s_x' = \alpha s_x$,
 $s_y' = \alpha s_y$ and
 $s_{\theta}' = \alpha s_{\theta}$.
-For the principal point however, it depends on the coordinate system.
+The principal point parameters on the other hand depend on the coordinate system.
 In most modelizations, the value of pixel $(x,y)$ is interpreted as the integration
 of the light hitting the sensor on the surface located between $(x-0.5, y-0.5)$
 and $(x+0.5, y+0.5)$.
@@ -234,11 +237,11 @@ It is the projection that changes, due to a different intrinsic matrix.
 \subsubsection{Keyframe Update}%
 \label{ssub:keyframe-update}
 
-We mentioned in VORS overview that the decision to change the keyframe is done heuristically.
-Simalarly than ORB-SLAM~\cite{mur2015orb} and DSO~\cite{engel2017direct},
+We mentioned in VORS overview that the decision to change the keyframe is done heuristically.
+Similarly to ORB-SLAM~\cite{mur2015orb} and DSO~\cite{engel2017direct},
 we use the optical flow of tracked points, which is
-the distance in pixels between their locations in the reference in tracked images,
-to take that decision.
+the distance in pixels between their locations in the reference and in tracked images,
+to make that decision.
 For convergence reasons, we established that the reference and the tracked frames
 should not be too different from each other.
 We therefore use a mean threshold distance of one pixel at the lowest image resolution.
@@ -248,21 +251,21 @@ We therefore use a mean threshold distance of one pixel at the lowest image reso
 \label{sub:limits-implementation}
 
 To our knowledge,
-VORS is the first Rust-only complete direct visual odometry stack.
+VORS is the first Rust-only complete direct visual odometry stack.
 We thus value simplicity for this important milestone.
 Incidentally, our algorithm lacks a few significant features,
 left as later improvements.
 
 One notable missing component is robustness to outliers.
-It is common that the photoconsistency assumption does not held with real-world images.
+It is common that the photoconsistency assumption does not hold with real-world images.
 Among the many possible reasons, two of them are the presence of dynamic moving objects,
-and the appearence of bright spots due to light reflections.
+and the appearance of bright spots due to light reflections.
 One possible solution is to use a robust M-estimator instead of a least square estimation.
 The energy to minimize then takes the form
 \[
 	\sum_{\bm{x}}\rho(I(W(\bm{x})) - I^{*}(\bm{x}))
 \]
-where $\rho$ has a few intresting properties.
+where $\rho$ has a few interesting properties.
 In part 2 of their series on direct image alignment~\cite{baker2003lucas},
 Baker et al. explain in details how a robust M-estimator can be used
 within an inverse compositional iteratively reweighted least squares (IRLS) algorithm.
