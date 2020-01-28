@@ -949,11 +949,40 @@ which uses a left-handed coordinate system.
 
 \subsubsection{Visualization Challenges}%
 
+Is Rust mature enough to write the visualization code in Rust native,
+and compile it to WebAssembly?
+Even though the field is exciting and buzzing, the short answer is no.
 The Rust ecosystem is still lacking in the domain of graphical user interfaces (GUI).
 As of 2019, only a handful of libraries enable 3D graphics,
 often as bindings to other C++ libraries.
 
-\subsection{Human Loop Closure}%
+Currently, the four main APIs for graphics are OpenGL, Vulkan, DirectX and Metal.
+OpenGL is an open standard developed by the Khronos group since 1992.
+It is easy and high level, but becoming obselete
+when efficient use of current graphics card hardware is needed.
+DirectX is Microsoft alternative to OpenGL.\@
+Up until DirectX 11, it was also a high level API,
+but starting from DirectX 12, became lower level and more efficient.
+Vulkan and Metal are also part of this renewal of graphics APIs
+targetting more efficient usage of the hardware architecture.
+Vulkan is open and developed by Khronos while Metal is Apple property.
+
+Just as WebGL was introduced as a Web version of OpenGL,
+a new standard is rising from the Vulkan API, called WebGPU.\@
+Unfortunately, as of August 2019, WebGPU is only supported on Chrome canary for OSX.\@
+The only viable option for our visualization is thus the duo OpenGL/WebGL.\@
+After trying few Rust libraries, the conclusion is that currently,
+the only way of reaching decent performances with WebGL for large point clouds,
+is directly with a WebGL framework,
+not with automatic conversion from a Rust native OpenGL code.
+As a consequence, our point cloud visualization is based on ThreeJS~\cite{threejs},
+a JavaScript 3D library.
+The points buffers used for the visualizations are efficiently referenced
+directly from the WebAssembly memory.
+This mutable memory manipulation has been challenging and error-prone
+but we eventually managed to get the visualizations working correctly.
+
+\subsection{Human in the Loop Closure}%
 \label{sub:human-loop-closure}
 
 \subsubsection{Automatic Registration}%
