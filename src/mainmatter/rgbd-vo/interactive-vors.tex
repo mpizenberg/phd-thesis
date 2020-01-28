@@ -306,7 +306,7 @@ The existence of well built reference datasets is thus a crucial point,
 and understanding their characteristics is valuable to correctly compare and interpret
 evaluation results.
 
-\subsubsection{Overview of Avaliable Datasets}%
+\subsubsection{Overview of Available Datasets}%
 \label{ssub:datasets_overview}
 
 We saw in Chapter~\ref{cha:the_image_annotation_problem} that the principal
@@ -909,8 +909,49 @@ rgb.png & 6.6 ms & 16.0 ms & 6.5 ms & 13.7 ms & 52.1 ms \\
 
 \subsubsection{Overview of the Interface}%
 
+Interactive VORS Web interface is visible in Figure~\ref{fig:interactive-vors-interface}
+and is composed of three parts,
+\begin{itemize}
+\setlength\itemsep{-0.5em}
+	\item the control bar at the bottom, with a timeline and some buttons,
+	\item the point cloud 3D visualization in the center,
+	\item and the image thumbnail of the current keyframe on the left.
+\end{itemize}
+Contrary to structure from motion where images are not guaranted to be in any specific order,
+visual odometry has the advantage of dealing with video data.
+The timeline thus enables movement along the temporal axis.
+It is a one-dimensional control that is well known thanks to its pervasive usage for videos.
+The frames accessible from the timeline are restricted to the keyframes of the visual odometry.
+As explained in Section~\ref{sub:multi-res-direct-image-alignment},
+they are the frames used as reference for the direct image alignment.
+A thumbnail of the current keyframe is located at the top left corner of the Web interface.
+For each keyframe, we use the depth information of the sparse candidate points
+to retrieve their 3D coordinates.
+The number of candidate points is variable but in the order of a thousand
+to ten thousands points per keyframe.
+Those 3D points are stored in an array buffer,
+then used for a point cloud visualization,
+located at the center of the interface.
+The sparse candidate points corresponding to the current keyframe
+are visualized in red, to ease the mental association between the keyframe thumbnail
+and the corresponding location in the complete point cloud.
+The reader may notice in Figure~\ref{fig:interactive-vors-interface}
+that the point cloud and the keyframe thumbnail are mirrored.
+This is due to the ray tracer employed in the ICL-NUIM dataset,
+which uses a left-handed coordinate system.
+
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=\linewidth]{assets/img/interactive-vors.png}
+	\caption{Interactive VORS Web Interface.}%
+	\label{fig:interactive-vors-interface}
+\end{figure}
+
 \subsubsection{Visualization Challenges}%
 
+The Rust ecosystem is still lacking in the domain of graphical user interfaces (GUI).
+As of 2019, only a handful of libraries enable 3D graphics,
+often as bindings to other C++ libraries.
 
 \subsection{Human Loop Closure}%
 \label{sub:human-loop-closure}
