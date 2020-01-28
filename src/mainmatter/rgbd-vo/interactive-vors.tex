@@ -19,8 +19,7 @@ of points depth, we focus on the RGB-D case,
 where the necessary depth information for reprojection is provided by a sensor.
 In order to reduce drift when the camera moves slowly,
 image alignment is performed from a fixed keyframe instead of the previous frame.
-Decision to change the keyframe is done heuristically;
-details are presented in Section~\ref{sub:multi-res-direct-image-alignment}.
+Decision to change the keyframe is done heuristically.
 Finally, our algorithm uses a sparse subset of points in the image,
 which has been shown~\cite{engel2017direct} to be sufficient to track the camera motion.
 Disregarding sparsity and robustness, discussed later,
@@ -35,19 +34,78 @@ An overview of the full pipeline of VORS is presented in Figure~\ref{fig:overvie
 	\label{fig:overview-vors}
 \end{figure}
 
+\subsection{Intuition on Direct Image Alignment}%
+\label{sub:intuition-direct}
+
+As presented in Section~\ref{sub:appearance-based},
+under the photoconsistency assumption, direct image alignment consists
+in finding the warp function $W$ minimizing
+\[
+	\sum_{\bm{x}}\|I(W(\bm{x})) - I^{*}(\bm{x})\|^2
+\]
+where $I^{*}, I$ are the reference and new images,
+and $\bm{x}$ is the position of a pixel in the reference image.
+As explained in Baker and Matthews~\cite{baker2004lucas},
+this can be minimized with an iterative optimization.
+If we note $\bm{\xi}$ the parameters of the warp function,
+and $\delta\bm{\xi}$ the iterative increment,
+the expression of the residual in an inverse compositional formulation is
+\[
+	I^{*}(W(\bm{x}, \delta \bm{\xi})) - I(W(\bm{x}, \bm{\xi})).
+\]
+In a Gauss-Newton scheme, the iterative increment $\delta\bm{\xi}$ is computed as
+\[
+	\delta \bm{\xi} = \inv{H} \sum_{\bm{x}} \tr{J} (I^{*}(\bm{x}) - I(W(\bm{x}, \bm{\xi})))
+\]
+where $J = \nabla I^{*} \cdot J_{\bm{\xi}}W$, $\nabla I^{*}$ is the reference image gradient
+and $J_{\bm{\xi}}W$ is the Jacobian of the warp function.
+The Hessian is computed as the Gauss-Newton approximation
+$H = \sum_{\bm{x}}\tr{J}J$.
+For readability of the expression inside the sum on all pixels $\bm{x}$,
+we did not indicate in the notation that $J$,
+composed of $\nabla I^{*}$ and  $J_{\bm{\xi}}W$, is computed at pixel $\bm{x}$.
+The image gradient $\nabla I^{*}$ at $\bm{x}$ is a 1x2 vector,
+while the Jacobian of the warp $J_{\bm{\xi}}W$ at $\bm{x}$ is a 2x6 vector (2 coordinates, 6 parameters).
+We leave aside the expression of the warp Jacobian, detailed in Appendix~\ref{sec:notation}.
+Two important components of $\delta \bm{\xi}$
+are the reference image gradient $\nabla I^{*}$
+and the residual image $\delta I = I^{*}(\bm{x}) - I(W(\bm{x}, \bm{\xi}))$.
+We represented both in Figure~\ref{fig:gradient-residual}
+for a couple of images in the ICL-NUIM sequence.
+As we can see there, all pixels are not participating equally in the expression.
+The most informative pixels are all near high gradient locations and it makes sense.
+Indeed if we, as humans, compare two homogeneous areas,
+it will be impossible to tell how the camera moved.
+If instead we are presented heterogeneous regions of the image with textures
+it is possible to visualize the movement.
+The same occurs for the expression of the warp increment $\delta \bm{\xi}$.
+Since pixels with high gradient magnitudes contain the more information,
+it should be possible to sample only those for direct image alignment,
+which leads us to the presentation of sparse points selection mechanisms.
+
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=0.48\linewidth]{assets/img/im_grad.png}
+	\hfill
+	\includegraphics[width=0.48\linewidth]{assets/img/im_diff.png}
+	\caption{Gradient norm of the reference image (left), and absolute residual image (right).}%
+	\label{fig:gradient-residual}
+\end{figure}
+
 \subsection{Sparse Points Selection}%
 \label{sub:sparse-points}
 
 Engel et al.\ demonstrated in DSO~\cite{engel2017direct} that using a sparse subset
 of points for the direct image alignment problem still results in precise camera locations
-at the condition that points satisfy two conditions,
+at the condition that points satisfy two properties,
 \begin{itemize}
 \setlength\itemsep{-0.5em}
 	\item they should be well distributed in the image,
-	\item and they should be located at positions with higher gradients magnitudes.
+	\item and they should be located at positions with higher gradient magnitudes.
 \end{itemize}
-Selected points are called candidate points,
-and their selection mechanism is rather complex, based on at least ten parameters.
+In DSO, selected points are called candidate points.
+Though presented quickly in the paper,
+their selection mechanism is much complex, based on at least ten parameters.
 The core idea is to regularly divide an image in tiles.
 One subdivision produces big tiles, called regions,
 and another generates small tiles, called blocks.
@@ -64,8 +122,10 @@ the algorithm will choose between the three following options,
 (1) keep candidates, (2) randomly select a sample of the candidates,
 or (3) change the block base size and restart from scratch.
 
-In contrast, our sparse selection of candidates is rather simple,
-based on a multi-resolution pyramid of images.
+Since we care about the complexity of VORS,
+we tried a different approach, much simpler,
+yet resulting in a distribution satisfying the two expected properties.
+Our sparse selection mechanism is based on a multi-resolution pyramid of images.
 We embraced the idea that each level of the image pyramid should exhibit
 that property of well distributed points with higher density near higher gradients.
 % Intuitively, it should help convergence of the alignment problem to a global minimum.
@@ -79,7 +139,9 @@ This sparse selection scheme ensures that there is at least one candidate per re
 corresponding to one pixel at the lowest resolution.
 It also increases the density of candidates in higher gradients areas.
 The number of levels of the image pyramid is a common parameter for candidates selection
-and for the multi-resolution direct image alignement presented next.
+and for the multi-resolution direct image alignment presented next.
+As a result, we obtain a sparse selection of points with only one parameter,
+the gradient threshold to pick one or two subpixels as candidates.
 
 \begin{figure}[ht]
 	\centering
@@ -100,7 +162,7 @@ and for the multi-resolution direct image alignement presented next.
 Figure~\ref{fig:candidates-dso-vors} depicts a zoomed-in view of the same image region
 for both DSO and VORS candidates selection mechanisms.
 As visible on the left image, DSO candidate points are regularly spaced,
-except in homogenous areas.
+except in homogeneous areas.
 VORS candidate points however tend to form contiguous lines,
 which probably generates redundant information.
 Limiting the maximum number of subpixel candidates to one
@@ -123,35 +185,7 @@ limit the information redundancy generated by neighbour candidates.
 \subsubsection{Convergence of the Optimization Problem}%
 \label{ssub:convergence-optimization}
 
-As presented in Section~\ref{sub:appearance-based},
-under the photoconsistency assumption, direct image alignment consists
-in finding the warp function $W$ minimizing
-\[
-	\sum_{\bm{x}}\|I(W(\bm{x})) - I^{*}(\bm{x})\|^2
-\]
-where $I^{*}, I$ are the reference and new images,
-and $\bm{x}$ is the position of a pixel in the reference image.
-As explained in Baker and Matthews~\cite{baker2004lucas},
-this can be minimized with an iterative optimization.
-If we note $\bm{\xi}$ the parameters of the warp function,
-and $\delta\bm{\xi}$ the iterative increments,
-the expression of the residual in an inverse compositional formulation is
-\[
-	I^{*}(W(\bm{x}, \delta \bm{\xi})) - I(W(\bm{x}, \bm{\xi})).
-\]
-In a Gauss-Newton scheme, the iterative increment $\delta\bm{\xi}$ is computed as
-\[
-	\delta \bm{\xi} = \inv{H} \sum_{\bm{x}} \tr{J} (I^{*}(\bm{x}) - I(W(\bm{x}, \bm{\xi})))
-\]
-where $J = \nabla I \cdot J_{\bm{\xi}}W$, $\nabla I$ is the image gradient
-and $J_{\bm{\xi}}W$ is the Jacobian of the warp function.
-The Hessian is computed as the Gauss-Newton approximation
-$H = \sum_{\bm{x}}\tr{J}J$.
-We parameterize $W$ in the Lie algebra of twists $\seee$.
-The expression of the Jacobian of the warp function
-is detailed in Appendix~\ref{sec:notation}.
-
-In theory however, this iterative algorithm is only correct under the assumption
+In theory, the iterative algorithm computing motion increments is only correct under the assumption
 that the initialization is already near the solution.
 Convergence to the correct minimum is thus a hard problem
 and under some circumstances, the optimization may drift to another local minimum.
