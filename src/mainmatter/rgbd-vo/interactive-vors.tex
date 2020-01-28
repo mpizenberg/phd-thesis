@@ -789,280 +789,411 @@ défauts de manière interactive.}
 \section{Interactive VORS on the Web}%
 \label{sec:interactive-vors}
 
+We previously quantitatively validated VORS viability for the visual odometry task.
+In this final section we detail how it can be usable directly on the Web.
+We also attempt at showcasing the potential of such exposure with
+an example use case of manual human intervention to detect and rectify drifts.
 
 \subsection{Port of VORS to WebAssembly}%
 \label{sub:vors-port-wasm}
 
-(1) how to get/capture images in a Web browser -> usage of a tar archive
-(2) performances issues with realtime PNG decoding
+\subsubsection{VORS in WebAssembly}%
 
-\subsection{Interactions}%
-\label{sub:interactions}
+Except from two little hurdles that we are going to detail,
+the port of VORS to WebAssembly was straightforward,
+as expected for a Rust-only project.
+VORS code base is organized as a library providing a rich API,
+accompanied by a small binary program performing the actual visual odometry
+on a dataset provided as a command line argument.
+Porting VORS is thus a matter of two tasks,
+(1) being able to compile the library to the WebAssembly target,
+(2) rewrite a small WebAssembly program replacing the command line program
+in the context of a Web browser.
+The first task is immediately validated by running
+\verb|cargo build --target wasm32-unknown-unknown|,
+confirming the ability to compile VORS to WebAssembly.
+The second task requires more work,
+due to the different natures of native command line applications and Web browsers.
 
-We have been experimenting with different interactive modalities.
-Actually, we would have liked to experiment with multiple modalities.
-Here is a screenshot of the Web application Interactive VORS.
+\subsubsection{Loading Data as a Tar Archive}%
 
-\begin{figure}[h]
+Native programs have the ability to interact with the underlying operating system.
+Web applications however are sandboxed, for security reasons reminded
+in Chapter~\ref{cha:performant_web_applications} on performant Web applications.
+The seemingly simple task of loading images for the dataset directory
+thus becomes impossible.
+The simplest alternative, which is the one we chose,
+consists in loading a \verb|tar| archive of the entire dataset through
+the file upload mechanism, making the archive content available in the browser memory.
+This has two constraints, one on memory the other on the application program.
+
+Current Web APIs prevent us from loading the archive directly on the WebAssembly memory.
+As a consequence, the archive is loaded inside the application JavaScript memory,
+and we then duplicate it in the WebAssembly module memory.
+For an unknown period of time, until the browser decides to release the JavaScript buffer,
+the application will consume a memory of double the archive size.
+The full first sequence of the ICL-NUIM dataset for example weighs 800 MB,
+resulting in 1.6 GB of allocated memory by the application in the browser.
+
+The other change has to occur in the program code, now reading files from an archive
+instead of from the file system.
+For this task, we used the \verb|tar-rs| library~\cite{tar-rs},
+which brought the first hurdle by not compiling to WebAssembly
+due to the presence of OS-specific code for file time management.
+Fortunately, simply adding compiler guards in that library to deactivate
+the incriminating functions from the public API when compiling to WebAssembly was sufficient.
+
+\subsubsection{PNG Image Reading}%
+
+The next technical challenge was a performance one.
+We managed to get VORS compiling and running as a WebAssembly module,
+but the performances dropped drastically, from 30 frames per second (fps)
+in the native case to less than 10 fps in WebAssembly.
+After some performance analysis, we identified the culprit as
+the PNG image decoding of frames.
+Figure~\ref{fig:png-perf} spotlights that the majority of the time
+is spent in decoding both images instead of in the visual odometry algorithm.
+
+\begin{figure}[ht]
 	\centering
-	\includegraphics[width=\linewidth]{assets/img/todo.png}
-	\caption{Interactive visual odometry on the Web}%
-	\label{fig:interactive_vors}
+	\includegraphics[width=\linewidth]{assets/img/png-perf-profile-annotated.png}
+	\caption{Flame graph of VORS WebAssembly performances with the PNG Rust crate.
+	The majority of the time is spent decoding RGB-D images.}%
+	\label{fig:png-perf}
 \end{figure}
 
-As you can see, the interface is split in three parts
+From the fact that OpenCV decodes images much faster,
+and that Rust should have similar performances than C++,
+we decided to give a try at a new PNG decoder.
+Our implementation keeps in mind that it should be ``Wasm-friendly'',
+meaning we limit the amount of memory allocations,
+which are more costly in WebAssembly.
 
-\begin{itemize}
-	\item The timeline
-	\item The 3D visualization
-	\item The image thumbnail of the current keyframe
-\end{itemize}
+The PNG specification is available online.
+Under the hood, the data is compressed with the deflate algorithm,
+whose specification is also available online.
+PNG is a simple structured format.
+A file contains successive data blocks called chunks of different types.
+The most interesting types are IHDR (header), IDAT (data) and IEND (end of file).
+The body of the image is composed by successive IDAT blocks
+containing transformed lines of the image (called ``filtered'') to reduce entropy,
+then compressed with the deflate algorithm.
+We have implemented the parsing with a fast parser combinator library,
+and the unfiltering is rather simple.
+We did not reimplement the inflate algorithm
+since there are already high performance Rust-only libraries for this task.
+After a few round of optimizations,
+we managed to get great decoding performances,
+especially in WebAssembly compared to the library we used initially.
+Table~\ref{tab:png-perf} summarizes performances on few images we used locally
+and clearly shows the improvement from the default Rust PNG library.
+OpenCV performances are included for comparison.
+As a result, we managed to get VORS compiling and running at similar speed in the browser.
 
-The timeline enables movement along the temporal axis.
-It is a one-dimentional control that is well known thanks to its pervasive use in video playing.
-Visual Odometry has the advantage of dealing with video data,
-contrary to structure from motion, where images are not guaranted to be in any specific order.
-The timeline is thus very adapted for temporal navigation in the video.
-The frames accessible from the timeline are only the keyframes of the video tracking.
-Those are the frames that are used to track the following frames of the sequence.
-The decision to consider a new frame as a keyframe follows a heuristic based on
-the amplitude of the movement of the optical flow.
-The objective is to optimize the number of keyframes in the video.
-If the keyframe and the new frame are close enough,
-the motion of the keyframe can be precisely estimated related to the keyframe.
-So even small drifts happen during tracking, it is not additive until we change of keyframe.
-Once a keyframe changes, all successive frames that will be tracked based on this keyframe
-will consequently have an absolute position drift dependent of the drift of the previous keyframe.
-So increasing the number of keyframes should reduce the risk of loosing completely the tracking,
-but also increases the additive drift accumulated for each keyframe.
+\begin{table}[ht]
+\centering
+% \resizebox{\textwidth}{!}{%
+\begin{tabular}{llllll}
+Image & us & png crate & OpenCV & us (wasm) & png (wasm) \\
+    \midrule
+depth.png & 4.0 ms & 9.1 ms & 4.0 ms & 5.5 ms & 30.7 ms \\
+rgb.png & 6.6 ms & 16.0 ms & 6.5 ms & 13.7 ms & 52.1 ms \\
+\end{tabular}%
+% } % end of resizebox
+\caption{Decoding performances of our PNG decoder.}%
+\label{tab:png-perf}
+\end{table}
 
-For every keyframe, we use the depth image and choose a limited amount of points
-for the tracking of the following frames.
-This is explained by the ``coarse to fine candidates points selection'' section.
-The number of points used in each keyframe is variable but in the order of a thousand
-to ten thousands points.
-Those 3D points are stored in an array,
-and used for a point cloud visualization with a library called ThreeJS.
+\subsection{Interactive VORS Web Interface}%
+\label{sub:vors-web}
 
-The Rust ecosystem is still lacking in the domain of graphical user interfaces (GUI).
-As of 2019, only a handful of libraries enable 3D graphics,
-often as bindings to other C++ libraries.
+\subsubsection{Overview of the Interface}%
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\alert{The following is an extract of the ``comptes rendus'' google doc}
-
-\textbf{Work on 3D visualizations}
-Pour une application interactive d’odométrie visuelle, il est primordial d’avoir une visualisation du nuage de points généré par les keyframes, et utilisé pour le tracking. Je me suis donc intéressé aux différentes approches de rendu avec Rust. Je conseille de lire cet article de Simon Heath (@icefoxen) intitulé “A Guide To Rust Graphics Libraries 2019”.
-
-\textbf{Petit tour rapide des APIs de rendu.}
-
-En dehors des programmeurs de pilotes de cartes graphiques, personne n'écrit directement du code pour GPU. À la place, on utilise des bibliothèques graphiques telles que OpenGL. Aujourd'hui, les 4 principales APIs graphiques utilisables sont OpenGL, DirectX, Vulkan et Metal.
-
-OpenGL est un standard ouvert, développé par le groupe Khronos, qui a vu le jour en 1992. Des pilotes existent pour presque tous les systèmes, linux, windows, osx, etc. Son principal problème est son âge. C'est une API assez haut niveau qui n'a pas évolué favorablement en comparaison des architectures des GPUs.
-
-DirectX (DX) est un peu l'équivalent d'OpenGL à la sauce Microsoft, disponible uniquement pour Windows et XBox. Jusque DirectX 11, les API sont très haut niveau, comme OpenGL. DirectX 12 la dernière version fait parti d'un renouveau de pilotes plus bas niveaux, tout comme Vulkan et Metal, qui tirent beaucoup mieux parti des architectures actuelles des cartes graphiques.
-
-Vulkan est à OpenGL ce que DX12 est à DX11, une API bien plus bas niveau mais offrant des bien meilleures performances. J'ai le sentiment que sur des appareils de faibles puissance, tels que des smartphones, la différence se fera bien ressentir et il sera courant d'avoir des perf x2, x3 ou plus suivant les cas.
-
-Metal c'est le DX12 d'Apple. Une API bas niveau uniquement accessible sur des machines Apple.
-
-\textbf{Et Rust dans tout ça ?}
-
-En Rust, il y a des wrappers pour chacune des APIs graphiques, souvent le nom de l'API suffixé "-rs" (pour rust). Ces bibliothèques ont souvent une API "unsafe", ce qui signifie en Rust qu'elles n'ont pas toutes les garanties que peut apporter le langage en terme sûreté mémoire. La bibliothèque probablement la plus important de l'écosystème graphique de Rust s'appelle "gfx", aujourd'hui renommée "gfx-hal" (pour hardware abstraction layer). C'est une API bas niveau, à 97\% similaire à Vulkan mais qui est multi-plateforme ! Elle peut compiler vers Vulkan, DX12, ou Metal suivant l'environnement (et un support réduit d'OpenGL). Il existe aussi une bibliothèque très active du nom de "rendy" qui se veut être un toolkit pour gfx-hal et réduit la quantité de boilerplate nécessaire pour des APIs autant bas niveau.
-
-\textbf{Et le Web dans tout ça ?}
-
-Et bien justement, on est là aussi au bord d’un renouveau complet. Tout comme WebGL qui a apporté une version simplifié et sécurisée d'OpenGL sur le Web en 2011, le W3C, en collaboration avec Apple, Mozilla, Microsoft et Google, est en train de standardiser une API dédiée au Web, du nom de WebGPU. WebGPU devrait exposer pour JavaScript et WebAssembly une API graphique et de calcul (comme Cuda / OpenCL) efficace pour tout appareil ayant des pilotes natifs pour Vulkan / DX12 / Metal.
-
-L'implémentation de WebGPU en Rust, qui s'appelle "wgpu", a démarré vers Septembre 2018. La où ca devient encore plus intéressant, c'est qu'elle est basée sur gfx-hal pour le rendu. Utiliser wgpu permet donc en théorie d'avoir un code efficace, un peu plus haut niveau que Vulkan, compilable vers toutes les plateformes natives et le Web ! En pratique malheureusement, au jour d'aujourd'hui (aout 2019), seul Chrome canary sur OSX supporte WebGPU. On ne peut donc pas (encore) s'en servir pour des applis Web. Mais vu la motivation des différents partis, ça devrait arriver vite !
-
-\textbf{C’est beau mais en pratique on fait quoi nous ?}
-
-De l'OpenGL / WebGL mon capitaine ! J'ai donc cherché dans l'écosystème Rust, et je suis tombé sur Kiss3D, par le même créateur que la bibliothèque d'algèbre linéaire que j'utilise. Kiss3D promet une API simple et compatible avec WebAssembly. Après quelques essais ratés, les premières visualisations correctes sont encourageantes ! Je raconte mes pérégrinations dans ce post du forum rust pour de plus amples détails.
+\subsubsection{Visualization Challenges}%
 
 
-https://youtu.be/hCzT47eeges
+\subsection{Human Loop Closure}%
+\label{sub:human-loop-closure}
+
+\subsubsection{Automatic Registration}%
+
+Applying direct image alignment
+
+\subsubsection{Manual Intervention}%
+
+P3P
+
+\subsection{Conclusion}%
+\label{sub:vors-ccl}
 
 
-Mais (comme toujours il y a un mais ...) malheureusement la compilation vers wasm fait drastiquement chuter les performances sur mon ordi portable. On passe d'environ 60 fps en natif à environ 10 fps en web, ce qui n'est clairement pas utilisable. Il y a également une deuxième chose qui m'a chagriné. Kiss3D est basé sur "stdweb" pour sa compilation vers wasm. Or "stdweb" est une approche alternative à l'approche standardisée pour wasm en Rust, qui s'appelle wasm-bindgen, et les deux ne sont pas facilement compatibles. Il est donc difficile de faire cohabiter le code de tracking, utilisant wasm-bingen, et le code de visualisation, basé sur stdweb.
-
-\textbf{Finalement on fait quoi du coup ?}
-
-L'approche qui me donne le meilleur compromis de performances et de flexibilité, c'est de mixer les calculs faits en Rust + wasm (en utilisant wasm-bindgen), avec le rendu fait en JavaScript avec Three. Three c'est probablement la bibliothèque de 3D la plus mature pour le Web, avec une API simple en JavaScript. C’est celle que Thomas utilise pour ses rendus. En faisant tous mes calculs avec Rust, je peux partager avec Three un pointeur vers la position dans la mémoire wasm du résultat des calculs. Le seul léger inconvénient, c'est que toute donnée nécessaire pour le rendu Three, doit avoir un attribut permanent associé dans le code Rust. C'est un moindre mal, et en utilisant correctement l'API Three, j'obtiens 25 à 30 fps pour un million de points avec mon ordi portable. Axel a un solide 60 fps sur son ordi.
-
-Voici la démo, et le code source pour un simple exemple générant un cube rempli d'un million de points aléatoires. Je suis curieux de savoir à quel framerate cet exemple tourne dans différents types d'appareils mobiles. Avec mon android bas de gamme, j'obtiens 4 fps sous chrome, et 3 fps sous firefox.
-
-La démo la plus intéressante, c'est celle de l'appli de tracking VORS ! Elle est disponible ici, code source par là. ATTENTION, pour la faire tourner, il faut 1.6 Go de ram disponible avec le dataset ICL NUIM. Pour démarrer la démo, il faut lui donner une archive tar contenant tout le dataset à tester. Il y a une archive (700 Mo) toute prête, téléchargeable jusqu'au 29 aout par ici. Ci-dessous une capture d’écran de l’appli qui tourne sur mon ordi portable.
-
-\alert{End of the google doc extract.}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-As we explain in the extract above,
-we ended using ThreeJS for the 3D visualization.
-Upon navigation in the timeline, there are two other different modifications of the visualization.
-First the 3D points corresponding to the current keyframe are displayed in another color (red),
-and the camera point along the camera trajectory is updated.
-This makes following the camera trajectory and identifying the associated geometry trivial.
-And second, the thumbnail of the current keyframe is updated.
-As a consequence, looking at the thumbnail area while moving along the timeline
-reminds temporal navigation in traditional 2D videos.
-It also facilitates the association of the 3D geometry with the actual 2D frame
-from the original video sequence.
-In sum the combination of a keyframe timeline with associated thumbnail
-and 3D geometry bridges the traditionally difficult gap between 2D and 3D user interfaces.
-
-We just have introduced the first interactive modality, the keyframe timeline navigation.
-In order to introduce the other two, we need to describe first
-a problem we are facing with our visual odometry algorithm.
-The video sequences used for the benchmark of the different visual odometry algorithms
-have different difficulty levels of tracking.
-The synthetic sequence from the ICL NUIM dataset
-have the particularity of providing low textured but crisp images with perfect alignment
-between the color images and depth map.
-Those conditions enable high precision tracking, except for some short sections
-almost not textured at all, where tracking is lost and drifts.
-When running interactive VORS on this dataset,
-we observe two of those distinctive drifts, resulting in multiple
-disjoint and unaligned pieces of the global 3D model of the associated room.
-
-\begin{figure}[h]
-	\centering
-	\includegraphics[width=\linewidth]{assets/img/todo.png}
-	\caption{Misaligned 3D model due to drifts in the tracking.}%
-	\label{fig:drift_icl_nuim}
-\end{figure}
-
-If we set for example the objective to obtain a globally coherent 3D model of the room,
-there are plenty of approaches heading in that direction.
-Here are two of those.
-
-\begin{itemize}
-	\item Identify in the timeline each section with a coherent 3D model associated.
-		Export a model of each temporally coherent section.
-		Join all parts of the model with an approch such as ICP (Iterative Closest Point).
-	\item Identify two keyframes in the timeline with a visual overlapping
-		but no 3D geometry overlapping due to a drift between those images.
-		Re-align those two images.
-		Adapt the tracking of the rest of the sequence to take into account this adjustment.
-\end{itemize}
-
-We decided to take the second approach for this experiment.
-The second option here is very similar to what we usually call SLAM.
-SLAM consists in adding loop closure and pose graph optimization techniques
-to visual odometry to bring global map consistency.
-In traditional SLAM algorithms, points of interests are retrieved for all keyframes.
-Their descriptors are classified with techniques like ``bag of words''.
-Then typical indexing and search techniques are applied to identify similar keyframes.
-In our case, the identification is performed by a human interaction.
-Once two keyframes are matched, the next step consists in computing
-the camera motion between those.
-Usually, one would match all keypoints in the pair of images
-and use a robust version of the 8-point algorithm if there is no depth info,
-or a robust PNP algorithm if depth info is know.
-Logically, we thus tried to perform keypoints detection and matching for the pair of keyframes.
-There exist many keypoint descriptors for this task.
-Some well known are ORB, SIFT, FAST, A-KAZE.
-The A-KAZE features were already implemented in Rust (https://github.com/indianajohn/akaze-rust)
-so we tried to use them for the matching.
-Unfortunately, due to the low textured images of the synthetic dataset,
-the number of matches for selected pairs of keyframes were in the order of 20,
-not enough to compute reliable camera motion.
-This is the origin of the next two interactive modalities explored.
-
-Once a pair of keyframes is identified by a user,
-thumbnails of those two frames are displayed next to each other.
-The reference keyframe thumbnail also displays in red the points used for the tracking,
-i.e. points which also provide depth information.
-We consciously restrict the number of points with depth information to candidates
-points used in the tracking, instead of all points with depth information from the sensor,
-for two reasons.
-(1) Those points are the only points supposed to be known if we extend our work to RGB visual odometry,
-(2) less red points means less visual clutter for the user.
-In those two thumbnails, the user is asked to identify three pairs of points
-by clicking inside the two images.
-In the reference image, the points chosen should be restricted to those in red.
-From the three pairs of points, we can compute 0 to 4 potential camera positions
-based on the P3P algorithm.
-Since there was no currently available Rust P3P implementation,
-and it was not too complicated to implement, we ported M. Persson ``Lambda Twist''
-P3P algorithm. It is available at https://github.com/rust-photogrammetry/p3p.
-Those potential camera positions are used to backproject the points with known depth
-(red points in the thumbnail) into the 3D environment.
-Every potential camera pose is associated with 3D points of a unique color
-as depicted in Figure~\ref{fig:p3p}.
-
-\begin{figure}[h]
-	\centering
-	\includegraphics[width=\linewidth]{assets/img/todo.png}
-	\caption{P3P camera pose candidates.}%
-	\label{fig:p3p}
-\end{figure}
-
-As also visible in Figure~\ref{fig:p3p}, a probability is associated with every potential pose.
-Those probabilities are estimated by a measure of photometric reprojection error.
-Indeed, for each potential camera pose, it is possible to project the 3D points
-of the reference keyframe into the other frame.
-For this estimatation we compute the reprojection error at low resolution images
-which are less sensible to small errors in the reprojection.
-In the end, the probability scores are simply set proportional to the inverse of the reprojection errors.
-Such scores are intended to be a hint for the user,
-helping them to select the correct pose initialization in the interface.
-With this combination of colored 3D visualization and selectable options,
-we avoid the complex task of directly interacting in the 3D world.
-In the end, the chosen pose is set as initialization to the tracking algorithm.
-The tracking is then restarted from this second keyframe.
-It should provide a globally consistent 3D model until the next drift in the sequence.
-
-\subsection{Drawbacks of the approach}%
-\label{sub:drawbacks}
-
-In traditional SLAM, the loop closure and pose estimation would add
-an edge in the global pose graph of the sequence.
-Then a pose graph optimization algorithm would be run to improve the global
-consistency of the pose graph.
-In our simplified case however, we do not build this pose graph,
-but simply ensure the coherence of the sequence after the second keyframe
-with regard to the reference keyframe.
-It means that all frames in between the pair of keyframes is not adjusted.
-In particular, there will still be drifted frames in this section of the sequence.
-
-\subsection{Code architecture of interactive VORS}%
-\label{sub:code-interactive-vors}
-
-The code of this project is available at https://github.com/mpizenberg/interactive-vors.
-As of version 1.0.0, it is composed of three main parts.
-Those are clearly reflected by the language percentage usage in GitHub Web page interface,
-38\% JavaScript, 35\% Elm and 26\% Rust.
-
-The Elm application manages the Web user interface and communicates
-with the JavaScript part to handle the 3D drawing and visual odometry.
-
-The 3D rendering is handled by a JavaScript library called ThreeJS, based on WebGL.
-A keyframe may contain 1 to 10 thousand points with depth information.
-In a typical tracking situation, there might be one keyframe for rougly 5 to 20 frames.
-The ICL-NUIM sequence for example, is composed of 1508 frames,
-and results in 225 keyframes and 550000 points.
-Being able to display point clouds with a number of points in the order of the million
-with WebGL is still a non trivial task for today mid-end hardware.
-In order to mitigate 3D drawing performance bottlenecks,
-all the 3D visualizations in the application are based on a unique preallocated
-geometry buffer sized for a million point.
-While it is a reasonable solution for our proof of concept use case,
-this is an important detail if we are to consider more memory efficient solutions.
-We will also note, that with the advent of the new standard WebGPU,
-better performances and compatibility with WebAssembly are to expect in the near future.
-
-The visual odometry algorithm is of course a WebAssembly module,
-compiled from a small Rust interface module,
-reusing our Rust visual odometry algorithm (VORS).
-Our JavaScript code base is communicating with this Wasm module
-thanks to the intermediate JavaScript binding code generated by wasm-bindgen and wasm-pack.
-Before diving into the details of porting VORS to WebAssembly,
-we will provide few quantitative measures of the improvements that our interactive
-approach enabled.
-
-\subsection{Quantitative improvements of the 3D model and trajectory}%
-\label{sub:quantitative-improvements}
-
-(1) absolute trajectory error
-(2) absolute point cloud error
+% \subsection{Interactions}%
+% \label{sub:interactions}
+%
+% We have been experimenting with different interactive modalities.
+% Actually, we would have liked to experiment with multiple modalities.
+% Here is a screenshot of the Web application Interactive VORS.
+%
+% \begin{figure}[h]
+% 	\centering
+% 	\includegraphics[width=\linewidth]{assets/img/todo.png}
+% 	\caption{Interactive visual odometry on the Web}%
+% 	\label{fig:interactive_vors}
+% \end{figure}
+%
+% As you can see, the interface is split in three parts
+%
+% \begin{itemize}
+% 	\item The timeline
+% 	\item The 3D visualization
+% 	\item The image thumbnail of the current keyframe
+% \end{itemize}
+%
+% The timeline enables movement along the temporal axis.
+% It is a one-dimentional control that is well known thanks to its pervasive use in video playing.
+% Visual Odometry has the advantage of dealing with video data,
+% contrary to structure from motion, where images are not guaranted to be in any specific order.
+% The timeline is thus very adapted for temporal navigation in the video.
+% The frames accessible from the timeline are only the keyframes of the video tracking.
+% Those are the frames that are used to track the following frames of the sequence.
+% The decision to consider a new frame as a keyframe follows a heuristic based on
+% the amplitude of the movement of the optical flow.
+% The objective is to optimize the number of keyframes in the video.
+% If the keyframe and the new frame are close enough,
+% the motion of the keyframe can be precisely estimated related to the keyframe.
+% So even small drifts happen during tracking, it is not additive until we change of keyframe.
+% Once a keyframe changes, all successive frames that will be tracked based on this keyframe
+% will consequently have an absolute position drift dependent of the drift of the previous keyframe.
+% So increasing the number of keyframes should reduce the risk of loosing completely the tracking,
+% but also increases the additive drift accumulated for each keyframe.
+%
+% For every keyframe, we use the depth image and choose a limited amount of points
+% for the tracking of the following frames.
+% This is explained by the ``coarse to fine candidates points selection'' section.
+% The number of points used in each keyframe is variable but in the order of a thousand
+% to ten thousands points.
+% Those 3D points are stored in an array,
+% and used for a point cloud visualization with a library called ThreeJS.
+%
+% The Rust ecosystem is still lacking in the domain of graphical user interfaces (GUI).
+% As of 2019, only a handful of libraries enable 3D graphics,
+% often as bindings to other C++ libraries.
+%
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \alert{The following is an extract of the ``comptes rendus'' google doc}
+%
+% \textbf{Work on 3D visualizations}
+% Pour une application interactive d’odométrie visuelle, il est primordial d’avoir une visualisation du nuage de points généré par les keyframes, et utilisé pour le tracking. Je me suis donc intéressé aux différentes approches de rendu avec Rust. Je conseille de lire cet article de Simon Heath (@icefoxen) intitulé “A Guide To Rust Graphics Libraries 2019”.
+%
+% \textbf{Petit tour rapide des APIs de rendu.}
+%
+% En dehors des programmeurs de pilotes de cartes graphiques, personne n'écrit directement du code pour GPU. À la place, on utilise des bibliothèques graphiques telles que OpenGL. Aujourd'hui, les 4 principales APIs graphiques utilisables sont OpenGL, DirectX, Vulkan et Metal.
+%
+% OpenGL est un standard ouvert, développé par le groupe Khronos, qui a vu le jour en 1992. Des pilotes existent pour presque tous les systèmes, linux, windows, osx, etc. Son principal problème est son âge. C'est une API assez haut niveau qui n'a pas évolué favorablement en comparaison des architectures des GPUs.
+%
+% DirectX (DX) est un peu l'équivalent d'OpenGL à la sauce Microsoft, disponible uniquement pour Windows et XBox. Jusque DirectX 11, les API sont très haut niveau, comme OpenGL. DirectX 12 la dernière version fait parti d'un renouveau de pilotes plus bas niveaux, tout comme Vulkan et Metal, qui tirent beaucoup mieux parti des architectures actuelles des cartes graphiques.
+%
+% Vulkan est à OpenGL ce que DX12 est à DX11, une API bien plus bas niveau mais offrant des bien meilleures performances. J'ai le sentiment que sur des appareils de faibles puissance, tels que des smartphones, la différence se fera bien ressentir et il sera courant d'avoir des perf x2, x3 ou plus suivant les cas.
+%
+% Metal c'est le DX12 d'Apple. Une API bas niveau uniquement accessible sur des machines Apple.
+%
+% \textbf{Et Rust dans tout ça ?}
+%
+% En Rust, il y a des wrappers pour chacune des APIs graphiques, souvent le nom de l'API suffixé "-rs" (pour rust). Ces bibliothèques ont souvent une API "unsafe", ce qui signifie en Rust qu'elles n'ont pas toutes les garanties que peut apporter le langage en terme sûreté mémoire. La bibliothèque probablement la plus important de l'écosystème graphique de Rust s'appelle "gfx", aujourd'hui renommée "gfx-hal" (pour hardware abstraction layer). C'est une API bas niveau, à 97\% similaire à Vulkan mais qui est multi-plateforme ! Elle peut compiler vers Vulkan, DX12, ou Metal suivant l'environnement (et un support réduit d'OpenGL). Il existe aussi une bibliothèque très active du nom de "rendy" qui se veut être un toolkit pour gfx-hal et réduit la quantité de boilerplate nécessaire pour des APIs autant bas niveau.
+%
+% \textbf{Et le Web dans tout ça ?}
+%
+% Et bien justement, on est là aussi au bord d’un renouveau complet. Tout comme WebGL qui a apporté une version simplifié et sécurisée d'OpenGL sur le Web en 2011, le W3C, en collaboration avec Apple, Mozilla, Microsoft et Google, est en train de standardiser une API dédiée au Web, du nom de WebGPU. WebGPU devrait exposer pour JavaScript et WebAssembly une API graphique et de calcul (comme Cuda / OpenCL) efficace pour tout appareil ayant des pilotes natifs pour Vulkan / DX12 / Metal.
+%
+% L'implémentation de WebGPU en Rust, qui s'appelle "wgpu", a démarré vers Septembre 2018. La où ca devient encore plus intéressant, c'est qu'elle est basée sur gfx-hal pour le rendu. Utiliser wgpu permet donc en théorie d'avoir un code efficace, un peu plus haut niveau que Vulkan, compilable vers toutes les plateformes natives et le Web ! En pratique malheureusement, au jour d'aujourd'hui (aout 2019), seul Chrome canary sur OSX supporte WebGPU. On ne peut donc pas (encore) s'en servir pour des applis Web. Mais vu la motivation des différents partis, ça devrait arriver vite !
+%
+% \textbf{C’est beau mais en pratique on fait quoi nous ?}
+%
+% De l'OpenGL / WebGL mon capitaine ! J'ai donc cherché dans l'écosystème Rust, et je suis tombé sur Kiss3D, par le même créateur que la bibliothèque d'algèbre linéaire que j'utilise. Kiss3D promet une API simple et compatible avec WebAssembly. Après quelques essais ratés, les premières visualisations correctes sont encourageantes ! Je raconte mes pérégrinations dans ce post du forum rust pour de plus amples détails.
+%
+%
+% https://youtu.be/hCzT47eeges
+%
+%
+% Mais (comme toujours il y a un mais ...) malheureusement la compilation vers wasm fait drastiquement chuter les performances sur mon ordi portable. On passe d'environ 60 fps en natif à environ 10 fps en web, ce qui n'est clairement pas utilisable. Il y a également une deuxième chose qui m'a chagriné. Kiss3D est basé sur "stdweb" pour sa compilation vers wasm. Or "stdweb" est une approche alternative à l'approche standardisée pour wasm en Rust, qui s'appelle wasm-bindgen, et les deux ne sont pas facilement compatibles. Il est donc difficile de faire cohabiter le code de tracking, utilisant wasm-bingen, et le code de visualisation, basé sur stdweb.
+%
+% \textbf{Finalement on fait quoi du coup ?}
+%
+% L'approche qui me donne le meilleur compromis de performances et de flexibilité, c'est de mixer les calculs faits en Rust + wasm (en utilisant wasm-bindgen), avec le rendu fait en JavaScript avec Three. Three c'est probablement la bibliothèque de 3D la plus mature pour le Web, avec une API simple en JavaScript. C’est celle que Thomas utilise pour ses rendus. En faisant tous mes calculs avec Rust, je peux partager avec Three un pointeur vers la position dans la mémoire wasm du résultat des calculs. Le seul léger inconvénient, c'est que toute donnée nécessaire pour le rendu Three, doit avoir un attribut permanent associé dans le code Rust. C'est un moindre mal, et en utilisant correctement l'API Three, j'obtiens 25 à 30 fps pour un million de points avec mon ordi portable. Axel a un solide 60 fps sur son ordi.
+%
+% Voici la démo, et le code source pour un simple exemple générant un cube rempli d'un million de points aléatoires. Je suis curieux de savoir à quel framerate cet exemple tourne dans différents types d'appareils mobiles. Avec mon android bas de gamme, j'obtiens 4 fps sous chrome, et 3 fps sous firefox.
+%
+% La démo la plus intéressante, c'est celle de l'appli de tracking VORS ! Elle est disponible ici, code source par là. ATTENTION, pour la faire tourner, il faut 1.6 Go de ram disponible avec le dataset ICL NUIM. Pour démarrer la démo, il faut lui donner une archive tar contenant tout le dataset à tester. Il y a une archive (700 Mo) toute prête, téléchargeable jusqu'au 29 aout par ici. Ci-dessous une capture d’écran de l’appli qui tourne sur mon ordi portable.
+%
+% \alert{End of the google doc extract.}
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% As we explain in the extract above,
+% we ended using ThreeJS for the 3D visualization.
+% Upon navigation in the timeline, there are two other different modifications of the visualization.
+% First the 3D points corresponding to the current keyframe are displayed in another color (red),
+% and the camera point along the camera trajectory is updated.
+% This makes following the camera trajectory and identifying the associated geometry trivial.
+% And second, the thumbnail of the current keyframe is updated.
+% As a consequence, looking at the thumbnail area while moving along the timeline
+% reminds temporal navigation in traditional 2D videos.
+% It also facilitates the association of the 3D geometry with the actual 2D frame
+% from the original video sequence.
+% In sum the combination of a keyframe timeline with associated thumbnail
+% and 3D geometry bridges the traditionally difficult gap between 2D and 3D user interfaces.
+%
+% We just have introduced the first interactive modality, the keyframe timeline navigation.
+% In order to introduce the other two, we need to describe first
+% a problem we are facing with our visual odometry algorithm.
+% The video sequences used for the benchmark of the different visual odometry algorithms
+% have different difficulty levels of tracking.
+% The synthetic sequence from the ICL NUIM dataset
+% have the particularity of providing low textured but crisp images with perfect alignment
+% between the color images and depth map.
+% Those conditions enable high precision tracking, except for some short sections
+% almost not textured at all, where tracking is lost and drifts.
+% When running interactive VORS on this dataset,
+% we observe two of those distinctive drifts, resulting in multiple
+% disjoint and unaligned pieces of the global 3D model of the associated room.
+%
+% \begin{figure}[h]
+% 	\centering
+% 	\includegraphics[width=\linewidth]{assets/img/todo.png}
+% 	\caption{Misaligned 3D model due to drifts in the tracking.}%
+% 	\label{fig:drift_icl_nuim}
+% \end{figure}
+%
+% If we set for example the objective to obtain a globally coherent 3D model of the room,
+% there are plenty of approaches heading in that direction.
+% Here are two of those.
+%
+% \begin{itemize}
+% 	\item Identify in the timeline each section with a coherent 3D model associated.
+% 		Export a model of each temporally coherent section.
+% 		Join all parts of the model with an approch such as ICP (Iterative Closest Point).
+% 	\item Identify two keyframes in the timeline with a visual overlapping
+% 		but no 3D geometry overlapping due to a drift between those images.
+% 		Re-align those two images.
+% 		Adapt the tracking of the rest of the sequence to take into account this adjustment.
+% \end{itemize}
+%
+% We decided to take the second approach for this experiment.
+% The second option here is very similar to what we usually call SLAM.
+% SLAM consists in adding loop closure and pose graph optimization techniques
+% to visual odometry to bring global map consistency.
+% In traditional SLAM algorithms, points of interests are retrieved for all keyframes.
+% Their descriptors are classified with techniques like ``bag of words''.
+% Then typical indexing and search techniques are applied to identify similar keyframes.
+% In our case, the identification is performed by a human interaction.
+% Once two keyframes are matched, the next step consists in computing
+% the camera motion between those.
+% Usually, one would match all keypoints in the pair of images
+% and use a robust version of the 8-point algorithm if there is no depth info,
+% or a robust PNP algorithm if depth info is know.
+% Logically, we thus tried to perform keypoints detection and matching for the pair of keyframes.
+% There exist many keypoint descriptors for this task.
+% Some well known are ORB, SIFT, FAST, A-KAZE.
+% The A-KAZE features were already implemented in Rust (https://github.com/indianajohn/akaze-rust)
+% so we tried to use them for the matching.
+% Unfortunately, due to the low textured images of the synthetic dataset,
+% the number of matches for selected pairs of keyframes were in the order of 20,
+% not enough to compute reliable camera motion.
+% This is the origin of the next two interactive modalities explored.
+%
+% Once a pair of keyframes is identified by a user,
+% thumbnails of those two frames are displayed next to each other.
+% The reference keyframe thumbnail also displays in red the points used for the tracking,
+% i.e. points which also provide depth information.
+% We consciously restrict the number of points with depth information to candidates
+% points used in the tracking, instead of all points with depth information from the sensor,
+% for two reasons.
+% (1) Those points are the only points supposed to be known if we extend our work to RGB visual odometry,
+% (2) less red points means less visual clutter for the user.
+% In those two thumbnails, the user is asked to identify three pairs of points
+% by clicking inside the two images.
+% In the reference image, the points chosen should be restricted to those in red.
+% From the three pairs of points, we can compute 0 to 4 potential camera positions
+% based on the P3P algorithm.
+% Since there was no currently available Rust P3P implementation,
+% and it was not too complicated to implement, we ported M. Persson ``Lambda Twist''
+% P3P algorithm. It is available at https://github.com/rust-photogrammetry/p3p.
+% Those potential camera positions are used to backproject the points with known depth
+% (red points in the thumbnail) into the 3D environment.
+% Every potential camera pose is associated with 3D points of a unique color
+% as depicted in Figure~\ref{fig:p3p}.
+%
+% \begin{figure}[h]
+% 	\centering
+% 	\includegraphics[width=\linewidth]{assets/img/todo.png}
+% 	\caption{P3P camera pose candidates.}%
+% 	\label{fig:p3p}
+% \end{figure}
+%
+% As also visible in Figure~\ref{fig:p3p}, a probability is associated with every potential pose.
+% Those probabilities are estimated by a measure of photometric reprojection error.
+% Indeed, for each potential camera pose, it is possible to project the 3D points
+% of the reference keyframe into the other frame.
+% For this estimatation we compute the reprojection error at low resolution images
+% which are less sensible to small errors in the reprojection.
+% In the end, the probability scores are simply set proportional to the inverse of the reprojection errors.
+% Such scores are intended to be a hint for the user,
+% helping them to select the correct pose initialization in the interface.
+% With this combination of colored 3D visualization and selectable options,
+% we avoid the complex task of directly interacting in the 3D world.
+% In the end, the chosen pose is set as initialization to the tracking algorithm.
+% The tracking is then restarted from this second keyframe.
+% It should provide a globally consistent 3D model until the next drift in the sequence.
+%
+% \subsection{Drawbacks of the approach}%
+% \label{sub:drawbacks}
+%
+% In traditional SLAM, the loop closure and pose estimation would add
+% an edge in the global pose graph of the sequence.
+% Then a pose graph optimization algorithm would be run to improve the global
+% consistency of the pose graph.
+% In our simplified case however, we do not build this pose graph,
+% but simply ensure the coherence of the sequence after the second keyframe
+% with regard to the reference keyframe.
+% It means that all frames in between the pair of keyframes is not adjusted.
+% In particular, there will still be drifted frames in this section of the sequence.
+%
+% \subsection{Code architecture of interactive VORS}%
+% \label{sub:code-interactive-vors}
+%
+% The code of this project is available at https://github.com/mpizenberg/interactive-vors.
+% As of version 1.0.0, it is composed of three main parts.
+% Those are clearly reflected by the language percentage usage in GitHub Web page interface,
+% 38\% JavaScript, 35\% Elm and 26\% Rust.
+%
+% The Elm application manages the Web user interface and communicates
+% with the JavaScript part to handle the 3D drawing and visual odometry.
+%
+% The 3D rendering is handled by a JavaScript library called ThreeJS, based on WebGL.
+% A keyframe may contain 1 to 10 thousand points with depth information.
+% In a typical tracking situation, there might be one keyframe for rougly 5 to 20 frames.
+% The ICL-NUIM sequence for example, is composed of 1508 frames,
+% and results in 225 keyframes and 550000 points.
+% Being able to display point clouds with a number of points in the order of the million
+% with WebGL is still a non trivial task for today mid-end hardware.
+% In order to mitigate 3D drawing performance bottlenecks,
+% all the 3D visualizations in the application are based on a unique preallocated
+% geometry buffer sized for a million point.
+% While it is a reasonable solution for our proof of concept use case,
+% this is an important detail if we are to consider more memory efficient solutions.
+% We will also note, that with the advent of the new standard WebGPU,
+% better performances and compatibility with WebAssembly are to expect in the near future.
+%
+% The visual odometry algorithm is of course a WebAssembly module,
+% compiled from a small Rust interface module,
+% reusing our Rust visual odometry algorithm (VORS).
+% Our JavaScript code base is communicating with this Wasm module
+% thanks to the intermediate JavaScript binding code generated by wasm-bindgen and wasm-pack.
+% Before diving into the details of porting VORS to WebAssembly,
+% we will provide few quantitative measures of the improvements that our interactive
+% approach enabled.
+%
+% \subsection{Quantitative improvements of the 3D model and trajectory}%
+% \label{sub:quantitative-improvements}
+%
+% (1) absolute trajectory error
+% (2) absolute point cloud error
