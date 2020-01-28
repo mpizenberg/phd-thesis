@@ -1057,8 +1057,11 @@ Figure~\ref{fig:p3p-two-poses} depicts an example situation where two potential
 P3P poses are proposed in addition to a misaligned initial proposition in red.
 Once a new camera pose is chosen for the second keyframe,
 the visual odometry may be restarted for all subsequent frames.
+Our Rust implementation of P3P is based on Persson and Nordberg's solver~\cite{persson2018lambda}
+and published as an open source library under the Rust Computer Vision (rust-cv)
+Github organization~\cite{rust-p3p}.
 
-\begin{figure}[ht]
+\begin{figure}[t]
 	\centering
 	\includegraphics[width=\linewidth]{assets/img/p3p-two.png}
 	\caption{Visualization of potential poses for the second keyframe.
