@@ -69,17 +69,19 @@ while the Jacobian of the warp $J_{\bm{\xi}}W$ at $\bm{x}$ is a 2x6 vector (2 co
 We leave aside the expression of the warp Jacobian, detailed in Appendix~\ref{sec:notation}.
 Two important components of $\delta \bm{\xi}$
 are the reference image gradient $\nabla I^{*}$
-and the residual image $\delta I = I^{*}(\bm{x}) - I(W(\bm{x}, \bm{\xi}))$.
+and the residual image $\delta I = I^{*}(\bm{x}) - I(W(\bm{x}, \bm{\xi}))$
+which is the difference between the reference image and
+the reprojected pixels on the second image.
 We represented both in Figure~\ref{fig:gradient-residual}
 for a couple of images in the ICL-NUIM sequence.
-As we can see there, all pixels are not participating equally in the expression.
-The most informative pixels are all near high gradient locations and it makes sense.
+As we can see there, not all pixels are participating equally in the expression.
+The most informative pixels are all near high gradient locations which actually makes sense.
 Indeed if we, as humans, compare two homogeneous areas,
 it will be impossible to tell how the camera moved.
 If instead we are presented heterogeneous regions of the image with textures
 it is possible to visualize the movement.
 The same occurs for the expression of the warp increment $\delta \bm{\xi}$.
-Since pixels with high gradient magnitudes contain the more information,
+Since pixels with high gradient magnitudes contain the most information,
 it should be possible to sample only those for direct image alignment,
 which leads us to the presentation of sparse points selection mechanisms.
 
@@ -602,7 +604,7 @@ i.e.\ the global robustness of the algorithm.
 In practice, we should note that the ground truth and estimated trajectory
 are not expressed in the same reference frame.
 It is thus necessary to first align the two trajectories.
-This is usally done with a principal component analysis (PCA)
+This is usually done with a principal component analysis (PCA)
 of the trajectories.
 It is also important to note that the ground truth and estimated trajectories
 are not sampled at the same timings and frequency.
@@ -631,8 +633,6 @@ The relative pose error is thus computed as
 where $d(\cdot, \cdot)$ is similar than for the ATE,
 and $\Omega'$ is the set of regularly spaced pairs,
 whether it is a duration, like 1 second, or a distance like 1 meter.
-
-\alert{Ajouter un schéma RPE avec les notations précédentes.}
 
 
 \subsubsection{Metrics without Ground Truth}%
@@ -788,7 +788,12 @@ which better reflects the robustness to outliers.
 As visible in that figure, VORS has a long tail of highly
 erroneous motion tracking.
 High RMSE errors are better understood when looking at the
-detailed RPE of one sequence, as shown in Figure~\ref{fig:rpe_icl3}.
+detailed RPE of one sequence.
+Figure~\ref{fig:rpe_icl3} contains plots of the RPE along the third sequence
+of the ICL-NUIM dataset.
+As visible there, VORS exhibits lower errors in general,
+but the absence of drift detection or robustness may generate much bigger drifts
+such as those around frame 600 of the sequence.
 In the end, even though our visual odometry implementation in Rust (VORS)
 has robustness issues due to previously discussed challenges,
 we provide a precise, state of the art RGB-D visual odometry,
@@ -796,12 +801,6 @@ easy to compile, to use and as we will develop next,
 easy to port to WebAssembly.
 VORS thus enables the exploration of efficient interactive
 visual odometry on the Web, which we finally present next.
-
-\alert{Parler plus de la dernière figure.
-Ajouter une discussion un peu plus fournie
-sur les perfs de VORS en bilan.
-En transition mentionner que on va pouvour corriger certains
-défauts de manière interactive.}
 
 \begin{figure}[ht]
 	\centering
