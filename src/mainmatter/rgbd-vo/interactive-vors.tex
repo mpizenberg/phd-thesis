@@ -824,7 +824,7 @@ défauts de manière interactive.}
 \label{sec:interactive-vors}
 
 We previously quantitatively validated VORS viability for the visual odometry task.
-In this final section we detail how it can be usable directly on the Web.
+In this final section we detail how it can be made usable directly on the Web.
 We also attempt at showcasing the potential of such exposure with
 an example use case of manual human intervention to detect and rectify drifts.
 
@@ -833,8 +833,7 @@ an example use case of manual human intervention to detect and rectify drifts.
 
 \subsubsection{VORS in WebAssembly}%
 
-Except from two little hurdles that we are going to detail,
-the port of VORS to WebAssembly was straightforward,
+Globally, the port of VORS to WebAssembly was straightforward,
 as expected for a Rust-only project.
 VORS code base is organized as a library providing a rich API,
 accompanied by a small binary program performing the actual visual odometry
@@ -859,7 +858,7 @@ thus becomes impossible.
 The simplest alternative, which is the one we chose,
 consists in loading a \verb|tar| archive of the entire dataset through
 the file upload mechanism, making the archive content available in the browser memory.
-This has two constraints, one on memory the other on the application program.
+This has two constraints, one on memory and the other on the application program.
 
 Current Web APIs prevent us from loading the archive directly on the WebAssembly memory.
 As a consequence, the archive is loaded inside the application JavaScript memory,
@@ -881,12 +880,12 @@ the incriminating functions from the public API when compiling to WebAssembly wa
 
 The next technical challenge was a performance one.
 We managed to get VORS compiling and running as a WebAssembly module,
-but the performances dropped drastically, from 30 frames per second (fps)
+but the performances dropped drastically, from 40 frames per second (fps)
 in the native case to less than 10 fps in WebAssembly.
 After some performance analysis, we identified the culprit as
 the PNG image decoding of frames.
 Figure~\ref{fig:png-perf} spotlights that the majority of the time
-is spent in decoding both images instead of in the visual odometry algorithm.
+is spent decoding both images instead of running the visual odometry algorithm.
 
 \begin{figure}[ht]
 	\centering
@@ -896,9 +895,13 @@ is spent in decoding both images instead of in the visual odometry algorithm.
 	\label{fig:png-perf}
 \end{figure}
 
-From the fact that OpenCV decodes images much faster,
-and that Rust should have similar performances than C++,
-we decided to give a try at a new PNG decoder.
+Even though it may appear anecdotal,
+the usability of realtime interactive applications
+is hindered by low refresh rates so it felt important to improve on the default
+PNG decoder available in Rust.
+Since OpenCV decodes images much faster,
+and Rust should have similar performances than C++,
+we decided to implement a new Rust PNG decoder.
 Our implementation keeps in mind that it should be ``Wasm-friendly'',
 meaning we limit the amount of memory allocations,
 which are more costly in WebAssembly.
@@ -917,18 +920,21 @@ and the unfiltering is rather simple.
 We did not reimplement the inflate algorithm
 since there are already high performance Rust-only libraries for this task.
 After a few round of optimizations,
-we managed to get great decoding performances,
+we managed to get very good decoding performances,
 especially in WebAssembly compared to the library we used initially.
 Table~\ref{tab:png-perf} summarizes performances on few images we used locally
 and clearly shows the improvement from the default Rust PNG library.
 OpenCV performances are included for comparison.
 As a result, we managed to get VORS compiling and running at similar speed in the browser.
+After this first milestone, the next step is handling visualization
+of visual odometry data such as trajectories and 3D point clouds.
+All this must be tightly integrated in a standard Web application.
 
 \begin{table}[ht]
 \centering
 % \resizebox{\textwidth}{!}{%
 \begin{tabular}{llllll}
-Image & us & png crate & OpenCV & us (wasm) & png (wasm) \\
+Image & us (native) & default (native) & OpenCV & us (wasm) & default (wasm) \\
     \midrule
 depth.png & 4.0 ms & 9.1 ms & 4.0 ms & 5.5 ms & 30.7 ms \\
 rgb.png & 6.6 ms & 16.0 ms & 6.5 ms & 13.7 ms & 52.1 ms \\
@@ -962,7 +968,7 @@ A thumbnail of the current keyframe is located at the top left corner of the Web
 For each keyframe, we use the depth information of the sparse candidate points
 to retrieve their 3D coordinates.
 The number of candidate points is variable but in the order of a thousand
-to ten thousands points per keyframe.
+to ten thousands of points per keyframe.
 Those 3D points are stored in an array buffer,
 then used for a point cloud visualization,
 located at the center of the interface.
@@ -973,6 +979,7 @@ The reader may notice in Figure~\ref{fig:interactive-vors-interface}
 that the point cloud and the keyframe thumbnail are mirrored.
 This is due to the ray tracer employed in the ICL-NUIM dataset,
 which uses a left-handed coordinate system.
+Finally, the camera trajectory is visible in purple in the point cloud visualization.
 
 \begin{figure}[ht]
 	\centering
@@ -992,7 +999,7 @@ often as bindings to other C++ libraries.
 
 Currently, the four main APIs for graphics are OpenGL, Vulkan, DirectX and Metal.
 OpenGL is an open standard developed by the Khronos group since 1992.
-It is easy and high level, but becoming obselete
+It is easy and high level, but becoming obsolete
 when efficient use of current graphics card hardware is needed.
 DirectX is Microsoft alternative to OpenGL.\@
 Up until DirectX 11, it was also a high level API,
@@ -1004,11 +1011,11 @@ Vulkan is open and developed by Khronos while Metal is Apple property.
 Just as WebGL was introduced as a Web version of OpenGL,
 a new standard is rising from the Vulkan API, called WebGPU.\@
 Unfortunately, as of August 2019, WebGPU is only supported on Chrome canary for OSX.\@
-The only viable option for our visualization is thus the duo OpenGL/WebGL.\@
+The only viable option for our visualization is thus the OpenGL/WebGL duo.\@
 After trying few Rust libraries, the conclusion is that currently,
-the only way of reaching decent performances with WebGL for large point clouds,
-is directly with a WebGL framework,
-not with automatic conversion from a Rust native OpenGL code.
+the only way of reaching decent performances with WebGL for large point clouds
+is to directly use a WebGL framework
+and not an automatic conversion from a Rust native OpenGL code.
 As a consequence, our point cloud visualization is based on ThreeJS~\cite{threejs},
 a JavaScript 3D library.
 The points buffers used for the visualizations are efficiently referenced
@@ -1020,13 +1027,14 @@ but we eventually managed to get the visualizations working correctly.
 \label{sub:human-loop-closure}
 
 As discussed in Section~\ref{sub:algorithms_eval},
-VORS is a precise visual odometry algorithm, prone to big local drifts.
+VORS is a precise visual odometry algorithm, prone to punctual large drifts.
 The resulting point cloud visualizations contain parts that seem to be duplicated,
 as in Figure~\ref{fig:interactive-vors-drift}.
 This kind of observations is common in the presence of loops in the sequence.
 In a SLAM context, presented in Section~\ref{sub:relation-visual-slam},
 this type of drifts may be corrected by loop closure detection and pose graph optimization.
-In this section however, we put the human in the loop, instead of automatic loop closure.
+In this section however, we define an interactive correction procedure
+that puts humans in the loop, instead of automatic loop closure.
 
 \begin{figure}[ht]
 	\centering
@@ -1039,18 +1047,18 @@ In this section however, we put the human in the loop, instead of automatic loop
 
 In traditional indirect SLAM algorithms, points of interests are retrieved for all keyframes
 and their descriptors are classified with techniques such as ``bag of words''.
-Then typical indexing and search algorithms are applied to identify similar keyframes.
+Typical indexing and search algorithms are then applied to identify similar keyframes.
 In our case, the identification is performed by a human interaction,
 clicking on the buttons in the toolbar for the reference keyframe
-and the one that need re-ajusting.
+and the one that needs re-ajusting.
 Once two keyframes are selected, the next step consists in computing
 the camera motion between those.
 
 Usually, one would match all keypoints in the pair of images
 and use a robust version of the 8-point algorithm if there is no depth information,
-or a robust PNP algorithm if depth information is known.
+or a robust PnP algorithm if depth information is known.
 We thus tried to perform keypoints detection and matching for the pair of keyframes.
-There exist many keypoint descriptors for this task.
+There exists many keypoint descriptors for this task.
 Some well known are ORB, SIFT, FAST and A-KAZE,
 with a Rust implementation of A-KAZE features already available.
 Unfortunately, due to the low textured images of the synthetic dataset,
