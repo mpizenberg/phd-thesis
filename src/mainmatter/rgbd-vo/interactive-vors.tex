@@ -1099,6 +1099,9 @@ Figure~\ref{fig:p3p-two-poses} depicts an example situation where two potential
 P3P poses are proposed in addition to a misaligned initial proposition in red.
 Once a new camera pose is chosen for the second keyframe,
 the visual odometry may be restarted for all subsequent frames.
+Figures~\ref{fig:interactive-vors-intervention} and~\ref{fig:ate-plot},
+and Table~\ref{tab:ate-comparison} provide qualitative and quantitative results
+showing the improvements provided by the manual human intervention.
 Our Rust implementation of P3P is based on Persson and Nordberg's solver~\cite{persson2018lambda}
 and published as an open source library under the Rust Computer Vision (rust-cv)
 Github organization~\cite{rust-p3p}.
@@ -1113,6 +1116,43 @@ Github organization~\cite{rust-p3p}.
 	provided in the lower right corner of the visualization canvas.}%
 	\label{fig:p3p-two-poses}
 \end{figure}
+
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=0.48\linewidth]{assets/img/vors-drift-before.png}
+	\hfill
+	\includegraphics[width=0.48\linewidth]{assets/img/vors-drift-after.png}
+	\caption{Point cloud before (left) and after (right) manual intervention.}%
+	\label{fig:interactive-vors-intervention}
+\end{figure}
+
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=0.48\linewidth]{assets/img/ate-vors.png}
+	\hfill
+	\includegraphics[width=0.48\linewidth]{assets/img/ate-vors-interactive.png}
+	\caption{Absolute trajectory error (ATE) before (left) and after (right) manual intervention.}%
+	\label{fig:ate-plot}
+\end{figure}
+
+\begin{table}[ht]
+\centering
+% \resizebox{\textwidth}{!}{%
+\begin{tabular}{lll}
+measure & before manual intervention & after manual intervention \\
+\midrule
+	ATE rmse   & 0.125126 m & 0.100411 m (-20\%)\\
+	ATE mean   & 0.113021 m & 0.086285 m (-24\%)\\
+	ATE median & 0.102886 m & 0.076897 m (-25\%)\\
+	ATE std    & 0.053692 m & 0.051354 m (-4\%)\\
+	ATE min    & 0.049635 m & 0.019642 m (-60\%)\\
+	ATE max    & 0.267245 m & 0.195351 m (-27\%)\\
+\end{tabular}%
+% } % end of resizebox
+\caption{ATE before and after manual intervention
+	on the first ICL-NUIM sequence.}%
+\label{tab:ate-comparison}
+\end{table}
 
 \section{Conclusion}%
 \label{sec:vors-ccl}
