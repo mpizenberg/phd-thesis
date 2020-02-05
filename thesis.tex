@@ -5,15 +5,11 @@
 % Import before tlsflyleaf page.
 \usepackage[bindingoffset=1cm]{geometry}
 
-% Page de garde université Toulouse (pre-2018)
-% http://tlsflyleaf.onada.fr
-\usepackage[ED=MITT-ImgInf, Ets=INP]{tlsflyleaf}
-
 \usepackage[]{fancyhdr} % Custom header and footer
 \usepackage[chapter,nottoc]{tocbibind} % Add bibliography to table of contents
 % \usepackage[]{datetime} % Write date and time in header to identify version
 \usepackage[T1]{fontenc} % 8-bits font encoding
-% \usepackage{graphicx} % Already imported by tlsflyleaf
+\usepackage{graphicx} % Already imported by tlsflyleaf
 \usepackage{subcaption} % Using subfigures
 \usepackage{booktabs} % For formal tables
 \usepackage{makecell} % Line break in cell
@@ -30,6 +26,9 @@
 \onehalfspacing{}
 % \doublespacing{}
 
+% Include cover page
+\usepackage{pdfpages}
+
 % Plots
 \usepackage{tikz}
 \usepackage{datatool}
@@ -41,30 +40,6 @@
 \usepackage{mymaths}
 \usepackage{mymvg}
 \usepackage{mytext}
-
-\title{Interactive Computer Vision through the Web}
-\author{Matthieu Pizenberg}
-\defencedate{24/02/2020}
-\lab{Institut de Recherche en Informatique de Toulouse (UMR 5505)}
-%\cotutelle{Nom de l'établissement}
-
-% Directeur de thèse
-\nboss{2}
-\makesomeone{boss}{1}{Vincent CHARVILLAT}{}{} % Sera affiché en premier
-\makesomeone{boss}{2}{Axel CARLIER}{}{}  % Sera affiché en second
-
-% Rapporteurs
-\nreferee{2}
-\makesomeone{referee}{1}{Véronique ÉGLIN}{}{}
-\makesomeone{referee}{2}{Mathias LUX}{}{}
-
-% Jury
-\njudge{4}
-% \makesomeone{judge}{1}{Premier MEMBRE}{Professeur d'Université}{}%{Président du Jury}
-\makesomeone{judge}{1}{Véronique ÉGLIN}{Professeur d'Université}{reviewer}%{Membre du Jury}
-\makesomeone{judge}{2}{Mathias LUX}{Associate Professor}{reviewer}%{Membre du Jury}
-\makesomeone{judge}{3}{Vincent CHARVILLAT}{Professeur d'Université}{examiner}
-\makesomeone{judge}{4}{Axel CARLIER}{Maître de Conférences}{examiner}
 
 % ============================================================
 

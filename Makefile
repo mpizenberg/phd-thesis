@@ -10,8 +10,8 @@ outfile = $(outdir)/$(rootname).pdf
 compress = gs -sDEVICE=pdfwrite -dPDFSETTINGS=/$(1) -dCompatibilityLevel=1.4 -dNOPAUSE -dQUIET -dBATCH -sOutputFile=$(outdir)/$(rootname)-$(1).pdf $(outfile)
 
 # Latex command to build pdf file.
-latexmk = export TEXINPUTS=.:./tlsflyleaf/: && latexmk -pdf -quiet -f -pdflatex="pdflatex -interaction=nonstopmode" -outdir=$(outdir) $(1) $(rootfile)
-latexmk-verbose = export TEXINPUTS=.:./tlsflyleaf/: && latexmk -pdf -outdir=$(outdir) $(1) $(rootfile)
+latexmk = latexmk -pdf -quiet -f -pdflatex="pdflatex -interaction=nonstopmode" -outdir=$(outdir) $(1) $(rootfile)
+latexmk-verbose = latexmk -pdf -outdir=$(outdir) $(1) $(rootfile)
 
 # Build PDF version adapted to printers.
 printer: pdf
