@@ -1,0 +1,77 @@
+English below ------
+
+Bonjour à toutes et à tous,
+
+J'ai le plaisir de vous inviter à la soutenance de ma thèse intitulée
+"Vision par Ordinateur Interactive sur le Web",
+qui aura lieu vendredi 28 février 2020 à 9h en salle du conseil (F501) à l'ENSEEIHT.
+La présentation se fera en anglais.
+
+Cordialement,
+Matthieu Pizenberg
+
+Mots-clés : vision, interactions, Web
+
+Résumé
+La vision par ordinateur est la science de la compréhension de l'environnement à partir d'images,
+très utile dans des domaines tels que la réalité augmentée ou les véhicules autonomes.
+Dans un premier temps, nous traitons le problème de l'annotation pour la segmentation d'image.
+Cette tâche consiste à identifier les pixels correspondants
+à un objet d'intérêt dans une image pour entraîner un ordinateur à
+le faire automatiquement plus tard.
+Nous présentons notre approche pour annoter efficacement des grands ensembles d'images
+par le biais d'un service de crowdsourcing en ligne.
+Dans un second temps, nous étudions le problème d'odométrie visuelle,
+qui consiste à retracer la trajectoire d'une caméra et à reconstruire
+une carte virtuelle en 3D de son environnement à partir des images capturées par la caméra.
+Nous présentons notre bibliothèque logicielle libre, ainsi qu'une application Web capable
+d'améliorer les résultats de l'algorithme grâce à des interactions utilisateur.
+
+Jury
+Mme Véronique ÉGLIN, INSA Lyon, Rapporteure
+M. Mathias LUX, Université de Klagenfurt, Rapporteur
+M. Chistophe DEHAIS, FittingBox, Examinateur
+M. Oge MARQUES, Florida Atlantic University (FAU), Examinateur
+Mme Géraldine MORIN, Université de Toulouse, Examinatrice
+M. Vincent CHARVILLAT, Université de Toulouse, Directeur de thèse
+M. Axel CARLIER, Université de Toulouse, Co-directeur de thèse
+
+------ English
+
+Dear all,
+
+I have the pleasure to invite you to my PhD thesis defense on Friday 28th February 2020,
+at 9am in room F501 at ENSEEIHT.
+The thesis is entitled "Interactive Computer Vision through the Web"
+and the presentation will be held in English.
+
+Best regards,
+Matthieu
+
+Key words: vision, interactions, Web
+
+Abstract
+Computer vision is the science of understanding the environment from images,
+which is very useful in domains such as augmented reality or autonomous vehicles.
+In this thesis, we explore how specific Web applications can help improving
+some 2D and 3D subfields of computer vision.
+In the first part, we focus on the problem of annotation for image segmentation.
+This task consists in identifying the pixels corresponding
+to an object of interest in an image to help a computer to be able
+to do it automatically later.
+We present our method to efficiently annotate datasets of images
+through an online crowdsourcing service.
+In the second part of this thesis, we focus on the problem of visual odometry.
+It consists in tracking the trajectory of a camera and reconstructing
+a virtual 3D map of its environment just from the images provided by the camera itself.
+We present our open-source library, and a Web application able
+to improve the algorithm results thanks to user input.
+
+Jury
+Ms. Véronique ÉGLIN, INSA Lyon, Reviewer
+Mr. Mathias LUX, Klagenfurt University, Reviewer
+Mr. Chistophe DEHAIS, FittingBox, Examiner
+Mr. Oge MARQUES, Florida Atlantic University (FAU), Examiner
+Mme Géraldine MORIN, Université de Toulouse, Examiner
+Mr. Vincent CHARVILLAT, Université de Toulouse, Supervisor
+Mr. Axel CARLIER, Université de Toulouse, Co-supervisor
